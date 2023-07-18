@@ -1,0 +1,33 @@
+{% block content %}
+
+<div style="margin: auto; width: 70%; font-family: Arial, Helvetica, sans-serif;">
+    <img src="https://hirebeat-assets.s3.amazonaws.com/HireBeatLogo2.png" alt="HireBeat Logo"
+      style="display:inline-block"></img>
+    <h1 style="display: inline-block; color: #006dff;">HireBeat</h1>
+
+<div class="header-bar">
+    <h1>Register</h1>
+</div>
+
+<form method="POST">
+        {% csrf_token %}
+        <label>{{form.username.label}}</label>
+        {{form.username}}
+        <br>
+        <br>
+        <label>{{form.password1.label}}</label>
+        {{form.password1}}
+        <br>
+        <br>
+        <label>{{form.password2.label}}</label>
+        {{form.password2}}
+
+        <br>
+        <br>
+        <input style="margin-top:10px;"class="button" type="submit" value="Register">
+    </form>
+    <p>Already have and account? <a href="{% url 'login' %}">Login</a></p>
+</div>
+
+
+{% endblock content %}
