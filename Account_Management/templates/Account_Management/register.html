@@ -5,27 +5,32 @@
       style="display:inline-block"></img>
     <h1 style="display: inline-block; color: #006dff;">HireBeat</h1>
 
-<div class="header-bar">
+<div>
     <h1>Register</h1>
 </div>
 
 <form method="POST">
         {% csrf_token %}
+    <div>
         <label>{{form.username.label}}</label>
         {{form.username}}
-        <br>
-        <br>
+    </div>
+    <br>
+    <div>
         <label>{{form.password1.label}}</label>
         {{form.password1}}
-        <br>
-        <br>
+    </div>
+    <br>
+    <div>
         <label>{{form.password2.label}}</label>
         {{form.password2}}
-
-        <br>
-        <br>
+    </div>
+    <br>
+    <div>
         <input style="margin-top:10px;"class="button" type="submit" value="Register">
     </form>
+    </div>
+    <br>
     <p>Already have and account? <a href="{% url 'login' %}">Login</a></p>
 </div>
 
