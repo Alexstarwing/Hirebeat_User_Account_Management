@@ -1,47 +1,8 @@
-'''
-from django.shortcuts import render
-from django.contrib.auth.tokens import PasswordResetTokenGenerator
-from django.views.generic import View
-from .models import User
-from django.utils.http import urlsafe_base64_decode
-from django.utils.encoding import force_text
-from django.contrib.auth import login
-
-class ActivateAccount(View):
-    def get(self, request, uidb64, token, *args, **kwargs):
-        # Changes: consider 1-to-many auth user and user group
-        account_activation_token = PasswordResetTokenGenerator()
-        try:
-            uid = force_text(urlsafe_base64_decode(uidb64))
-            user = User.objects.get(pk=uid)
-        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
-            user = None
-
-        if user is not None and account_activation_token.check_token(user, token):
-            # try:
-            #     user_group = AuthUserGroup.objects.filter(user_id=uid)
-            # except ObjectDoesNotExist:
-            #     return render(request, 'Account_Management/activation_failure.html')
-            # for current_user_group in user_group:
-            #     current_user_group.is_email_confirmed = True
-            #     current_user_group.save()
-            # first_group = user_group.order_by('-created_at').first()
-            # user_account = Account.objects.get(pk=first_group.account_id.id)
-            user.email_confirmed = True
-            user.save()
-            login(request, user)
-            return render(request, 'Account_Management/activation_success.html')
-        else:
-            return render(request, 'Account_Management/activation_failure.html')
-'''
 from typing import Any, Dict
-from django.forms.models import BaseModelForm
-from django.http import HttpResponseRedirect
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect
 from django.views.generic import View
 from django.views.generic.list import ListView
-from django.views.generic.detail import DetailView
-from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormView
+from django.views.generic.edit import FormView
 from django.urls import reverse_lazy
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
@@ -55,7 +16,7 @@ from django.utils.encoding import force_bytes, force_text
 from django.core.mail import send_mail
 from django.contrib import messages
 from .forms import UserCreationForm
-from .models import Task
+from .models import Profile
 from .tokens import account_activation_token
 
 
@@ -113,43 +74,7 @@ class ActivateAccount(View):
         else:
             messages.warning(request, ('The confirmation link was invalid, possibly because it has already been used.'))
             return redirect('register')
-    
-class TaskList(LoginRequiredMixin, ListView):
-    model = Task
-    context_object_name = 'tasks'
-    
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['tasks'] = context['tasks'].filter(user=self.request.user)
-        context['count'] = context['tasks'].filter(complete=False).count
-        
-        search_input = self.request.GET.get('search-area') or ''
-        if search_input:
-            context['tasks'] = context['tasks'].filter(title__startswith=search_input)
-        
-        context['search_input'] = search_input
-        return context
 
-class TaskDetail(LoginRequiredMixin, DetailView):
-    model = Task
-    context_object_name = 'task'
-    template_name = 'Account_Management/task.html'
-    
-class TaskCreate(LoginRequiredMixin, CreateView):
-    model = Task
-    fields = ['title', 'description', 'complete']
-    success_url = reverse_lazy('tasks')
-    
-    def form_valid(self, form):
-        form.instance.user = self.request.user
-        return super(TaskCreate,self).form_valid(form)
-    
-class TaskUpdate(LoginRequiredMixin, UpdateView):
-    model = Task
-    fields = ['title', 'description', 'complete']
-    success_url = reverse_lazy('tasks')
-    
-class DeleteView(LoginRequiredMixin, DeleteView):
-    model = Task
-    context_object_name = 'task'
-    success_url = reverse_lazy('tasks')
+class TaskList(LoginRequiredMixin, ListView):
+    model = Profile
+    context_object_name = 'tasks'
