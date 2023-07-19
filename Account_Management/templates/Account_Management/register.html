@@ -11,9 +11,21 @@
 
 <form method="POST">
         {% csrf_token %}
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
     <div>
         <label>{{form.username.label}}</label>
         {{form.username}}
+    </div>
+    <br>
+    <div>
+        <label>{{form.email.label}}</label>
+        {{form.email}}
     </div>
     <br>
     <div>
@@ -31,6 +43,7 @@
     </form>
     </div>
     <br>
+    {{form.errors}} <!--Display the error message-->
     <p>Already have and account? <a href="{% url 'login' %}">Login</a></p>
 </div>
 
