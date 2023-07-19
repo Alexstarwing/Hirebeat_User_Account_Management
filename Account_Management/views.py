@@ -1,3 +1,4 @@
+import pdb
 from typing import Any, Dict
 from django.shortcuts import redirect
 from django.views.generic import View
@@ -26,13 +27,13 @@ class CustomLoginView(LoginView):
     redirect_authenticated_user = True
     
     def get_success_url(self):
-        return reverse_lazy('tasks')
+        return reverse_lazy('profiles')
     
 class RegisterPage(FormView):
     template_name = 'Account_Management/register.html'
     form_class = UserCreationForm
     redirect_authenticated_user = True
-    success_url = reverse_lazy('tasks') #where user will be redirect after success registration bug
+    success_url = reverse_lazy('profiles') #where user will be redirect after success registration bug
     
     def form_valid(self, form):
         user = form.save(commit=False)
@@ -53,7 +54,7 @@ class RegisterPage(FormView):
     
     def get(self, *args, **kwargs):
         if self.request.user.is_authenticated:
-            return redirect('tasks') #Redirect to the home page
+            return redirect('profiles') #Redirect to the home page
         return super().get(*args, **kwargs)
 
 class ActivateAccount(View):
@@ -63,18 +64,19 @@ class ActivateAccount(View):
             user = User.objects.get(pk=uid)
         except (TypeError, ValueError, OverflowError, User.DoesNotExist):
             user = None
-
+        pdb.set_trace() #断点
         if user is not None and account_activation_token.check_token(user, token): #why always goes to else branch
             user.is_active = True
             user.profile.email_confirmed = True
             user.save()
             login(request, user)
             messages.success(request, ('Your account have been confirmed.'))
-            return redirect('tasks')
+            return redirect('profiles')
         else:
             messages.warning(request, ('The confirmation link was invalid, possibly because it has already been used.'))
             return redirect('register')
 
-class TaskList(LoginRequiredMixin, ListView):
+
+class ProfileList(LoginRequiredMixin, ListView):
     model = Profile
-    context_object_name = 'tasks'
+    context_object_name = 'profiles'
