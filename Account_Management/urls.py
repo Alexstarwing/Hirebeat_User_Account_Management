@@ -1,6 +1,6 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views
-from .views import TaskList, TaskDetail, TaskCreate, TaskUpdate, DeleteView, CustomLoginView, RegisterPage
+from .views import TaskList, TaskDetail, TaskCreate, TaskUpdate, DeleteView, CustomLoginView, RegisterPage, ActivateAccount
 from django.contrib.auth.views import LogoutView
 
 urlpatterns = [
@@ -8,6 +8,7 @@ urlpatterns = [
     path('logout/', LogoutView.as_view(next_page='login'), name='logout'),
     path('register/', RegisterPage.as_view(), name='register'),
     path('', TaskList.as_view(), name='tasks'),
+    path('activate/<uidb64>/<token>/', ActivateAccount.as_view(), name='activate'),
     path('reset_password/',
          auth_views.PasswordResetView.as_view(template_name='Account_Management/password_reset.html'),
          name='password_reset'),  # submit email form
