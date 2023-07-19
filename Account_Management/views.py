@@ -58,6 +58,7 @@ from .forms import UserCreationForm
 from .models import Task
 from .tokens import account_activation_token
 
+
 class CustomLoginView(LoginView):
     template_name = 'Account_Management/login.html'
     fields = '__all__'
@@ -75,7 +76,6 @@ class RegisterPage(FormView):
     def form_valid(self, form):
         user = form.save(commit=False)
         user.is_active = False 
-        user.save()
         token = default_token_generator.make_token(user)
         current_site = get_current_site(self.request)
         mail_subject = 'Activate your account'
