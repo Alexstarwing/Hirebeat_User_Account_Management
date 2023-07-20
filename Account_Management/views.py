@@ -25,19 +25,21 @@ class CustomLoginView(LoginView):
     template_name = 'Account_Management/login.html'
     fields = '__all__'
     redirect_authenticated_user = True
-    
+
     def get_success_url(self):
         return reverse_lazy('profiles')
-    
+
+
 class RegisterPage(FormView):
     template_name = 'Account_Management/register.html'
     form_class = UserCreationForm
     redirect_authenticated_user = True
-    success_url = reverse_lazy('profiles') #where user will be redirect after success registration bug
-    
+    success_url = reverse_lazy('profiles')  # where user will be redirect after success registration bug
+
     def form_valid(self, form):
         user = form.save(commit=False)
-        user.is_active = False 
+        user.is_active = False
+        user.save()
         token = default_token_generator.make_token(user)
         current_site = get_current_site(self.request)
         mail_subject = 'Activate your account'
@@ -48,14 +50,15 @@ class RegisterPage(FormView):
             'token': token,
         })
         send_mail(mail_subject, message, 'yifandsb666@gmail.com', [user.email])
-        email_sent_message = "Activation email has been sent to your email address." #flash message
+        email_sent_message = "Activation email has been sent to your email address."  # flash message
         messages.success(self.request, email_sent_message)
-        return super().form_valid(form) #Redirect to success_url
-    
+        return super().form_valid(form)  # Redirect to success_url
+
     def get(self, *args, **kwargs):
         if self.request.user.is_authenticated:
-            return redirect('profiles') #Redirect to the home page
+            return redirect('profiles')  # Redirect to the home page
         return super().get(*args, **kwargs)
+
 
 class ActivateAccount(View):
     def get(self, request, uidb64, token, *args, **kwargs):
@@ -64,14 +67,14 @@ class ActivateAccount(View):
             user = User.objects.get(pk=uid)
         except (TypeError, ValueError, OverflowError, User.DoesNotExist):
             user = None
-        pdb.set_trace() #断点
-        if user is not None and account_activation_token.check_token(user, token): #why always goes to else branch
+        # pdb.set_trace()  # 断点
+        if user is not None and default_token_generator.check_token(user, token):  # why always goes to else branch
             user.is_active = True
             user.profile.email_confirmed = True
             user.save()
-            login(request, user)
-            messages.success(request, ('Your account have been confirmed.'))
-            return redirect('profiles')
+            # login(request, user)
+            messages.success(request, 'Your account have been confirmed.')
+            return redirect('login')
         else:
             messages.warning(request, ('The confirmation link was invalid, possibly because it has already been used.'))
             return redirect('register')
