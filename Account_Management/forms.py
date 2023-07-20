@@ -16,3 +16,6 @@ class UserCreationForm(UserCreationForm):
         if commit:
             user.save()
         return user
+    
+# class ResendActivationEmailForm(forms.Form):
+#     email = forms.EmailField(required=True)
