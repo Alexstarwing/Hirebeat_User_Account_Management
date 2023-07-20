@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/css/materialize.min.css">
+        <style>
+            html,
+            body {
+                height: 100%;
+            }
+            html {
+                display: table;
+                margin: auto;
+            }
+            body {
+                display: table-cell;
+                vertical-align: middle;
+                
+            }
+            
+            #login-page {
+               width: 500px;
+            }
+            
+            .card {
+                 position: absolute;
+                 left: 50%;
+                 top: 50%;
+                 -moz-transform: translate(-50%, -50%)
+                 -webkit-transform: translate(-50%, -50%)
+                 -ms-transform: translate(-50%, -50%)
+                 -o-transform: translate(-50%, -50%)
+                 transform: translate(-50%, -50%);
+            }
+
+            .button {
+                background-color: #1E90FF;
+                color: #ffffff;
+                font-size: 14px;
+                border-radius: 3px;
+                cursor: pointer;
+                text-decoration: none;
+                padding: 10px 200px;
+            }
+            .remember-me {
+                margin-right: 300px; /* Vertically center the checkbox and label */
+                margin-top: 40px;
+                margin-bottom: 10px;
+
+              }
+
+          </style>
+    </head>
+    <body ng-app="mainModule" ng-controller="mainController">
+        <center>
+            <img class="responsive-img" style="display:inline-block" src="https://hirebeat-assets.s3.amazonaws.com/HireBeatLogo2.png" alt="HireBeat Logo"/></img>
+            <h1 style="display: inline-block; color: #006dff;">HireBeat</h1>
+            <div id="login-page" class="row">
+            {% block content%}
+
+            {% endblock content%}
+        </center>
+        </div>
+    </body>
