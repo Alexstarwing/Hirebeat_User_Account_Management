@@ -6,6 +6,7 @@
               href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/css/materialize.min.css">
         <link rel="stylesheet"
               href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+        <link href="https://fonts.googlefonts.cn/css?family=Rubik" rel="stylesheet">
         <style>
             html,
             body {
@@ -51,18 +52,55 @@
                 margin-bottom: 10px;
 
               }
+            
+            #icon {
+                top: 0;
+                left: 0;
+                position: absolute;
+                padding: 20px;
+                width: 80px;
+                height: 80px;
+                margin-right: 10px;
+                cursor: pointer;
+                filter: drop-shadow(0px 0px 5px rgba(0, 0, 0, 0.2));
+              }
+            
+              .icontext {
+                left: 75px;
+                top: 13.5px;
+                color: #006dff;
+                position: absolute;
+                font-family: 'Rubik', sans-serif;
 
-          </style>
+              }
+            
+              .header {
+                display: flex;
+                align-items: center;
+                top: 60px;
+                background-color: #1E90FF;
+                color: #ffffff;
+                font-size: 30px;
+                width: 100%;
+                min-height: 20vh;
+                left: 0;
+                position: absolute;
+                justify-content: center;
+                font-family: 'Rubik', sans-serif;
+                font-size: 210%;
+              }
+
+        </style>
+        <img id="icon" src="https://hirebeat-assets.s3.amazonaws.com/HireBeatLogo2.png" alt="HireBeat Logo"/> </img>
+        <h5 class="icontext">HireBeat</h5>
+    </head>
     </head>
     <body ng-app="mainModule" ng-controller="mainController">
+    <body ng-app="mainModule" ng-controller="mainController">
         <center>
-            <img class="responsive-img" style="display:inline-block" src="https://hirebeat-assets.s3.amazonaws.com/HireBeatLogo2.png" alt="HireBeat Logo"/></img>
-            <h1 style="display: inline-block; color: #006dff;">HireBeat</h1>
-            <div id="login-page" class="row">
             {% block content%}
 
             {% endblock content%}
-            </div>
         </center>
         </div>
     </body>
