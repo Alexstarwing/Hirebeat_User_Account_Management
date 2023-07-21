@@ -9,12 +9,14 @@
         <div class="row">
         <div class="input-field col s12">
             <i class="material-icons prefix">person</i>
+            <label for="{{ form.username.id_for_label}}" style="display: inline-block; vertical-align: middle;" id="username_label">Username:</label>
             {{form.username}}
         </div>
         </div>
         <div class="row">
         <div class="input-field col s12">
             <i class="material-icons prefix">lock_outline</i>
+            <label for="{{ form.password.id_for_label }}" style="display: inline-block; vertical-align: middle;" id="password_label">Password:</label>
             {{form.password}}
         </div>
         </div>
@@ -42,4 +44,22 @@
         </div>
     </form>
 </div>
+
+<script>
+    function handleLabel(field, labelId) {
+        const inputField = document.getElementById(field);
+        const label = document.getElementById(labelId);
+
+        inputField.addEventListener("input", function() {
+            if (inputField.value.trim() !== "") {
+                label.style.display = "none";
+            } else {
+                label.style.display = "inline-block";
+            }
+        });
+    }
+
+    handleLabel("{{ form.username.id_for_label }}", "username_label");
+    handleLabel("{{ form.password.id_for_label }}", "password_label");
+</script>
 {% endblock content %}
