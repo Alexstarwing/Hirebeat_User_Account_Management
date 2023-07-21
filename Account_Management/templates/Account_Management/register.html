@@ -1,51 +1,56 @@
+{% extends 'Account_Management/main.html' %}
 {% block content %}
+{#    <div style="margin: auto; width: 70%; font-family: Arial, Helvetica, sans-serif;">#}
+{#    <img src="https://hirebeat-assets.s3.amazonaws.com/HireBeatLogo2.png" alt="HireBeat Logo"#}
+{#      style="display:inline-block"></img>#}
+{#    <h1 style="display: inline-block; color: #006dff;">HireBeat</h1>#}
+    <div>
+    <h4 class="indigo-text">Register NOW!</h4>
+    </div>
+    <div class="section"></div>
+    <div class="col s14 z-depth-6 card-panel">
+        <form method="POST">
+            {% csrf_token %}
+        <div class="row"></div>
+        {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
 
-<div style="margin: auto; width: 70%; font-family: Arial, Helvetica, sans-serif;">
-    <img src="https://hirebeat-assets.s3.amazonaws.com/HireBeatLogo2.png" alt="HireBeat Logo"
-      style="display:inline-block"></img>
-    <h1 style="display: inline-block; color: #006dff;">HireBeat</h1>
+        <div class="input-field col s12"
+             style="display: inline-block; vertical-align: middle;">
+            <i class="material-icons prefix">person_outline</i>
+            {{form.username}}
+            <p>username</p>
+        </div>
 
-<div>
-    <h1>Register</h1>
+        <div class="input-field col s12"
+             style="display: inline-block; vertical-align: middle;">
+            <i class="material-icons prefix">mail_outline</i>
+            {{form.email}}
+        </div>
+
+        <div class="input-field col s12"
+             style="display: inline-block; vertical-align: middle;">
+            <i class="material-icons prefix">lock_outline</i>
+            {{ form.password1 }}
+        </div>
+
+        <div class="input-field col s12"
+             style="display: inline-block; vertical-align: middle;">
+            <i class="material-icons prefix">lock</i>
+            {{ form.password2 }}
+        </div>
+        <div>
+            <input style="margin-top:10px;"class="button" type="submit" value="Register">
+        </div>
+        </form>
+        {{form.errors}} <!--Display the error message-->
+    <div class="input-field col s6 m6 l6">
+        <p class="margin medium-small">Already have an account? <a href="{% url 'login' %}">Login</a></p>
+    </div>
 </div>
-
-<form method="POST">
-        {% csrf_token %}
-    {% if messages %}
-    <ul class="messages">
-        {% for message in messages %}
-        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-        {% endfor %}
-    </ul>
-    {% endif %}
-    <div>
-        <label>{{form.username.label}}</label>
-        {{form.username}}
-    </div>
-    <br>
-    <div>
-        <label>{{form.email.label}}</label>
-        {{form.email}}
-    </div>
-    <br>
-    <div>
-        <label>{{form.password1.label}}</label>
-        {{form.password1}}
-    </div>
-    <br>
-    <div>
-        <label>{{form.password2.label}}</label>
-        {{form.password2}}
-    </div>
-    <br>
-    <div>
-        <input style="margin-top:10px;"class="button" type="submit" value="Register">
-    </div>
-    </form>
-    <br>
-    {{form.errors}} <!--Display the error message-->
-    <p>Already have and account? <a href="{% url 'login' %}">Login</a></p>
-</div>
-
-
 {% endblock content %}

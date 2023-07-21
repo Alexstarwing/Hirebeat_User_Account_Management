@@ -1,13 +1,29 @@
+{% extends 'Account_Management/main.html' %}
 {% block content %}
-<div style="margin: auto; width: 70%; font-family: Arial, Helvetica, sans-serif;">
-    <img src="https://hirebeat-assets.s3.amazonaws.com/HireBeatLogo2.png" alt="HireBeat Logo"
-      style="display:inline-block"></img>
-    <h1 style="display: inline-block; color: #006dff;">HireBeat</h1>
-
-<div>
-        <h1>Login</h1>
-</div>
-<div >
+    <h5 class="indigo-text">Please, login into your account</h5>
+    <div class="section"></div>
+<div class="col s12 z-depth-6 card-panel">
+    <form class="login-form" method="post" action="{% url 'login' %}">
+        {% csrf_token %}
+        <div class="row"></div>
+        <div class="row">
+        <div class="input-field col s12">
+            <i class="material-icons prefix">person</i>
+            {{form.username}}
+        </div>
+        </div>
+        <div class="row">
+        <div class="input-field col s12">
+            <i class="material-icons prefix">lock_outline</i>
+            {{form.password}}
+        </div>
+        </div>
+        <div class="row">
+            <div class="remember-me">
+                <input type="checkbox" id="remember-me" />
+                <label for="remember-me">Remember me</label>
+            </div>
+          </div>
     {% if messages %}
     <ul class="messages">
         {% for message in messages %}
@@ -15,16 +31,15 @@
         {% endfor %}
     </ul>
     {% endif %}
-    <form method="POST">
-        {% csrf_token %}
-        {{form.as_p}}
         <input class="button" type="submit" value="Login">
+        <div class="row">
+            <div class="input-field col s6 m6 l6">
+            <p class="margin medium-small"><a href="{% url 'register'%}">Register Now!</a></p>
+            </div>
+            <div class="input-field col s6 m6 l6">
+                <p class="margin right-align medium-small"><a href="{% url 'password_reset'%}">Forgot password?</a></p>
+            </div>
+        </div>
     </form>
-    <p>Dont have and account? <a href="{% url 'register'%}">Register</a></p>
-    <p>Forgot Password? <a href="{% url 'password_reset'%}">Reset</a></p>
 </div>
-
-
-
-
 {% endblock content %}

@@ -1,6 +1,6 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views
-from .views import ProfileList, CustomLoginView, RegisterPage, ActivateAccount, resend_activation_email
+from .views import ProfileList, CustomLoginView, RegisterPage, ActivateAccount#, resend_activation_email
 from django.contrib.auth.views import LogoutView
 
 urlpatterns = [
