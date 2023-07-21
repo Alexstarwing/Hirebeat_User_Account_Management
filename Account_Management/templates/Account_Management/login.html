@@ -1,20 +1,29 @@
 {% extends 'Account_Management/main.html' %}
 {% block content %}
-    <h5 class="indigo-text">Please, login into your account</h5>
+    <h5 class="header">Please, login into your account</h5>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
     <div class="section"></div>
-<div class="col s12 z-depth-6 card-panel">
+    <div class="col s12 z-depth-6 card-panel">
     <form class="login-form" method="post" action="{% url 'login' %}">
         {% csrf_token %}
         <div class="row"></div>
         <div class="row">
         <div class="input-field col s12">
             <i class="material-icons prefix">person</i>
+            <label for="{{ form.username.id_for_label}}" style="display: inline-block; vertical-align: middle;" id="username_label"></label>
             {{form.username}}
         </div>
         </div>
         <div class="row">
         <div class="input-field col s12">
             <i class="material-icons prefix">lock_outline</i>
+            <label for="{{ form.password.id_for_label }}" style="display: inline-block; vertical-align: middle;" id="password_label"></label>
             {{form.password}}
         </div>
         </div>
@@ -42,4 +51,22 @@
         </div>
     </form>
 </div>
+
+<script>
+    function handleLabel(field, labelId) {
+        const inputField = document.getElementById(field);
+        const label = document.getElementById(labelId);
+
+        inputField.addEventListener("input", function() {
+            if (inputField.value.trim() !== "") {
+                label.style.display = "none";
+            } else {
+                label.style.display = "inline-block";
+            }
+        });
+    }
+
+    handleLabel("{{ form.username.id_for_label }}", "username_label");
+    handleLabel("{{ form.password.id_for_label }}", "password_label");
+</script>
 {% endblock content %}

@@ -22,26 +22,29 @@
 
         <div class="input-field col s12"
              style="display: inline-block; vertical-align: middle;">
-            <i class="material-icons prefix">person_outline</i>
+             <i class="material-icons prefix">person_outline</i>
+             <label for="{{ form.username.id_for_label }}" style="display: inline-block; vertical-align: middle;" id="username_label">Username:</label>
             {{form.username}}
-            <p>username</p>
         </div>
 
         <div class="input-field col s12"
              style="display: inline-block; vertical-align: middle;">
             <i class="material-icons prefix">mail_outline</i>
+            <label for="{{ form.email.id_for_label }}" style="display: inline-block; vertical-align: middle;" id="email_label">Email:</label>
             {{form.email}}
         </div>
 
         <div class="input-field col s12"
              style="display: inline-block; vertical-align: middle;">
             <i class="material-icons prefix">lock_outline</i>
+            <label for="{{ form.password1.id_for_label }}" style="display: inline-block; vertical-align: middle;" id="password1_label">Password:</label>
             {{ form.password1 }}
         </div>
 
         <div class="input-field col s12"
              style="display: inline-block; vertical-align: middle;">
             <i class="material-icons prefix">lock</i>
+            <label for="{{ form.password2.id_for_label }}" style="display: inline-block; vertical-align: middle;" id="password2_label">Confirm Password:</label>
             {{ form.password2 }}
         </div>
         <div>
@@ -53,4 +56,24 @@
         <p class="margin medium-small">Already have an account? <a href="{% url 'login' %}">Login</a></p>
     </div>
 </div>
+
+<script>
+    function handleLabel(field, labelId) {
+        const inputField = document.getElementById(field);
+        const label = document.getElementById(labelId);
+
+        inputField.addEventListener("input", function() {
+            if (inputField.value.trim() !== "") {
+                label.style.display = "none";
+            } else {
+                label.style.display = "inline-block";
+            }
+        });
+    }
+
+    handleLabel("{{ form.username.id_for_label }}", "username_label");
+    handleLabel("{{ form.email.id_for_label }}", "email_label");
+    handleLabel("{{ form.password1.id_for_label }}", "password1_label");
+    handleLabel("{{ form.password2.id_for_label }}", "password2_label");
+</script>
 {% endblock content %}
