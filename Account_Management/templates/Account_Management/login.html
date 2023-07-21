@@ -1,8 +1,15 @@
 {% extends 'Account_Management/main.html' %}
 {% block content %}
-    <h5 class="indigo-text">Please, login into your account</h5>
+    <h5 class="header">Please, login into your account</h5>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
     <div class="section"></div>
-<div class="col s12 z-depth-6 card-panel">
+    <div class="col s12 z-depth-6 card-panel">
     <form class="login-form" method="post" action="{% url 'login' %}">
         {% csrf_token %}
         <div class="row"></div>
