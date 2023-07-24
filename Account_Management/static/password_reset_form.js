@@ -1,7 +1,9 @@
-function handleLabel(field, labelId) {
+document.addEventListener("DOMContentLoaded", function() {
+
+    function handleLabel(field, labelId) {
         const inputField = document.getElementById(field);
         const label = document.getElementById(labelId);
-
+        console.log(inputField);
         inputField.addEventListener("input", function() {
             if (inputField.value.trim() !== "") {
                 label.style.display = "none";
@@ -10,6 +12,7 @@ function handleLabel(field, labelId) {
             }
         });
     }
-    
-handleLabel("{{ form.new_password1.id_for_label }}", "password1_label");
-handleLabel("{{ form.new_password2.id_for_label }}", "password2_label");
+    handleLabel("id_new_password1", "password1_label");
+    handleLabel("id_new_password2", "password2_label");
+
+});

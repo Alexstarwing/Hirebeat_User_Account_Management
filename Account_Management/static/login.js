@@ -12,6 +12,6 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
     handleLabel("id_username", "username_label");
-    handleLabel("id_password", "email_label");
+    handleLabel("id_password", "password_label");
 
 });
