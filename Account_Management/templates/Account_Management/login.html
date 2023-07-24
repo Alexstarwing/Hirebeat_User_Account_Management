@@ -1,4 +1,5 @@
 {% extends 'Account_Management/main.html' %}
+{% load static %}
 {% block content %}
     <h5 class="header">Please, login into your account</h5>
     <br>
@@ -69,4 +70,5 @@
     handleLabel("{{ form.username.id_for_label }}", "username_label");
     handleLabel("{{ form.password.id_for_label }}", "password_label");
 </script>
+{#    <script src="{% static 'login.js' %}"></script>#}
 {% endblock content %}
