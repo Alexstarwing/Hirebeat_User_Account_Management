@@ -1,9 +1,6 @@
 {% extends 'Account_Management/main.html' %}
+{% load static %}
 {% block content %}
-{#    <div style="margin: auto; width: 70%; font-family: Arial, Helvetica, sans-serif;">#}
-{#    <img src="https://hirebeat-assets.s3.amazonaws.com/HireBeatLogo2.png" alt="HireBeat Logo"#}
-{#      style="display:inline-block"></img>#}
-{#    <h1 style="display: inline-block; color: #006dff;">HireBeat</h1>#}
     <div>
         <h5 class="header">Register NOW!</h5>
     </div>
@@ -56,7 +53,6 @@
         <p class="margin medium-small">Already have an account? <a href="{% url 'login' %}">Login</a></p>
     </div>
 </div>
-
 <script>
     function handleLabel(field, labelId) {
         const inputField = document.getElementById(field);
@@ -76,4 +72,5 @@
     handleLabel("{{ form.password1.id_for_label }}", "password1_label");
     handleLabel("{{ form.password2.id_for_label }}", "password2_label");
 </script>
+{#    <script src="{% static 'register.js' %}"></script>#}
 {% endblock content %}
