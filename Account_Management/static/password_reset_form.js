@@ -10,5 +10,6 @@ function handleLabel(field, labelId) {
             }
         });
     }
+    
 handleLabel("{{ form.new_password1.id_for_label }}", "password1_label");
 handleLabel("{{ form.new_password2.id_for_label }}", "password2_label");
