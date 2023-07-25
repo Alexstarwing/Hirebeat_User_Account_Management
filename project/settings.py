@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'Account_Management.apps.AccountManagementConfig',
+    'User_Management.apps.AccountManagementConfig',
     # 'django_crontab'
 ]
 
@@ -87,7 +87,7 @@ DATABASES = {
 }
 
 # CRONJOBS = [
-#     ('*/5 * * * *', 'Account_Management.cron.delete_inactive_users')
+#     ('*/5 * * * *', 'User_Management.cron.delete_inactive_users')
 # ]
 
 # Password validation

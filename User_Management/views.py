@@ -23,7 +23,7 @@ from .tokens import account_activation_token
 
 
 class CustomLoginView(LoginView):
-    template_name = 'Account_Management/login.html'
+    template_name = 'User_Management/login.html'
     fields = '__all__'
     redirect_authenticated_user = True
 
@@ -32,7 +32,7 @@ class CustomLoginView(LoginView):
 
 
 class RegisterPage(FormView):
-    template_name = 'Account_Management/register.html'
+    template_name = 'User_Management/register.html'
     form_class = UserCreationForm
     redirect_authenticated_user = True
     success_url = reverse_lazy('profiles')  # where user will be redirect after success registration
@@ -44,7 +44,7 @@ class RegisterPage(FormView):
         token = default_token_generator.make_token(user)
         current_site = get_current_site(self.request)
         mail_subject = 'Activate your account'
-        message = render_to_string('Account_Management/account_activation_email.html', {
+        message = render_to_string('User_Management/account_activation_email.html', {
             'user': user,
             'domain': current_site.domain,
             'uid': urlsafe_base64_encode(force_bytes(user.pk)),
@@ -101,7 +101,7 @@ class ProfileList(LoginRequiredMixin, ListView):
 #         token = default_token_generator.make_token(user)
 #         current_site = get_current_site(request)
 #         mail_subject = 'Activate your account'
-#         message = render_to_string('Account_Management/account_activation_email.html', {
+#         message = render_to_string('User_Management/account_activation_email.html', {
 #             'user': user,
 #             'domain': current_site.domain,
 #             'uid': urlsafe_base64_encode(force_bytes(user.pk)),
