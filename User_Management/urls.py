@@ -1,6 +1,6 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views
-from .views import ProfileList, CustomLoginView, RegisterPage, ActivateAccount#, resend_activation_email
+from .views import ProfileList, CustomLoginView, RegisterPage, ActivateAccount, EditAccountView#, resend_activation_email
 from django.contrib.auth.views import LogoutView
 
 urlpatterns = [
@@ -22,4 +22,5 @@ urlpatterns = [
     path('reset_password_complete',
          auth_views.PasswordResetCompleteView.as_view(template_name='User_Management/password_reset_done.html'),
          name='password_reset_complete'),  # Password successfully changed message
+    path('edit-account/', EditAccountView.as_view(), name='edit-account'),
 ]

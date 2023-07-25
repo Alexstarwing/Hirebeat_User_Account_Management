@@ -85,6 +85,11 @@ class ActivateAccount(View):
 class ProfileList(LoginRequiredMixin, ListView):
     model = Profile
     context_object_name = 'profiles'
+    
+class EditAccountView(LoginRequiredMixin, ListView):
+    model = Profile
+    context_object_name = 'edit-account'
+    template_name = 'User_Management/edit-account.html'
 
 # def resend_activation_email(request): 
 #     if request.user.is_authenticated:
