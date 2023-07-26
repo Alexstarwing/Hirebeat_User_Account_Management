@@ -302,12 +302,14 @@
                                         <a class="dropdown-item d-flex align-items-center py-2" href="{% url 'edit-account' %}">
                                             <span class="material-icons mr-2">account_circle</span> Edit Account
                                         </a>
-                                        <a class="dropdown-item d-flex align-items-center py-2" href="#">
+                                        <a class="dropdown-item d-flex align-items-center py-2" href="{% url 'author-settings' %}">
                                             <span class="material-icons mr-2">settings</span> Settings
                                         </a>
-                                        <a class="dropdown-item d-flex align-items-center py-2" href="login.html">
-                                            <span class="material-icons mr-2">exit_to_app</span> Logout
-                                        </a>
+                                        {% if request.user.is_authenticated %}
+                                            <a class="dropdown-item d-flex align-items-center py-2" href="{% url 'logout' %}">
+                                                <span class="material-icons mr-2">exit_to_app</span> Logout
+                                            </a>
+                                        {% endif %}
                                     </div>
                                 </div>
 

@@ -107,7 +107,7 @@
                                         <li class="nav-item dropdown">
                                             <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Layouts</a>
                                             <div class="dropdown-menu">
-                                                <a class="dropdown-item active" href="edit-account.html">Default</a>
+                                                <a class="dropdown-item active" href="{% url 'edit-account' %}">Default</a>
                                                 <!-- <a class="dropdown-item" href="fluid-edit-account.html">Full Width Navs</a> -->
                                                 <a class="dropdown-item" href="fixed-edit-account.html">Fixed Navs</a>
                                                 <a class="dropdown-item" href="mini-edit-account.html">Mini Sidebar + Navs</a>
@@ -292,15 +292,17 @@
 
                                         </div>
                                         <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item d-flex align-items-center py-2" href="edit-account.html">
+                                        <a class="dropdown-item d-flex align-items-center py-2" href="{% url 'edit-account' %}">
                                             <span class="material-icons mr-2">account_circle</span> Edit Account
                                         </a>
-                                        <a class="dropdown-item d-flex align-items-center py-2" href="#">
+                                        <a class="dropdown-item d-flex align-items-center py-2" href="{% url 'author-settings' %}">
                                             <span class="material-icons mr-2">settings</span> Settings
                                         </a>
-                                        <a class="dropdown-item d-flex align-items-center py-2" href="login.html">
-                                            <span class="material-icons mr-2">exit_to_app</span> Logout
-                                        </a>
+                                        {% if request.user.is_authenticated %}
+                                            <a class="dropdown-item d-flex align-items-center py-2" href="{% url 'logout' %}">
+                                                <span class="material-icons mr-2">exit_to_app</span> Logout
+                                            </a>
+                                        {% endif %}
                                     </div>
                                 </div>
 
@@ -551,7 +553,7 @@
                                 </a>
                             </li>
                             <li class="sidebar-menu-item active">
-                                <a class="sidebar-menu-button" href="edit-account.html">
+                                <a class="sidebar-menu-button" href="{% url 'edit-account' %}">
                                     <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">settings</i>
                                     <span class="sidebar-menu-text">Edit Account</span>
                                 </a>
@@ -833,39 +835,39 @@
     </div>
 
     <!-- jQuery -->
-    <script src="{% static/vendor/jquery.min.js"></script>
+    <script src="{% static 'vendor/jquery.min.js' %}"></script>
 
     <!-- Bootstrap -->
-    <script src="static 'vendor/popper.min.js' %}"></script>
-    <script src="static/vendor/bootstrap.min.js"></script>
+    <script src="{% static 'vendor/popper.min.js' %}"></script>
+    <script src="{% static 'vendor/bootstrap.min.js' %}"></script>
 
     <!-- Perfect Scrollbar -->
-    <script src="static/vendor/perfect-scrollbar.min.js"></script>
+    <script src="{% static 'vendor/perfect-scrollbar.min.js' %}"></script>
 
     <!-- DOM Factory -->
-    <script src="static/vendor/dom-factory.js"></script>
+    <script src="{% static 'vendor/dom-factory.js' %}"></script>
 
     <!-- MDK -->
-    <script src="static/vendor/material-design-kit.js"></script>
+    <script src="{% static 'vendor/material-design-kit.js' %}"></script>
 
     <!-- Range Slider -->
-    <script src="static/vendor/ion.rangeSlider.min.js"></script>
-    <script src="static/js/ion-rangeslider.js"></script>
+    <script src="{% static 'vendor/ion.rangeSlider.min.js' %}"></script>
+    <script src="{% static 'js/ion-rangeslider.js' %}"></script>
 
     <!-- App -->
-    <script src="static/js/toggle-check-all.js"></script>
-    <script src="static/js/check-selected-row.js"></script>
-    <script src="static/js/dropdown.js"></script>
-    <script src="static/js/sidebar-mini.js"></script>
-    <script src="static/js/app.js"></script>
+    <script src="{% static 'js/toggle-check-all.js' %}"></script>
+    <script src="{% static 'js/check-selected-row.js' %}"></script>
+    <script src="{% static 'js/dropdown.js' %}"></script>
+    <script src="{% static 'js/sidebar-mini.js' %}"></script>
+    <script src="{% static 'js/app.js' %}"></script>
 
     <!-- App Settings (safe to remove) -->
-    <script src="static/js/app-settings.js"></script>
+    <script src="{% static 'js/app-settings.js' %}"></script>
 
 
     <!-- Dropzone -->
-    <script src="static/vendor/dropzone.min.js"></script>
-    <script src="static/js/dropzone.js"></script>
+    <script src="{% static 'vendor/dropzone.min.js' %}"></script>
+    <script src="{% static 'js/dropzone.js' %}"></script>
 
 </body>
 
