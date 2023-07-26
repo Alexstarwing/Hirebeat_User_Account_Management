@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'User_Management.apps.AccountManagementConfig',
+    'Account_Management.apps.AccountManagementConfig'
     # 'django_crontab'
 ]
 
