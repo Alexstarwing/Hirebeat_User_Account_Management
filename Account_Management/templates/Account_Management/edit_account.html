@@ -1,0 +1,153 @@
+{% extends 'User_Management/account_main.html' %}
+{% block content %}
+
+        <!-- Header Layout Content -->
+        <div class="mdk-header-layout__content mdk-header-layout__content--fullbleed mdk-header-layout__content--scrollable page" style="padding-top: 60px;">
+
+
+            <div class="page__heading border-bottom">
+                <div class="container-fluid page__container d-flex align-items-center">
+                    <h1 class="mb-0">Edit Account</h1>
+                </div>
+            </div>
+
+            <div class="container-fluid page__container">
+                <div class="card card-form">
+                    <div class="row no-gutters">
+                        <div class="col-lg-4 card-body">
+                            <p><strong class="headings-color">Organization</strong></p>
+                            <p class="text-muted mb-0">Update the information on your company.</p>
+                        </div>
+                        <div class="col-lg-8 card-form__body card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label for="username">Orgnaization Name</label>
+                                        <input id="username" type="text" class="form-control" placeholder="Username" value="Hirebeat"> <!---->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="office-list">Offices</label>
+                                <button id="add-office-btn" class="btn btn-primary">+ Add Office</button>
+                                <ul id="office-list" class="list-group"></ul>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="department-list">Departments</label>
+                                <button id="add-department-btn" class="btn btn-primary">+ New Department</button>
+                                <ul id="department-list" class="list-group"></ul>
+                            </div>
+
+                            <script>
+                                document.addEventListener('DOMContentLoaded', function() {
+                                    const addOfficeBtn = document.getElementById('add-office-btn');
+                                    const addDepartmentBtn = document.getElementById('add-department-btn');
+
+                                    function createItem(list, itemName, editFunction, deleteFunction) {
+                                        const listItem = document.createElement('li');
+                                        listItem.className = 'list-group-item d-flex justify-content-between align-items-center';
+
+                                        const itemNameSpan = document.createElement('span');
+                                        itemNameSpan.textContent = itemName;
+                                        listItem.appendChild(itemNameSpan);
+
+                                        const buttonsContainer = document.createElement('div');
+                                        buttonsContainer.className = 'd-flex';
+
+                                        const editBtn = document.createElement('button');
+                                        editBtn.className = 'btn btn-secondary me-2';
+                                        editBtn.textContent = 'Edit';
+                                        editBtn.addEventListener('click', () => {
+                                            editFunction(itemNameSpan);
+                                        });
+                                        buttonsContainer.appendChild(editBtn);
+
+                                        const deleteBtn = document.createElement('button');
+                                        deleteBtn.className = 'btn btn-danger';
+                                        deleteBtn.textContent = 'Delete';
+                                        deleteBtn.addEventListener('click', () => {
+                                            deleteFunction(list, listItem);
+                                        });
+                                        buttonsContainer.appendChild(deleteBtn);
+
+                                        listItem.appendChild(buttonsContainer);
+
+                                        list.appendChild(listItem);
+                                    }
+
+                                    function editItemName(itemNameSpan) {
+                                        const newItemName = prompt('Enter the new name:', itemNameSpan.textContent);
+                                        if (newItemName !== null) {
+                                            itemNameSpan.textContent = newItemName;
+                                        }
+                                    }
+
+                                    function deleteItem(list, listItem) {
+                                        const isConfirmed = confirm('Are you sure you want to delete this item?');
+                                        if (isConfirmed) {
+                                            list.removeChild(listItem);
+                                        }
+                                    }
+
+                                    function showInputForm(list) {
+                                        const itemName = prompt('Enter the name:');
+                                        if (itemName) {
+                                            createItem(list, itemName, editItemName, deleteItem);
+                                        }
+                                    }
+
+                                    addOfficeBtn.addEventListener('click', function() {
+                                        showInputForm(document.getElementById('office-list'));
+                                    });
+
+                                    addDepartmentBtn.addEventListener('click', function() {
+                                        showInputForm(document.getElementById('department-list'));
+                                    });
+                                });
+                            </script>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card card-form">
+                    <div class="row no-gutters">
+                        <div class="col-lg-4 card-body">
+                            <p><strong class="headings-color">Users</strong></p>
+                            <p class="text-muted mb-0">Manage your team members or invite new users.</p>
+                        </div>
+                        <div class="col-lg-8 card-form__body card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <a href="{% url 'add-user'%}" class="btn btn-primary">Add User</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-right mb-5">
+                    <a href="" class="btn btn-success">Save</a>
+                </div>
+            </div>
+
+
+        </div>
+        <!-- // END header-layout__content -->
+
+
+
+
+
+    <!-- App Settings FAB -->
+    <div id="app-settings">
+        <app-settings layout-active="default" :layout-location="{
+      'default': 'edit-account.html',
+      'fixed': 'fixed-edit-account.html',
+      'fluid': 'fluid-edit-account.html',
+      'mini': 'mini-edit-account.html'
+    }"></app-settings>
+    </div>
+
+{% endblock content %}

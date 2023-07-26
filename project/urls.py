@@ -21,4 +21,5 @@ from project import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('User_Management.urls')),
+    path('account/', include('Account_Management.urls'))
 ]

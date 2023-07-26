@@ -17,7 +17,7 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_text
 from django.core.mail import send_mail
 from django.contrib import messages
-from .forms import UserCreationForm#, ResendActivationEmailForm
+from .forms import UserCreationForm  # , ResendActivationEmailForm
 from .models import Profile
 from .tokens import account_activation_token
 
@@ -53,7 +53,7 @@ class RegisterPage(FormView):
         send_mail(mail_subject, message, 'yifandsb666@gmail.com', [user.email])
         email_sent_message = "Activation email has been sent to your email address."  # flash message
         messages.success(self.request, email_sent_message)
-        #return redirect('resend_activation_email') #Notify about the sent in another page
+        # return redirect('resend_activation_email') #Notify about the sent in another page
         return super().form_valid(form)  # Redirect to success_url
 
     def get(self, *args, **kwargs):
@@ -70,7 +70,7 @@ class ActivateAccount(View):
         except (TypeError, ValueError, OverflowError, User.DoesNotExist):
             user = None
         # pdb.set_trace()  # 断点
-        if user is not None and default_token_generator.check_token(user, token):  
+        if user is not None and default_token_generator.check_token(user, token):
             user.is_active = True
             user.profile.email_confirmed = True
             user.save()
@@ -85,16 +85,19 @@ class ActivateAccount(View):
 class ProfileList(LoginRequiredMixin, ListView):
     model = Profile
     context_object_name = 'profiles'
-    
+
+
 class EditAccountView(LoginRequiredMixin, ListView):
     model = Profile
     context_object_name = 'edit-account'
     template_name = 'User_Management/edit-account.html'
-    
+
+
 class SettingView(LoginRequiredMixin, ListView):
     model = Profile
     context_object_name = 'author-settings'
     template_name = 'User_Management/author-settings.html'
+
 
 class AddUserView(LoginRequiredMixin, ListView):
     model = Profile
@@ -104,7 +107,7 @@ class AddUserView(LoginRequiredMixin, ListView):
 # def resend_activation_email(request): 
 #     if request.user.is_authenticated:
 #         return redirect('profiles')
-    
+
 #     form = ResendActivationEmailForm(request.POST)
 #     if form.is_valid():
 #         email = form.cleaned_data["email"]
@@ -124,5 +127,5 @@ class AddUserView(LoginRequiredMixin, ListView):
 #         })
 #         send_mail(mail_subject, message, 'yifandsb666@gmail.com', [user.email])
 #         return redirect('resend_activation_email') 
-    
+
 #     return HttpResponse("An error occurred or the form is not valid.")
