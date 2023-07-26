@@ -96,6 +96,11 @@ class SettingView(LoginRequiredMixin, ListView):
     context_object_name = 'author-settings'
     template_name = 'User_Management/author-settings.html'
 
+class AddUserView(LoginRequiredMixin, ListView):
+    model = Profile
+    context_object_name = 'add-user'
+    template_name = 'User_Management/add_user.html'
+
 # def resend_activation_email(request): 
 #     if request.user.is_authenticated:
 #         return redirect('profiles')
