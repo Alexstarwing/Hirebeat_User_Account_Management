@@ -1,0 +1,71 @@
+
+{% extends 'User_Management/account_main.html' %}
+{% block content %}
+    <!-- Header Layout Content -->
+    <div class="mdk-header-layout__content mdk-header-layout__content--fullbleed mdk-header-layout__content--scrollable page" style="padding-top: 60px;">
+
+
+        <div class="container-fluid page__container page__heading d-flex align-items-center border-bottom  ">
+            <img id="icon" src="https://hirebeat-assets.s3.amazonaws.com/HireBeatLogo2.png" alt="HireBeat Logo"/> </img>
+            <h1 class="icontext">HireBeat</h1>
+        </div>
+        <div class="container-fluid page__container">
+            <div class="card-header card-header-large bg-light d-flex align-items-center">
+                <div class="flex">
+                    <h4 class="card-header__title">Company Logo</h4>
+                </div>
+                <div class="ml-auto">
+                    <a href="{% url 'account_management:edit_account'%}" class="btn btn-light">Edit</a>
+                </div>
+            </div>
+            <div class="card-header card-header-large bg-light d-flex align-items-center">
+                <div class="flex">
+                    <h4 class="card-header__title">Company Name</h4>
+                </div>
+                <div class="ml-auto">
+                    <a href="#" class="btn btn-light">Edit</a>
+                </div>
+            </div>
+            <div class="card-header card-header-large bg-light d-flex align-items-center">
+                <div class="flex">
+                    <h4 class="card-header__title">Basic Information</h4>
+                </div>
+                <div class="ml-auto">
+                    <a href="#" class="btn btn-light">Edit</a>
+                </div>
+            </div>
+            <div class="card-header card-header-large bg-light d-flex align-items-center">
+                <div class="flex">
+                    <h4 class="card-header__title">Profile Video</h4>
+                </div>
+                <div class="ml-auto">
+                    <a href="#" class="btn btn-light">Update</a>
+                </div>
+            </div>
+            <div class="card-header card-header-large bg-light d-flex align-items-center">
+                <div class="flex">
+                    <h4 class="card-header__title">Email Settings</h4>
+                </div>
+                <div class="ml-auto">
+                    <a href="#" class="btn btn-light">Manage</a>
+                </div>
+            </div>
+
+        </div>
+
+
+
+    </div>
+    <!-- // END header-layout__content -->
+
+    <!-- App Settings FAB -->
+    <div id="app-settings">
+        <app-settings layout-active="default" :layout-location="{
+      'default': 'author-settings.html',
+      'fixed': 'fixed-author-settings.html',
+      'fluid': 'fluid-author-settings.html',
+      'mini': 'mini-author-settings.html'
+    }"></app-settings>
+    </div>
+
+{% endblock content %}

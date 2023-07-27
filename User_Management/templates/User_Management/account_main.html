@@ -42,7 +42,14 @@
     <link type="text/css" href="{% static 'vendor/jqvmap/jqvmap.min.css' %}" rel="stylesheet">
 
 
+    <style>
+        .icontext {
+            margin-left: 10px;
+            color: #006dff;
+            font-family: 'Rubik', sans-serif;
 
+        }
+    </style>
 </head>
 <body class="layout-default">
 
@@ -103,10 +110,10 @@
                                         <li class="nav-item dropdown">
                                             <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Layouts</a>
                                             <div class="dropdown-menu">
-                                                <a class="dropdown-item active" href="index.html">Default</a>
+                                                <a class="dropdown-item active" href="{% url 'profiles' %}">Default</a>
                                                 <!-- <a class="dropdown-item" href="fluid-index.html">Full Width Navs</a> -->
-                                                <a class="dropdown-item" href="fixed-index.html">Fixed Navs</a>
-                                                <a class="dropdown-item" href="mini-index.html">Mini Sidebar + Navs</a>
+                                                <a class="dropdown-item" href="{% url 'profiles' %}">Fixed Navs</a>
+                                                <a class="dropdown-item" href="{% url 'profiles' %}">Mini Sidebar + Navs</a>
                                             </div>
                                         </li>
                                         <li>
@@ -116,7 +123,7 @@
 
 
 
-                                <form class="ml-auto search-form search-form--light d-none d-sm-flex flex" action="index.html">
+                                <form class="ml-auto search-form search-form--light d-none d-sm-flex flex" action="{% url 'profiles' %}">
                                     <input type="text" class="form-control" placeholder="Search">
                                     <button class="btn" type="submit"><i class="material-icons">search</i></button>
                                 </form>
@@ -291,8 +298,8 @@
                                         <a class="dropdown-item d-flex align-items-center py-2" href="{% url 'account_management:edit_account' %}">
                                             <span class="material-icons mr-2">account_circle</span> Edit Account
                                         </a>
-                                        <a class="dropdown-item d-flex align-items-center py-2" href="{% url 'author-settings' %}">
-                                            <span class="material-icons mr-2">settings</span> Settings
+                                        <a class="dropdown-item d-flex align-items-center py-2" href="{% url 'account_management:account_list' %}">
+                                            <span class="material-icons mr-2">settings</span> Configure
                                         </a>
                                         {% if request.user.is_authenticated %}
                                             <a class="dropdown-item d-flex align-items-center py-2" href="{% url 'logout' %}">
@@ -324,7 +331,7 @@
     <div class="sidebar sidebar-dark sidebar-left bg-dark-gray" data-perfect-scrollbar>
 
         <div class="d-flex align-items-center sidebar-p-a sidebar-account flex-shrink-0">
-            <a href="index.html" class="flex d-flex align-items-center text-underline-0">
+            <a href="{% url 'profiles' %}" class="flex d-flex align-items-center text-underline-0">
                 <span class="mr-3">
                     <!-- LOGO -->
                     <svg width="30px" viewBox="0 0 27 26" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -356,7 +363,7 @@
         <div class="sidebar-block p-0">
             <ul class="sidebar-menu mt-0">
                 <li class="sidebar-menu-item active">
-                    <a class="sidebar-menu-button" href="{% url 'edit-account' %}">
+                    <a class="sidebar-menu-button" href="{% url 'account_management:edit_account' %}">
                         <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">settings</i>
                         <span class="sidebar-menu-text">Edit Account</span>
                     </a>
@@ -385,6 +392,14 @@
 </div>
 </div>
 <!-- // END drawer-layout -->
+<div id="app-settings">
+    <app-settings layout-active="default" :layout-location="{
+  'default': 'edit_account.html',
+  'fixed': 'fixed-edit-account.html',
+  'fluid': 'fluid-edit-account.html',
+  'mini': 'mini-edit-account.html'
+}"></app-settings>
+</div>
     
     <!-- jQuery -->
     <script src="{% static 'vendor/jquery.min.js' %}"></script>
