@@ -8,9 +8,49 @@
         <div class="container-fluid page__container page__heading d-flex align-items-center border-bottom  ">
             <h1 class="mb-0">Configure</h1>
         </div>
-        <button>
-            <a href="{% url 'account_management:edit_account'%}">Edit Account</a>
-        </button>
+        <div class="container-fluid page__container">
+            <div class="card-header card-header-large bg-light d-flex align-items-center">
+                <div class="flex">
+                    <h4 class="card-header__title">Edit Account</h4>
+                </div>
+                <div class="ml-auto">
+                    <a href="{% url 'account_management:edit_account'%}" class="btn btn-light">Edit</a>
+                </div>
+            </div>
+            <div class="card-header card-header-large bg-light d-flex align-items-center">
+                <div class="flex">
+                    <h4 class="card-header__title">Organization</h4>
+                </div>
+                <div class="ml-auto">
+                    <a href="#" class="btn btn-light">Details / Edit</a>
+                </div>
+            </div>
+            <div class="card-header card-header-large bg-light d-flex align-items-center">
+                <div class="flex">
+                    <h4 class="card-header__title">Users</h4>
+                </div>
+                <div class="ml-auto">
+                    <a href="#" class="btn btn-light">Manage / Invite</a>
+                </div>
+            </div>
+            <div class="card-header card-header-large bg-light d-flex align-items-center">
+                <div class="flex">
+                    <h4 class="card-header__title">Permission Policies</h4>
+                </div>
+                <div class="ml-auto">
+                    <a href="#" class="btn btn-light">Manage</a>
+                </div>
+            </div>
+            <div class="card-header card-header-large bg-light d-flex align-items-center">
+                <div class="flex">
+                    <h4 class="card-header__title">Email Settings</h4>
+                </div>
+                <div class="ml-auto">
+                    <a href="#" class="btn btn-light">Manage</a>
+                </div>
+            </div>
+
+        </div>
 
 
 
