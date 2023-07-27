@@ -27,8 +27,8 @@ class AddUserView(LoginRequiredMixin, ListView):
     context_object_name = 'add_user'
     template_name = 'Account_Management/add_user.html'
 
+
 class OrganizationView(LoginRequiredMixin, ListView):
     model = Account
     context_object_name = 'organization'
-    template_name = 'Account_Management/organization.html'    
-
+    template_name = 'Account_Management/organization.html'
