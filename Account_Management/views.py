@@ -51,7 +51,7 @@ class AddUserView(LoginRequiredMixin, View):
             # Generate the registration link
             current_site = get_current_site(self.request)
             uid = urlsafe_base64_encode(force_bytes(email))
-            register_link = f"http://{current_site.domain}"
+            register_link = f"http://{current_site.domain}/register"
 
             # Send invitation email with registration link
             subject = 'Invitation to Register'
