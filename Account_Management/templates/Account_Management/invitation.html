@@ -7,12 +7,28 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Email Invitation Sent| HireBeat</title>
+        <style>
+            .go_back_link {
+                    cursor: pointer;
+                }
+
+                .go_back_link:hover {
+                    color: #1167C9;
+                }
+        </style>
     </head>
     <body>
-        <h1>Email Invitation Sent</h1>
-        <p>An invitation email has been sent to the user.</p>
-        <p>Click the button below to return to the edit account page:</p>
-        <a href="{% url 'account_management:edit_account' %}" class="btn btn-primary">Return to Edit Account</a>
+        <div style="margin: auto; font-family: Arial, Helvetica, sans-serif; text-align: center ">
+            <h5 class="header">Email Invitation Sent</h5>
+            <div class="col s12 z-depth-6 card-panel">
+                <div class="card-content left-align">
+                    <p>An invitation email has been sent to the user.</p>
+                    <p>Click the button below to return to the edit account page:</p>
+                    <div class="row" style="margin-bottom: 5px"></div>
+                    <a onclick="function goBack() {window.history.back();} goBack()" class="go_back_link">Go Back</a>
+                </div>
+            </div>
+        </div>
     </body>
     </html>
 {% endblock content %}
