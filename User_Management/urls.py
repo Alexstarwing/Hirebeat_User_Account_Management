@@ -1,6 +1,7 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views
-from .views import ProfileList, CustomLoginView, RegisterPage, ActivateAccount, EditAccountView, SettingView, AddUserView#, resend_activation_email
+from .views import ProfileList, CustomLoginView, RegisterPage, ActivateAccount, EditAccountView, SettingView, \
+    AddUserView  # , resend_activation_email
 from django.contrib.auth.views import LogoutView
 
 urlpatterns = [
@@ -8,7 +9,7 @@ urlpatterns = [
     path('logout/', LogoutView.as_view(next_page='login'), name='logout'),
     path('register/', RegisterPage.as_view(), name='register'),
     path('', ProfileList.as_view(), name='profiles'),
-#     path('resend_activation_email/', resend_activation_email, name='resend_activation_email'),
+    #     path('resend_activation_email/', resend_activation_email, name='resend_activation_email'),
     path('activate/<uidb64>/<token>/', ActivateAccount.as_view(), name='activate'),
     path('reset_password/',
          auth_views.PasswordResetView.as_view(template_name='User_Management/password_reset.html'),
@@ -24,5 +25,5 @@ urlpatterns = [
          name='password_reset_complete'),  # Password successfully changed message
     path('edit-account/', EditAccountView.as_view(), name='edit-account'),
     path('author-settings/', SettingView.as_view(), name='author-settings'),
-    path('add-user/', AddUserView.as_view(), name='add-user'), 
+    path('add-user/', AddUserView.as_view(), name='add-user'),
 ]
