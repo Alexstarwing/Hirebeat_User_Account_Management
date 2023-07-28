@@ -25,7 +25,7 @@
                     <p>An invitation email has been sent to the user.</p>
                     <p>Click the button below to return to the edit account page:</p>
                     <div class="row" style="margin-bottom: 5px"></div>
-                    <a onclick="function goBack() {window.history.back();} goBack()" class="go_back_link">Go Back</a>
+                    <a href="{% url 'account_management:account_list' %}" class="go_back_link">Go Back</a>
                 </div>
             </div>
         </div>
