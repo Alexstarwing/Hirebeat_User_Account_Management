@@ -1,5 +1,8 @@
 {% extends 'User_Management/account_main.html' %}
 {% block content %}
+    <head>
+        <title>Dashboard | HireBeat</title>
+    </head>
 
     <!-- Header Layout Content -->
     <div class="mdk-header-layout__content mdk-header-layout__content--fullbleed mdk-header-layout__content--scrollable page" style="padding-top: 60px;">
@@ -127,13 +130,6 @@
                         </div>
                     </div>
                     <!-- END FIRST TAB CONTENT -->
-            <button>
-                <a href="{% url 'account_management:account' %}">configure</a>
-            </button>
-            <button>
-                <a href="{% url 'logout' %}">logout</a>
-            </button>
-
     </div>
     <!-- // END header-layout__content -->
 

@@ -1,42 +1,86 @@
-<h1>add user</h1>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enter User Email</title>
-    <style>
-        .form-group {
-            display: flex;
-            align-items: center;
-        }
+{% extends 'User_Management/main.html' %}
+{% load static %}
+{% block content %}
+    <!DOCTYPE html>
+    <html lang="en">
+        <head>
+            <title>Add new user | HireBeat</title>
+            <style>
+                .form-group {
+                    display: flex;
+                    align-items: center;
+                }
 
-        .form-group label {
-            margin-right: 10px;
-            line-height: 32px;
-        }
+                .form-group label {
+                    margin-right: 10px;
+                    line-height: 32px;
+                }
 
-        .form-control {
-            height: 32px;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8 card-form__body card-body">
-                <div class="row">
-                    <div class="col-md-12">
-                        <h2>Enter User Email</h2>
-                        <form method="post">
-                            {% csrf_token %}
-                            {{ form.as_p }}
-                            <button>Submit</button>
-                        </form>
-                    </div>
-                </div>
+
+
+                .col.s14.z-depth-6.card-panel {
+                    max-width: 500px;
+                    margin: 0 auto;
+                    padding: 20px;
+                }
+
+                input.button {
+                    display: block;
+                    width: 75%;
+                    margin-top: 20px;
+                    background-color: #2196F3;
+                    border: 1px solid white;
+                    padding: 10px;
+                    color: white;
+                    cursor: pointer;
+                }
+
+                input.button:hover {
+                    background-color: #1565C0;
+                }
+
+                .custom-panel {
+                    width: 490px; /* Adjust this value to set the desired height */
+                    height: 300px;
+                    vertical-align: center;
+                  }
+
+                .go_back_link {
+                    cursor: pointer;
+                }
+
+                .go_back_link:hover {
+                    color: #1167C9;
+                }
+            </style>
+        </head>
+        <body>
+            <h4 class="header">Add New User</h4>
+            <div class="section"></div>
+            <div class="section"></div>
+            <div class="col s14 z-depth-6 card-panel custom-panel">
+                <form method="post" autocomplete="off">
+                  {% csrf_token %}
+                  <div class="input-field col s12">
+                    <i class="material-icons prefix">person</i>
+                    <label for="{{ form.name.id_for_label}}" style="vertical-align: middle;" id="name_label">Name:</label>
+                    {{form.name}}
+                  </div>
+
+                  <div class="input-field col s12">
+                    <i class="material-icons prefix">email</i>
+                    <label for="{{ form.email.id_for_label}}" style="vertical-align: middle;" id="email_label">Email:</label>
+                    {{form.email}}
+                  </div>
+
+                  <input class="button" type="submit" value="Invite" style="border: transparent">
+                  <div class="row" style="margin-bottom: 15px"></div>
+                  <a onclick="function goBack() {window.history.back();}
+                  goBack()" class="go_back_link">Go Back</a>
+                </form>
             </div>
-        </div>
-    </div>
-</body>
-</html>
+        </body>
+    </html>
+<script src="{% static 'add_user.js' %}"></script>
+
+{% endblock content %}
