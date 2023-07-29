@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Manage Users</title>
+</head>
+<body>
+    <h1>Manage Users</h1>
+    <ul>
+        {% for account in accounts %}
+            <li>{{ account.profile.user.username }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
