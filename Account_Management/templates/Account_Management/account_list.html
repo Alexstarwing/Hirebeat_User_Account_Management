@@ -1,4 +1,3 @@
-
 {% extends 'User_Management/account_main.html' %}
 {% block content %}
     <head>
@@ -33,7 +32,8 @@
                     <h4 class="card-header__title">Users</h4>
                 </div>
                 <div class="ml-auto">
-                    <a href="{% url 'account_management:add_user' %}" class="btn btn-light">Manage / Invite</a>
+                    <a href="{% url 'account_management:manage_users' %}" class="btn btn-light">Manage</a>
+                    <a href="{% url 'account_management:add_user' %}" class="btn btn-light">Invite</a>
                 </div>
             </div>
             <div class="card-header card-header-large bg-light d-flex align-items-center">

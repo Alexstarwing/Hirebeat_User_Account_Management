@@ -12,7 +12,8 @@ from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.conf import settings
 from django.views import View
-from .forms import InviteForm
+from .forms import InviteForm, OrganizationForm
+from User_Management.models import Profile
 from django.template.loader import render_to_string
 from django.contrib.auth.tokens import default_token_generator, PasswordResetTokenGenerator
 
@@ -22,11 +23,30 @@ class AccountList(LoginRequiredMixin, ListView):
     context_object_name = 'Accounts'
 
 
-class EditAccountView(LoginRequiredMixin, ListView):
+class EditAccountView(LoginRequiredMixin, View):
     model = Account
     context_object_name = 'edit_account'
     template_name = 'Account_Management/edit_account.html'
 
+    def get(self, request):
+        try:
+            profile = Profile.objects.get(user=request.user)
+            account = Account.objects.filter(profile=profile).first()
+            form = OrganizationForm(initial={'organization': account.organization}) if account else OrganizationForm()
+        except Profile.DoesNotExist:
+            form = OrganizationForm()
+        
+        return render(request, self.template_name, {'form': form})
+    
+    def post(self, request):
+        form = OrganizationForm(request.POST)
+        if form.is_valid():
+            profile = Profile.objects.get(user=request.user)
+            account, created = Account.objects.get_or_create(profile=profile)
+            account.organization = form.cleaned_data['organization']
+            account.save()
+            return redirect('account_management:edit_account') 
+        return render(request, self.template_name, {'form': form})
 
 class SettingView(LoginRequiredMixin, ListView):
     model = Account
@@ -78,3 +98,12 @@ class OrganizationView(LoginRequiredMixin, ListView):
     model = Account
     context_object_name = 'organization'
     template_name = 'Account_Management/organization.html'
+
+class ManageUserView(View):
+    model = Account
+    template_name = 'Account_Management/manage_user.html'
+
+    def get(self, request):
+        current_account = Account.objects.get(profile__user=request.user)
+        accounts = Account.objects.filter(organization=current_account.organization)
+        return render(request, self.template_name, {'accounts': accounts})
