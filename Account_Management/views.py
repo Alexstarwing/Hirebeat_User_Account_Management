@@ -1,4 +1,5 @@
 from django.http import HttpResponse
+from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic.list import ListView
@@ -102,7 +103,22 @@ class OrganizationView(LoginRequiredMixin, ListView):
 class ManageUserView(View):
     model = Account
     template_name = 'Account_Management/manage_user.html'
+    assign_org_url = reverse_lazy('account_management:edit_account')
 
+    def dispatch(self, request, *args, **kwargs):
+        try:
+            current_account = Account.objects.get(profile__user=request.user)
+        
+            # Check if organization name is assigned, if not, redirect with a message
+            if not current_account.organization:
+                messages.warning(request, "Please assign an organization first.")
+                return redirect(self.assign_org_url)
+        except Account.DoesNotExist: 
+                messages.warning(request, "Please assign an organization first.")
+                return redirect(self.assign_org_url)
+        
+        return super().dispatch(request, *args, **kwargs)
+    
     def get(self, request):
         current_account = Account.objects.get(profile__user=request.user)
         accounts = Account.objects.filter(organization=current_account.organization)
