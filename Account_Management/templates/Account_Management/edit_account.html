@@ -13,6 +13,8 @@
                 </div>
             </div>
 
+            
+
             <div class="container-fluid page__container">
                 <div class="card card-form">
                     <div class="row no-gutters">
@@ -24,6 +26,13 @@
                             <div class="row">
                                 <div class="col">
                                     <div class="form-group">
+                                        {% if messages %}
+                                            <ul class="messages">
+                                                {% for message in messages %}
+                                                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                                                {% endfor %}
+                                            </ul>
+                                        {% endif %}
                                         <form method="post" class="form-inline">
                                             {% csrf_token %}
                                             {{ form.as_p }}
@@ -135,7 +144,7 @@
                 </div>
 
                 <div class="text-right mb-5">
-                    <a href="" class="btn btn-success">Save</a>
+                    <a href="{% url 'account_management:account'%}" class="btn btn-success">Go Back</a>
                 </div>
             </div>
 
