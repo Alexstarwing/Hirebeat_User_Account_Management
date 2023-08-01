@@ -135,3 +135,7 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True 
 EMAIL_HOST_USER = "yifandsb666@gmail.com"
 EMAIL_HOST_PASSWORD = "usjwlmpkaxwczevy"
+
+MEDIA_URL = '/images/'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'static/images')

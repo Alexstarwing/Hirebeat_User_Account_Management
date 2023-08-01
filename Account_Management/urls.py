@@ -1,6 +1,8 @@
 from django.urls import path
 from .views import AccountList, EditAccountView, SettingView, \
    AddUserView, OrganizationView, InvitationView, ManageUserView
+from . import views
+   
 
 app_name = 'account_management'
 

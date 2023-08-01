@@ -25,7 +25,9 @@
                         <div class="dz-clickable media align-items-center" data-toggle="dropzone" data-dropzone-url="http://" data-dropzone-clickable=".dz-clickable" data-dropzone-files='["assets/images/account-add-photo.svg"]'>
                             <div class="dz-preview dz-file-preview dz-clickable mr-3">
                                 <div class="avatar avatar-lg">
-                                    <img src="{% static 'images/frontted-logo-blue.svg' %}" class="avatar-img rounded" alt="..." data-dz-thumbnail>
+
+                                    <img src="{{ account.profile.profile_logo.url }}" alt="">
+
                                 </div>
                             </div>
                             <div class="media-body">
