@@ -99,6 +99,14 @@ class OrganizationView(LoginRequiredMixin, ListView):
     model = Account
     context_object_name = 'organization'
     template_name = 'Account_Management/organization.html'
+    
+    def account_detail(request):
+        try:
+            account = Account.objects.get(profile__user=request.user)
+        except Account.DoesNotExist:
+            account = None
+
+        return render(request, 'organization.html', {'account': account})
 
 class ManageUserView(View):
     model = Account
@@ -123,3 +131,9 @@ class ManageUserView(View):
         current_account = Account.objects.get(profile__user=request.user)
         accounts = Account.objects.filter(organization=current_account.organization)
         return render(request, self.template_name, {'accounts': accounts})
+    
+    
+def acccountSettings(request):
+    context = {}
+    return render(request, 'accounts/origanization.html', context)
+

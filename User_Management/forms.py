@@ -1,4 +1,5 @@
 from django import forms
+from .models import Profile
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
@@ -19,3 +20,10 @@ class UserCreationForm(UserCreationForm):
     
 # class ResendActivationEmailForm(forms.Form):
 #     email = forms.EmailField(required=True)
+
+class CustonmerForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = '__all__'
+        exclude = ['user']
+    

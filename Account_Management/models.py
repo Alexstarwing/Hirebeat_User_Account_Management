@@ -9,7 +9,7 @@ class Account(models.Model):
     office = models.CharField(max_length=200)
     department = models.CharField(max_length=200)
     organization = models.CharField(max_length=200)
-
+    profile_logo = models.ImageField(null=True, blank=True)
     # def __str__(self):
     #     users = self.users.all()
     #     first_user = users[0].name if users else 'No users'
