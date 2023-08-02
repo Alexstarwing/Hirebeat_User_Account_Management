@@ -1,5 +1,5 @@
 from django.db import models
-from User_Management.models import Profile
+from User_Management.models import Profile, CustomUser
 
 # Create your models here.
 
@@ -77,4 +77,25 @@ class Role(models.Model):
     class Meta:
         indexes = [
             models.Index(fields=['role_type']),
+        ]
+        
+class TeamInvitation(models.Model):
+    user = models.ForeignKey(
+       CustomUser, on_delete=models.CASCADE, related_name='team_invitations')
+    account = models.ForeignKey(Account, on_delete=models.CASCADE)
+    invited_email = models.EmailField()
+    is_accepted = models.BooleanField(default=False)
+    invited_by_user = models.ForeignKey(
+        CustomUser, on_delete=models.SET_NULL, null=True, blank=True, related_name='sent_invitations')
+    role = models.ForeignKey(Role, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        indexes = [
+            models.Index(fields=['user']),
+            models.Index(fields=['account']),
+            models.Index(fields=['invited_email']),
+            models.Index(fields=['is_accepted']),
+            models.Index(fields=['role']),
         ]
