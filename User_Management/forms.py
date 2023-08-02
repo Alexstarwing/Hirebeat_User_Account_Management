@@ -1,14 +1,14 @@
 from django import forms
-from .models import Profile
+from .models import Profile, CustomUser
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
+# from django.contrib.auth.models import User
 
 
 class UserCreationForm(UserCreationForm):
     email = forms.EmailField(required=True, label='Email')
 
     class Meta:
-        model = User
+        model = CustomUser
         fields = ("username", "email", "password1", "password2")
 
     def save(self, commit=True):
