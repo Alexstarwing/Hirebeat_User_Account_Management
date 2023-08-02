@@ -10,7 +10,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
 from django.contrib.auth import login
 from django.contrib.auth.tokens import default_token_generator
-from django.contrib.auth.models import User
+# from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
@@ -18,7 +18,7 @@ from django.utils.encoding import force_bytes, force_text
 from django.core.mail import send_mail
 from django.contrib import messages
 from .forms import UserCreationForm  # , ResendActivationEmailForm
-from .models import Profile
+from .models import Profile, CustomUser
 from .tokens import account_activation_token
 
 
@@ -66,8 +66,8 @@ class ActivateAccount(View):
     def get(self, request, uidb64, token, *args, **kwargs):
         try:
             uid = force_text(urlsafe_base64_decode(uidb64))
-            user = User.objects.get(pk=uid)
-        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+            user = CustomUser.objects.get(pk=uid)
+        except (TypeError, ValueError, OverflowError, CustomUser.DoesNotExist):
             user = None
         # pdb.set_trace()  # 断点
         if user is not None and default_token_generator.check_token(user, token):
