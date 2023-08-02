@@ -10,6 +10,13 @@ class Account(models.Model):
     department = models.CharField(max_length=200)
     organization = models.CharField(max_length=200)
     profile_logo = models.ImageField(null=True, blank=True)
+    company_name = models.CharField(max_length=255, null=True, blank=True)
+    company_summary = models.TextField(null=True, blank=True)
+    company_linkedin = models.URLField(max_length=255, null=True, blank=True)
+    company_facebook = models.URLField(max_length=255, null=True, blank=True)
+    company_twitter = models.URLField(max_length=255, null=True, blank=True)
+    
+    
     # def __str__(self):
     #     users = self.users.all()
     #     first_user = users[0].name if users else 'No users'
