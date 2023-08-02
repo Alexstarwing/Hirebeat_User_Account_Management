@@ -30,6 +30,9 @@ class Account(models.Model):
     company_summary = models.TextField(null=True, blank=True)
     company_industry = models.CharField(max_length=255, null=True, blank=True)
     #company_size_range = models.CharField(max_length=255, null=True, blank=True, choices=COMPANY_SIZE_RANGE_CHOICES)
+    company_website = models.URLField(max_length=255, null=True, blank=True)
+    company_location = models.CharField(max_length=255, null=True, blank=True)
+    #company_domain = models.CharField(max_length=255, unique=True)
     company_linkedin = models.URLField(max_length=255, null=True, blank=True)
     company_facebook = models.URLField(max_length=255, null=True, blank=True)
     company_twitter = models.URLField(max_length=255, null=True, blank=True)
@@ -39,6 +42,13 @@ class Account(models.Model):
     #created_at = models.DateTimeField(auto_now_add=True)
     #updated_at = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        indexes = [
+            models.Index(fields=['company_name']),
+            #models.Index(fields=['account_status']),
+            #models.Index(fields=['company_industry']),
+            #models.Index(fields=['company_domain']),
+        ]
 
     
     
