@@ -15,6 +15,11 @@ class Account(models.Model):
     company_linkedin = models.URLField(max_length=255, null=True, blank=True)
     company_facebook = models.URLField(max_length=255, null=True, blank=True)
     company_twitter = models.URLField(max_length=255, null=True, blank=True)
+    company_video_url = models.URLField(max_length=255, null=True, blank=True)
+    viewed_employer_welcome = models.TextField(null=True, blank=True)
+    viewed_employer_tutorial = models.TextField(null=True, blank=True)
+
+
     
     
     # def __str__(self):
