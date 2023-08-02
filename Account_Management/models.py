@@ -5,7 +5,7 @@ from User_Management.models import Profile
 
 
 class Account(models.Model):
-    profile = models.OneToOneField(Profile, on_delete=models.CASCADE)
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
     office = models.CharField(max_length=200)
     department = models.CharField(max_length=200)
     organization = models.CharField(max_length=200)
