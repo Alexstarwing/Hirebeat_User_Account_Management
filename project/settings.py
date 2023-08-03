@@ -139,3 +139,5 @@ EMAIL_HOST_PASSWORD = "usjwlmpkaxwczevy"
 MEDIA_URL = '/images/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'static/images')
+
+AUTH_USER_MODEL = 'User_Management.CustomUser'
