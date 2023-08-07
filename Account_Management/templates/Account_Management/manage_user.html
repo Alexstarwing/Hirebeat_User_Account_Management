@@ -22,9 +22,14 @@
                         <div class="col-lg-8 card-form__body card-body">
                             <ul>
                                 {% for account in accounts %}
-                                    <li>{{ account.profile.user.username }}</li>
+                                    <li>{{ account.user.username }}</li>
                                 {% endfor %}
                             </ul>
+                            <!-- <ul>
+                                {% for account in accounts %}
+                                    <li>{{ account.profile.user.username }}</li>
+                                {% endfor %}
+                            </ul> -->
                         </div>
                     </div>
                 </div>

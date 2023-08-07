@@ -9,8 +9,3 @@ class InviteForm(forms.Form):
 
 class OrganizationForm(forms.Form): 
     organization = forms.CharField(max_length=200, label='Organization Name')
-    
-
-    
-
-    

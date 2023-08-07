@@ -19,6 +19,7 @@ from django.core.mail import send_mail
 from django.contrib import messages
 from .forms import UserCreationForm  # , ResendActivationEmailForm
 from .models import Profile, CustomUser
+from Account_Management.models import Account, AccountUserRelation
 from .tokens import account_activation_token
 
 
@@ -74,6 +75,10 @@ class ActivateAccount(View):
             user.is_active = True
             user.profile.email_confirmed = True
             user.save()
+
+            account = Account.objects.create()
+            AccountUserRelation.objects.create(account=account, user=user)
+            
             # login(request, user)
             messages.success(request, 'Your account have been confirmed.')
             return redirect('login')
