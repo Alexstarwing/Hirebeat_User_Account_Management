@@ -17,6 +17,7 @@ from .forms import InviteForm, OrganizationForm
 from Account_Management.models import Profile, Account, AccountUserRelation
 from django.template.loader import render_to_string
 from django.contrib.auth.tokens import default_token_generator, PasswordResetTokenGenerator
+from .models import Role
 
 
 class AccountList(LoginRequiredMixin, ListView):
@@ -80,6 +81,7 @@ class AddUserView(LoginRequiredMixin, View):
     model = Account
     context_object_name = 'add_user'
     template_name = 'Account_Management/add_user.html'
+    
 
     def get(self, request):
         form = InviteForm()  # Create an instance of the InviteForm
@@ -190,4 +192,6 @@ class ManageUserView(View):
 def acccountSettings(request):
     context = {}
     return render(request, 'accounts/origanization.html', context)
+
+
 
