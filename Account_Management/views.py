@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic.list import ListView
-from Account_Management.models import Account
+from Account_Management.models import Account, TeamInvitation
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.mail import send_mail
 from django.contrib.sites.shortcuts import get_current_site
@@ -78,7 +78,7 @@ class SettingView(LoginRequiredMixin, ListView):
 
 
 class AddUserView(LoginRequiredMixin, View):
-    model = Account
+    model = TeamInvitation
     context_object_name = 'add_user'
     template_name = 'Account_Management/add_user.html'
     
@@ -92,6 +92,7 @@ class AddUserView(LoginRequiredMixin, View):
         if form.is_valid():
             name = form.cleaned_data['name']
             email = form.cleaned_data['email']
+
             # Generate the registration link
             current_site = get_current_site(self.request)
             uid = urlsafe_base64_encode(force_bytes(email))
