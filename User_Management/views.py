@@ -134,3 +134,4 @@ class AddUserView(LoginRequiredMixin, ListView):
 #         return redirect('resend_activation_email') 
 
 #     return HttpResponse("An error occurred or the form is not valid.")
+
