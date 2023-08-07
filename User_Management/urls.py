@@ -1,7 +1,7 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views
 from .views import ProfileList, CustomLoginView, RegisterPage, ActivateAccount, EditAccountView, SettingView, \
-    AddUserView  # , resend_activation_email
+    AddUserView # , resend_activation_email
 from django.contrib.auth.views import LogoutView
 
 urlpatterns = [
@@ -26,4 +26,5 @@ urlpatterns = [
     path('edit-account/', EditAccountView.as_view(), name='edit-account'),
     path('author-settings/', SettingView.as_view(), name='author-settings'),
     path('add-user/', AddUserView.as_view(), name='add-user'),
+    
 ]

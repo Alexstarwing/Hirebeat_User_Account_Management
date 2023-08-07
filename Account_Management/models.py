@@ -2,8 +2,6 @@ from django.db import models
 from User_Management.models import Profile, CustomUser
 
 # Create your models here.
-
-
 class Account(models.Model):
     ACCOUNT_STATUS_CHOICES = [
         ('active', 'Active'),
@@ -19,7 +17,7 @@ class Account(models.Model):
         ('1001+', '1001+'),
     ]
     
-    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    # profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
     office = models.CharField(max_length=200)
     department = models.CharField(max_length=200)
     organization = models.CharField(max_length=200)
@@ -48,10 +46,7 @@ class Account(models.Model):
             #models.Index(fields=['account_status']),
             #models.Index(fields=['company_industry']),
             #models.Index(fields=['company_domain']),
-        ]
-
-    
-    
+        ]   
     # def __str__(self):
     #     users = self.users.all()
     #     first_user = users[0].name if users else 'No users'
@@ -99,3 +94,10 @@ class TeamInvitation(models.Model):
             models.Index(fields=['is_accepted']),
             models.Index(fields=['role']),
         ]
+
+class AccountUserRelation(models.Model):
+    account = models.ForeignKey(Account, on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+
+    class Meta: 
+        unique_together = ('account', 'user',)

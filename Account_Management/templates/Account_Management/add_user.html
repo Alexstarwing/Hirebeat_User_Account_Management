@@ -1,4 +1,4 @@
-{% extends 'User_Management/main.html' %}
+{% extends 'User_Management/account_main.html' %}
 {% load static %}
 {% block content %}
     <!DOCTYPE html>
@@ -22,21 +22,39 @@
                     max-width: 500px;
                     margin: 0 auto;
                     padding: 20px;
+                    justify-content: center;
                 }
 
                 input.button {
                     display: block;
-                    width: 75%;
+                    width: 100%;
                     margin-top: 20px;
                     background-color: #2196F3;
                     border: 1px solid white;
                     padding: 10px;
                     color: white;
                     cursor: pointer;
+                    
                 }
 
                 input.button:hover {
                     background-color: #1565C0;
+                }
+
+                
+                .input-field.col.s12 select {
+                    width: 75%; /* Adjust the width as needed */
+                    margin-bottom: 10px;
+                }
+
+                .input-field.col.s12 input[type="text"] {
+                    width: 72.5%;
+                    margin-bottom: 10px;
+                }
+
+                .input-field.col.s12 input[type="email"] {
+                    width: 73%;
+                    margin-bottom: 10px;
                 }
 
                 .custom-panel {
@@ -52,35 +70,58 @@
                 .go_back_link:hover {
                     color: #1167C9;
                 }
+
+                
+
             </style>
         </head>
         <body>
-            <h4 class="header">Add New User</h4>
-            <div class="section"></div>
-            <div class="section"></div>
-            <div class="col s14 z-depth-6 card-panel custom-panel">
-                <form method="post" autocomplete="off">
-                  {% csrf_token %}
-                  <div class="input-field col s12">
-                    <i class="material-icons prefix">person</i>
-                    <label for="{{ form.name.id_for_label}}" style="vertical-align: middle;" id="name_label">Name:</label>
-                    {{form.name}}
-                  </div>
+            <div class="mdk-header-layout__content mdk-header-layout__content--fullbleed mdk-header-layout__content--scrollable page" style="padding-top: 60px;">
 
-                  <div class="input-field col s12">
-                    <i class="material-icons prefix">email</i>
-                    <label for="{{ form.email.id_for_label}}" style="vertical-align: middle;" id="email_label">Email:</label>
-                    {{form.email}}
-                  </div>
 
-                  <input class="button" type="submit" value="Invite" style="border: transparent">
-                  <div class="row" style="margin-bottom: 15px"></div>
-                  <a onclick="function goBack() {window.history.back();}
-                  goBack()" class="go_back_link">Go Back</a>
-                </form>
+                <div class="container-fluid page__container page__heading d-flex align-items-center border-bottom  ">
+                    <h1 class="mb-0">Add New User</h1>
+                </div>
+                <div class="container-fluid page__container">
+                    <div class="col s14 z-depth-6 card-panel custom-panel">
+                        <div class="card card-body">
+                            <form method="post" autocomplete="off">
+                            {% csrf_token %}
+                            <div class="input-field col s12">
+                                <i class="material-icons prefix">person</i>
+                                <label for="{{ form.name.id_for_label}}" style="vertical-align: middle;" id="name_label">Name:</label>
+                                {{form.name}}
+                            </div>
+                            <div class="input-field col s12">
+                                <i class="material-icons prefix">group</i>
+                                <label for="{{ form.role_type.id_for_label }}" style="vertical-align: middle;" id="role_type_label">Role: </label>
+                                <select name="{{ form.role_type.name }}" id="{{ form.role_type.id_for_label }}">
+                                    {% for role_choice in form.role_type.field.choices %}
+                                        <option value="{{ role_choice.0 }}">{{ role_choice.1 }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="input-field col s12">
+                                <i class="material-icons prefix">email</i>
+                                <label for="{{ form.email.id_for_label}}" style="vertical-align: middle;" id="email_label">Email:</label>
+                                {{form.email}}
+                            </div>
+                            <div class="mb-4">
+                                <input class="button" type="submit" value="Invite" style="border: transparent">
+                                <div class="row" style="margin-bottom: 15px"></div>
+                                    <a onclick="function goBack() {window.history.back();}
+                                goBack()" class="btn btn-light btn-block">Go Back</a>
+                                </div>
+                            
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
+            
+            
         </body>
+
     </html>
-<script src="{% static 'add_user.js' %}"></script>
 
 {% endblock content %}
