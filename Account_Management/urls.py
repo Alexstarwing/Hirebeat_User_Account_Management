@@ -14,4 +14,5 @@ urlpatterns = [
    path('invitation/', InvitationView.as_view(), name='invitation'),
    path('organization/', OrganizationView.as_view(), name='organization'),
    path('manage_users/', ManageUserView.as_view(), name='manage_users'),
+   path('register/<str:token>/', views.RegisterWithInvitationView.as_view(), name='register_with_invitation'),
 ]
