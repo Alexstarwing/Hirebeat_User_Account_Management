@@ -92,7 +92,6 @@ class AddUserView(LoginRequiredMixin, View):
         if form.is_valid():
             name = form.cleaned_data['name']
             email = form.cleaned_data['email']
-            inviter_account = request.user.account
             
             # Generate the registration link
             current_site = get_current_site(self.request)
