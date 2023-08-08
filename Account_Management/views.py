@@ -94,6 +94,7 @@ class AddUserView(LoginRequiredMixin, View):
         if form.is_valid():
             name = form.cleaned_data['name']
             email = form.cleaned_data['email']
+
             # role_type = form.cleaned_data['role_type']
 
             account_user_relation = AccountUserRelation.objects.get(user=request.user)
