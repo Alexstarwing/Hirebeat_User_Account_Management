@@ -140,9 +140,9 @@ class RegisterWithInvitationView(View):
     def get(self, request, uidb64, invitation_token):
         # Decode the uidb64 and check if the invitation is valid
         try:
-            uid = force_str(urlsafe_base64_decode(uidb64))
-            team_invitation = TeamInvitation.objects.get(id=uid, invitation_token=invitation_token)
-        except (TypeError, ValueError, OverflowError, TeamInvitation.DoesNotExist):
+            # uid = force_str(urlsafe_base64_decode(uidb64))
+            team_invitation = TeamInvitation.objects.get(invitation_token=invitation_token)#(id=uid, invitation_token=invitation_token) but no id field inside TeamInvitation model
+        except TeamInvitation.DoesNotExist: #(TypeError, ValueError, OverflowError, TeamInvitation.DoesNotExist):
             messages.error(request, "Invalid invitation link.")
             return redirect('account_management:invalid_invitation')
 
@@ -178,8 +178,6 @@ class RegisterWithInvitationView(View):
             return redirect('account_management:login')
         else:
             return render(request, self.template_name, {'form': form})
-
-
 
 
 class InvitationView(LoginRequiredMixin, View):
