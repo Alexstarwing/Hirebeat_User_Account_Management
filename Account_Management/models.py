@@ -82,14 +82,14 @@ class Role(models.Model):
 
 class TeamInvitation(models.Model):
     user = models.ForeignKey(
-        CustomUser, on_delete=models.CASCADE, related_name='team_invitations')
+        CustomUser, on_delete=models.CASCADE, related_name='team_invitations', blank=True)
     account = models.ForeignKey(Account, on_delete=models.CASCADE)
     invited_email = models.EmailField()
     is_accepted = models.BooleanField(default=False)
     invited_by_user = models.ForeignKey(
         CustomUser, on_delete=models.SET_NULL, null=True, blank=True, related_name='sent_invitations')
     invitation_token = models.CharField(max_length=32, unique=True, blank=True, null=True)
-    role = models.ForeignKey(Role, on_delete=models.CASCADE)
+    # role = models.ForeignKey(Role, on_delete=models.CASCADE, blank=True, null=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -100,7 +100,7 @@ class TeamInvitation(models.Model):
             models.Index(fields=['account']),
             models.Index(fields=['invited_email']),
             models.Index(fields=['is_accepted']),
-            models.Index(fields=['role']),
+            # models.Index(fields=['role']),
         ]
 
     def save(self, *args, **kwargs):

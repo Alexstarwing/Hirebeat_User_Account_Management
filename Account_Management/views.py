@@ -94,16 +94,22 @@ class AddUserView(LoginRequiredMixin, View):
         if form.is_valid():
             name = form.cleaned_data['name']
             email = form.cleaned_data['email']
-            role_type = form.cleaned_data['role_type']
+            # role_type = form.cleaned_data['role_type']
+
+            account_user_relation = AccountUserRelation.objects.get(user=request.user)
+            account = account_user_relation.account
+
+            # current_role = Role.objects.create(role_type=role_type)
 
             # Generate the invitation token
-            invitation_token = default_token_generator.make_token(CustomUser())
+            invitation_token = default_token_generator.make_token(request.user)
 
             # Save the invitation with the token and other data
             invitation = TeamInvitation(
+                account = account,
                 invited_email=email,
                 invited_by_user=request.user,
-                role_type=role_type,
+                # role=current_role,
                 invitation_token=invitation_token,
             )
             invitation.save()
