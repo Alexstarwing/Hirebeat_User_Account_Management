@@ -183,6 +183,7 @@ class RegisterWithInvitationView(View):
             password = form.cleaned_data['password1']
 
             new_user = CustomUser.objects.create_user(username=username, email=email, password=password)
+            new_user.is_active = True
             new_user.save()
 
             AccountUserRelation.objects.create(account=team_invitation.account, user=new_user)
