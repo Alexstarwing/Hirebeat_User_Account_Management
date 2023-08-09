@@ -179,9 +179,9 @@ class RegisterWithInvitationView(View):
         # form = RegisterWithInvitationForm(request.POST)
         form = UserCreationForm(request.POST)
         if form.is_valid():
-            name = form.cleaned_data['name']
+            name = form.cleaned_data['username']
             email = form.cleaned_data['email']
-            role_type = form.cleaned_data['role_type']
+            #role_type = form.cleaned_data['role_type']
             password = form.cleaned_data['password']
 
             new_user = CustomUser.objects.create_user(username=email, email=email, password=password)
