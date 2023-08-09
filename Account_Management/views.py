@@ -14,7 +14,7 @@ from django.utils.html import strip_tags
 from django.conf import settings
 from django.views import View
 from django.utils.crypto import get_random_string
-from User_Management.models import CustomUser, CustomUserManager
+from User_Management.models import CustomUser
 from .forms import InviteForm, OrganizationForm, RegisterWithInvitationForm
 from User_Management.forms import UserCreationForm
 from Account_Management.models import Profile, Account, AccountUserRelation
@@ -100,19 +100,6 @@ class AddUserView(LoginRequiredMixin, View):
 
             account_user_relation = AccountUserRelation.objects.get(user=request.user)
             account = account_user_relation.account
-            # create new user
-            # custom_user_manager = CustomUserManager()
-            # if custom_user_manager is None:
-            #     print('None')
-            # else:
-            #     print('111')
-            # new_user = custom_user_manager.create_user(username=name, email=email, password='hirebeat123456')
-            # if new_user is None:
-            #     print('None')
-            # else:
-            #     print(new_user.username)
-
-            # current_role = Role.objects.create(role_type=role_type)
 
             # Generate the invitation token
             invitation_token = get_random_string(32)
@@ -159,7 +146,8 @@ class RegisterWithInvitationView(View):
         try:
             # uid = force_str(urlsafe_base64_decode(uidb64))
             self.team_invitation = TeamInvitation.objects.get(
-                invitation_token=invitation_token)  # (id=uid, invitation_token=invitation_token) but no id field inside TeamInvitation model
+                invitation_token=invitation_token)
+            # (id=uid, invitation_token=invitation_token) but no id field inside TeamInvitation model
         except TeamInvitation.DoesNotExist:  # (TypeError, ValueError, OverflowError, TeamInvitation.DoesNotExist):
             messages.error(request, "Invalid invitation link.")
             # return redirect('account_management:invalid_invitation')
@@ -176,21 +164,31 @@ class RegisterWithInvitationView(View):
             messages.error(request, "Invalid invitation link.")
             return redirect('account_management:invalid_invitation')
 
+        def clean(self):
+            cleaned_data = super().clean()
+            password1 = cleaned_data.get("password1")
+            password2 = cleaned_data.get("password2")
+
+            if password1 and password2 and password1 != password2:
+                raise form.ValidationError("Passwords do not match. Please enter the same password in both fields.")
+
+            return cleaned_data
+
         # form = RegisterWithInvitationForm(request.POST)
         form = UserCreationForm(request.POST)
         if form.is_valid():
-            name = form.cleaned_data['username']
+            username = form.cleaned_data['username']
             email = form.cleaned_data['email']
-            #role_type = form.cleaned_data['role_type']
-            password = form.cleaned_data['password']
+            # role_type = form.cleaned_data['role_type']
+            password = form.cleaned_data['password1']
 
-            new_user = CustomUser.objects.create_user(username=email, email=email, password=password)
+            new_user = CustomUser.objects.create_user(username=username, email=email, password=password)
             new_user.save()
 
             AccountUserRelation.objects.create(account=team_invitation.account, user=new_user)
 
             messages.success(request, "Registration successful! You can now log in.")
-            return redirect('account_management:login')
+            return redirect('/login/')
         else:
             return render(request, self.template_name, {'form': form})
 
