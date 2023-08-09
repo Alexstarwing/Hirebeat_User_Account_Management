@@ -82,7 +82,7 @@ class Role(models.Model):
 
 class TeamInvitation(models.Model):
     user = models.ForeignKey(
-        CustomUser, on_delete=models.CASCADE, related_name='team_invitations', blank=True)
+        CustomUser, on_delete=models.CASCADE, related_name='team_invitations', blank=True, null=True)
     account = models.ForeignKey(Account, on_delete=models.CASCADE)
     invited_email = models.EmailField()
     is_accepted = models.BooleanField(default=False)
@@ -115,4 +115,4 @@ class AccountUserRelation(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
 
     class Meta:
-        unique_together = ('account', 'user',)
+        unique_together = ('user',)

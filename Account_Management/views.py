@@ -14,7 +14,7 @@ from django.utils.html import strip_tags
 from django.conf import settings
 from django.views import View
 
-from User_Management.models import CustomUser
+from User_Management.models import CustomUser, CustomUserManager
 from .forms import InviteForm, OrganizationForm, RegisterWithInvitationForm
 from Account_Management.models import Profile, Account, AccountUserRelation
 from django.template.loader import render_to_string
@@ -99,15 +99,27 @@ class AddUserView(LoginRequiredMixin, View):
 
             account_user_relation = AccountUserRelation.objects.get(user=request.user)
             account = account_user_relation.account
+            # create new user
+            # custom_user_manager = CustomUserManager()
+            # if custom_user_manager is None:
+            #     print('None')
+            # else:
+            #     print('111')
+            # new_user = custom_user_manager.create_user(username=name, email=email, password='hirebeat123456')
+            # if new_user is None:
+            #     print('None')
+            # else:
+            #     print(new_user.username)
 
             # current_role = Role.objects.create(role_type=role_type)
 
             # Generate the invitation token
             invitation_token = default_token_generator.make_token(request.user)
+            print(invitation_token)
 
             # Save the invitation with the token and other data
             invitation = TeamInvitation(
-                account = account,
+                account=account,
                 invited_email=email,
                 invited_by_user=request.user,
                 # role=current_role,
@@ -142,8 +154,9 @@ class RegisterWithInvitationView(View):
         # Decode the uidb64 and check if the invitation is valid
         try:
             # uid = force_str(urlsafe_base64_decode(uidb64))
-            team_invitation = TeamInvitation.objects.get(invitation_token=invitation_token)#(id=uid, invitation_token=invitation_token) but no id field inside TeamInvitation model
-        except TeamInvitation.DoesNotExist: #(TypeError, ValueError, OverflowError, TeamInvitation.DoesNotExist):
+            team_invitation = TeamInvitation.objects.get(
+                invitation_token=invitation_token)  # (id=uid, invitation_token=invitation_token) but no id field inside TeamInvitation model
+        except TeamInvitation.DoesNotExist:  # (TypeError, ValueError, OverflowError, TeamInvitation.DoesNotExist):
             messages.error(request, "Invalid invitation link.")
             return redirect('account_management:invalid_invitation')
 
