@@ -17,14 +17,15 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_text
 from django.core.mail import send_mail
 from django.contrib import messages
-from .forms import UserCreationForm  # , ResendActivationEmailForm
+from .forms import UserCreationForm, CustomLoginForm  # , ResendActivationEmailForm
 from .models import Profile, CustomUser
 from Account_Management.models import Account, AccountUserRelation
 from .tokens import account_activation_token
 
 
 class CustomLoginView(LoginView):
-    template_name = 'User_Management/login.html'
+    authentication_form = CustomLoginForm
+    template_name = 'User_Management/login_1.html'
     fields = '__all__'
     redirect_authenticated_user = True
 
@@ -33,7 +34,7 @@ class CustomLoginView(LoginView):
 
 
 class RegisterPage(FormView):
-    template_name = 'User_Management/register.html'
+    template_name = 'User_Management/signup.html'
     form_class = UserCreationForm
     redirect_authenticated_user = True
     success_url = reverse_lazy('profiles')  # where user will be redirect after success registration
