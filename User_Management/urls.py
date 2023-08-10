@@ -4,6 +4,8 @@ from .views import ProfileList, CustomLoginView, RegisterPage, ActivateAccount, 
     AddUserView # , resend_activation_email
 from django.contrib.auth.views import LogoutView
 
+# app_name = 'user_management'
+
 urlpatterns = [
     path('login/', CustomLoginView.as_view(), name='login'),
     path('logout/', LogoutView.as_view(next_page='login'), name='logout'),

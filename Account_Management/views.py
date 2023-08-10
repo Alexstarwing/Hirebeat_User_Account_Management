@@ -13,9 +13,10 @@ from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.conf import settings
 from django.views import View
-
-from User_Management.models import CustomUser, CustomUserManager
+from django.utils.crypto import get_random_string
+from User_Management.models import CustomUser
 from .forms import InviteForm, OrganizationForm, RegisterWithInvitationForm
+from User_Management.forms import UserCreationForm
 from Account_Management.models import Profile, Account, AccountUserRelation
 from django.template.loader import render_to_string
 from django.contrib.auth.tokens import default_token_generator, PasswordResetTokenGenerator
@@ -99,23 +100,11 @@ class AddUserView(LoginRequiredMixin, View):
 
             account_user_relation = AccountUserRelation.objects.get(user=request.user)
             account = account_user_relation.account
-            # create new user
-            # custom_user_manager = CustomUserManager()
-            # if custom_user_manager is None:
-            #     print('None')
-            # else:
-            #     print('111')
-            # new_user = custom_user_manager.create_user(username=name, email=email, password='hirebeat123456')
-            # if new_user is None:
-            #     print('None')
-            # else:
-            #     print(new_user.username)
-
-            # current_role = Role.objects.create(role_type=role_type)
 
             # Generate the invitation token
-            invitation_token = default_token_generator.make_token(request.user)
-            print(invitation_token)
+            invitation_token = get_random_string(32)
+            # invitation_token = default_token_generator.make_token(request.user)
+            # print(invitation_token)
 
             # Save the invitation with the token and other data
             invitation = TeamInvitation(
@@ -129,15 +118,17 @@ class AddUserView(LoginRequiredMixin, View):
 
             # Generate the registration link
             current_site = get_current_site(self.request)
-            uid = urlsafe_base64_encode(force_bytes(email))
+            # uid = urlsafe_base64_encode(force_bytes(email))
             # register_link = f"http://{current_site.domain}/register"
-            register_link = reverse('account_management:register_with_invitation', args=[uid, invitation_token])
+            # register_link = reverse('account_management:register_with_invitation', args=[invitation_token])
 
             # Send invitation email with registration link
             subject = 'Invitation to Register'
             message = render_to_string('Account_Management/account_activation_email.html', {
                 'user': name,
-                'register_link': register_link,
+                'domain': current_site.domain,
+                'invitation_token': invitation_token,
+                # 'register_link': register_link,
             })
             from_email = 'yifandsb666@gmail.com'
             recipient_list = [email]
@@ -150,46 +141,55 @@ class AddUserView(LoginRequiredMixin, View):
 class RegisterWithInvitationView(View):
     template_name = 'Account_Management/register_with_invitation.html'
 
-    def get(self, request, uidb64, invitation_token):
+    def get(self, request, invitation_token):
         # Decode the uidb64 and check if the invitation is valid
         try:
             # uid = force_str(urlsafe_base64_decode(uidb64))
-            team_invitation = TeamInvitation.objects.get(
-                invitation_token=invitation_token)  # (id=uid, invitation_token=invitation_token) but no id field inside TeamInvitation model
+            self.team_invitation = TeamInvitation.objects.get(
+                invitation_token=invitation_token)
+            # (id=uid, invitation_token=invitation_token) but no id field inside TeamInvitation model
         except TeamInvitation.DoesNotExist:  # (TypeError, ValueError, OverflowError, TeamInvitation.DoesNotExist):
             messages.error(request, "Invalid invitation link.")
-            return redirect('account_management:invalid_invitation')
+            # return redirect('account_management:invalid_invitation')
 
-        form = RegisterWithInvitationForm()
+        # return redirect('user_management:register')
+        # form = RegisterWithInvitationForm()
+        form = UserCreationForm()
         return render(request, self.template_name, {'form': form})
 
-    def post(self, request, uidb64, invitation_token):
-        # Decode the uidb64 and check if the invitation is valid
+    def post(self, request, invitation_token):
         try:
-            uid = force_str(urlsafe_base64_decode(uidb64))
-            team_invitation = TeamInvitation.objects.get(id=uid, invitation_token=invitation_token)
+            team_invitation = TeamInvitation.objects.get(invitation_token=invitation_token)
         except (TypeError, ValueError, OverflowError, TeamInvitation.DoesNotExist):
             messages.error(request, "Invalid invitation link.")
             return redirect('account_management:invalid_invitation')
 
-        form = RegisterWithInvitationForm(request.POST)
-        if form.is_valid():
-            name = form.cleaned_data['name']
-            email = form.cleaned_data['email']
-            role_type = form.cleaned_data['role_type']
-            password = form.cleaned_data['password']
+        def clean(self):
+            cleaned_data = super().clean()
+            password1 = cleaned_data.get("password1")
+            password2 = cleaned_data.get("password2")
 
-            # Create the new user and save it to the database
-            new_user = CustomUser.objects.create_user(username=email, email=email, password=password)
+            if password1 and password2 and password1 != password2:
+                raise form.ValidationError("Passwords do not match. Please enter the same password in both fields.")
+
+            return cleaned_data
+
+        # form = RegisterWithInvitationForm(request.POST)
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            email = form.cleaned_data['email']
+            # role_type = form.cleaned_data['role_type']
+            password = form.cleaned_data['password1']
+
+            new_user = CustomUser.objects.create_user(username=username, email=email, password=password)
+            new_user.is_active = True
             new_user.save()
 
-            # Associate the new user with the inviting account
             AccountUserRelation.objects.create(account=team_invitation.account, user=new_user)
 
-            # You can add any additional logic here, like sending a welcome email, etc.
-
             messages.success(request, "Registration successful! You can now log in.")
-            return redirect('account_management:login')
+            return redirect('/login/')
         else:
             return render(request, self.template_name, {'form': form})
 

@@ -1,2 +1,5 @@
-Hi, you have been invited to register on our website.
-Please use the following link to register: {{ register_link }}
+{% autoescape off %}
+Hi {{ name }}, you have been invited to register on our website.
+Please use the following link to register:
+http://{{ domain }}{% url 'account_management:register_with_invitation' invitation_token=invitation_token %}
+{% endautoescape %}
