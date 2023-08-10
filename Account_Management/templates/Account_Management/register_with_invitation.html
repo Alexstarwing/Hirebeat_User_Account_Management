@@ -1,39 +1,93 @@
-{% extends 'Account_Management/main.html' %}
-{% load static %}
-{% block content %}
-<head>
-    <title>Register</title>
+{% extends 'User_Management/main_1.html' %}
+{% block content%}
+    <title>Register with Invitation</title>
 
-    <!-- Perfect Scrollbar -->
-    <link type="text/css" href="assets/vendor/perfect-scrollbar.css" rel="stylesheet">
-
-    <!-- App CSS -->
-    <link type="text/css" href="assets/css/app.css" rel="stylesheet">
-    <link type="text/css" href="assets/css/app.rtl.css" rel="stylesheet">
-
-    <!-- Material Design Icons -->
-    <link type="text/css" href="assets/css/vendor-material-icons.css" rel="stylesheet">
-    <link type="text/css" href="assets/css/vendor-material-icons.rtl.css" rel="stylesheet">
-
-    <!-- Font Awesome FREE Icons -->
-    <link type="text/css" href="assets/css/vendor-fontawesome-free.css" rel="stylesheet">
-    <link type="text/css" href="assets/css/vendor-fontawesome-free.rtl.css" rel="stylesheet">
-
-    <!-- ion Range Slider -->
-    <link type="text/css" href="assets/css/vendor-ion-rangeslider.css" rel="stylesheet">
-    <link type="text/css" href="assets/css/vendor-ion-rangeslider.rtl.css" rel="stylesheet">
 </head>
 
 <body class="layout-login-centered-boxed">
 
-    <div class="layout-login-centered-boxed__form">
-        <h1>Register with Invitation</h1>
-        <form method="post">
-              {% csrf_token %}
-              {{ form.as_p }}
-              <button type="submit">Register</button>
-        </form>
-    </div>
-</body>
 
-{% endblock %}
+    <div class="layout-login-centered-boxed__form">
+        <div class="d-flex flex-column justify-content-center align-items-center mt-2 mb-4 navbar-light">
+            <a href="index.html" class="navbar-brand text-center mb-2 mr-0 flex-column" style="min-width: 0">
+                <!-- LOGO -->
+                <img id="icon" src="https://hirebeat-assets.s3.amazonaws.com/HireBeatLogo2.png" alt="HireBeat Logo"/> </img>
+                
+
+                <span class="mt-2">Register with Invitation</span>
+            </a>
+        </div>
+        <div class="card card-body">
+            <form id="myForm" method="POST">
+                {% csrf_token %}
+                {% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                    <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            <br>
+            <form action="index.html" novalidate>
+                <div class="form-group">
+                    <label for="{{ form.username.id_for_label }}"  class="text-label" id="username_label">Username:</label>
+                    <div class="input-group input-group-merge">
+                        {{form.username}}    
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">
+                                <span class="far fa-user"></span>
+                            </div>
+                        </div>
+                    </div> 
+                </div>
+                <div class="form-group">
+                    <label for="{{ form.email.id_for_label }}" class="text-label" id="email_label">Email Address:</label>
+                    <div class="input-group input-group-merge">
+                        {{form.email}}
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">
+                                <span class="far fa-envelope"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="{{ form.password1.id_for_label }}" class="text-label" id="password1_label">Password:</label>
+                    <div class="input-group input-group-merge">
+                        {{ form.password1 }}
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">
+                                <span class="far fa-key"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="{{ form.password2.id_for_label }}" class="text-label" id="password2_label">Confirm Password:</label>
+                    <div class="input-group input-group-merge">
+                        {{ form.password2 }}
+                        
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">
+                                <span class="far fa-key"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group mb-3 text-center">
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" checked="" class="custom-control-input" id="terms" />
+                        <label class="custom-control-label" for="terms">I accept <a href="#">Terms and Conditions</a></label>
+                    </div>
+                </div>
+                <div class="form-group text-center">
+                    <button class="btn btn-primary mb-2" type="submit">Register</button><br>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+{% endblock content %}
+    
+
