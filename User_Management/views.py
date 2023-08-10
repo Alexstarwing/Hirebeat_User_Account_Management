@@ -1,7 +1,7 @@
 import pdb
 from django.http import HttpResponse
 from typing import Any, Dict
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.views.generic import View
 from django.views.generic.list import ListView
 from django.views.generic.edit import FormView
@@ -84,13 +84,26 @@ class ActivateAccount(View):
             messages.success(request, 'Your account have been confirmed.')
             return redirect('login')
         else:
-            messages.warning(request, ('The confirmation link was invalid, possibly because it has already been used.'))
+            messages.warning(request, 'The confirmation link was invalid, possibly because it has already been used.')
             return redirect('register')
 
 
 class ProfileList(LoginRequiredMixin, ListView):
     model = Profile
     context_object_name = 'profiles'
+
+    def get_user_roles(self):
+        user = self.request.user
+        user_groups = user.groups.all()
+        user_roles = [group.name for group in user_groups]
+        # pdb.set_trace()  # 断点
+        return force_text(user_roles)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user_roles = self.get_user_roles()
+        context['user_roles'] = user_roles
+        return context
 
 
 class EditAccountView(LoginRequiredMixin, ListView):
