@@ -3,7 +3,7 @@ from django import template
 register = template.Library()
 
 
-@register.filter(name="cut")
-def cut(value, arg):
-    """Removes all values of arg from the given string"""
+@register.filter(name="replace")
+def replace(value, arg):
+    """Replace all values of arg to space"""
     return value.replace(arg, " ")
