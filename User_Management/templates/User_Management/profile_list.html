@@ -17,6 +17,9 @@
                 {% else %}
                     <p>You have no assigned role.</p>
                 {% endif %}
+                {% if user_roles.2 == 'H' or user_roles.2 == 'A' %}
+                    <p>I am HR or admin</p>
+                {% endif %}
             </div>
         </div>
         <div class="bg-white border-bottom mb-3">

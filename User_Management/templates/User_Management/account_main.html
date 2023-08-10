@@ -368,18 +368,22 @@
                         <span class="sidebar-menu-text">Account Settings</span>
                     </a>
                 </li>
+                {% if user_roles.2 == 'H' or user_roles.2 == 'A' %}
                 <li class="sidebar-menu-item">
                     <a class="sidebar-menu-button" href="student-courses.html">
                         <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">queue_play_next</i>
                         <span class="sidebar-menu-text">Delete Account</span>
                     </a>
                 </li>
+                {% endif %}
+                {% if user_roles.2 == 'H' or user_roles.2 == 'A' %}
                 <li class="sidebar-menu-item">
                     <a class="sidebar-menu-button" href="student-courses.html">
                         <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">queue_play_next</i>
                         <span class="sidebar-menu-text">Delete User</span>
                     </a>
                 </li>
+                {% endif %}
                 <li class="sidebar-menu-item">
                     <a class="sidebar-menu-button" href="{% url 'logout' %}">
                         <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">exit_to_app</i>
