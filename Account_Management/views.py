@@ -234,7 +234,12 @@ class InvitationView(LoginRequiredMixin, View):
     template_name = 'Account_Management/invitation.html'
 
     def get(self, request):
-        return render(request, self.template_name)
+        current_user = request.user
+        user_groups = current_user.groups.all()
+        user_roles = [group.name for group in user_groups]
+        # pdb.set_trace()  # 断点
+        return render(request, self.template_name, {'user_roles': user_roles[0]})
+        # return render(request, self.template_name)
 
 
 class OrganizationView(LoginRequiredMixin, ListView):
