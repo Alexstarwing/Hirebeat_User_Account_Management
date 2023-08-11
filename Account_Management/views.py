@@ -1,3 +1,5 @@
+import pdb
+
 from django.http import HttpResponse, Http404
 from django.contrib import messages
 from django.shortcuts import render, redirect
@@ -29,7 +31,7 @@ class AccountList(LoginRequiredMixin, ListView):
     context_object_name = 'Accounts'
 
 
-class EditAccountView(LoginRequiredMixin, View):
+class AccountSettingView(LoginRequiredMixin, View):
     model = Account
     context_object_name = 'edit_account'
     template_name = 'Account_Management/edit_account.html'
@@ -37,6 +39,7 @@ class EditAccountView(LoginRequiredMixin, View):
     def get_account_for_user(self, user):
         try:
             account_user_relation = AccountUserRelation.objects.get(user=user)
+            # pdb.set_trace()
             return account_user_relation.account
         except AccountUserRelation.DoesNotExist:
             return None
@@ -49,16 +52,10 @@ class EditAccountView(LoginRequiredMixin, View):
             raise Http404("No account linked with the current user.")
 
         form = OrganizationForm(initial={'organization': account.organization})
-        return render(request, self.template_name, {'form': form})
+        user_groups = current_user.groups.all()
+        user_roles = [group.name for group in user_groups]
 
-        # try:
-        #     profile = Profile.objects.get(user=request.user)
-        #     account = Account.objects.filter(profile=profile).first()
-        #     form = OrganizationForm(initial={'organization': account.organization}) if account else OrganizationForm()
-        # except Profile.DoesNotExist:
-        #     form = OrganizationForm()
-
-        # return render(request, self.template_name, {'form': form})
+        return render(request, self.template_name, {'form': form, 'user_roles': user_roles[0]})
 
     def post(self, request):
         form = OrganizationForm(request.POST)
@@ -76,10 +73,9 @@ class EditAccountView(LoginRequiredMixin, View):
         return render(request, self.template_name, {'form': form})
 
 
-class SettingView(LoginRequiredMixin, ListView):
+class ConfigureView(LoginRequiredMixin, ListView):
     model = Account
     context_object_name = 'settings'
-    template_name = 'Account_Management/settings.html'
 
 
 class AddUserView(LoginRequiredMixin, View):
