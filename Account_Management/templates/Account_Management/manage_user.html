@@ -20,6 +20,32 @@
                             <p class="text-muted mb-0">Manage your company members.</p>
                         </div>
                         <div class="col-lg-8 card-form__body card-body">
+                            <!-- <table>
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Role</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for data in user_role_data %}
+                                    <tr>
+                                        <td>{{ data.user.username }}</td>
+                                        <td>{{ data.user.email }}</td>
+                                        <td>{{ data.role.role_type }}</td>
+                                    </tr>
+                                    {% endfor %} -->
+                                    <!-- {% for account in accounts %}
+                                    <tr>
+                                        <td>{{ account.user.username }}</td>
+                                        <td>{{ account.user.email }}</td>
+                                        <td>{{ account.user.last_login }}</td> 
+                                        <td>{{ account.user.groups.first }}</td> 
+                                    </tr>
+                                    {% endfor %} -->
+                                <!-- </tbody>
+                            </table> -->
                             <ul>
                                 {% for account in accounts %}
                                     <li>{{ account.user.username }}</li>

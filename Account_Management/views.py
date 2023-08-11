@@ -86,6 +86,26 @@ class AddUserView(LoginRequiredMixin, View):
     model = TeamInvitation
     context_object_name = 'add_user'
     template_name = 'Account_Management/add_user.html'
+    assign_org_url = reverse_lazy('account_management:edit_account')
+
+    def get_account_for_user(self, user):
+        try:
+            account_user_relation = AccountUserRelation.objects.get(user=user)
+            return account_user_relation.account
+        except AccountUserRelation.DoesNotExist:
+            return None
+
+    def dispatch(self, request, *args, **kwargs):
+        try:
+            current_account = self.get_account_for_user(request.user)
+            if not current_account.organization:
+                messages.warning(request, "Please assign an organization first.")
+                return redirect(self.assign_org_url)
+        except AccountUserRelation.DoesNotExist:
+            messages.warning(request, "Please assign an organization first.")
+            return redirect(self.assign_org_url)
+
+        return super().dispatch(request, *args, **kwargs)
 
     def get(self, request):
         form = InviteForm()  # Create an instance of the InviteForm
@@ -94,7 +114,7 @@ class AddUserView(LoginRequiredMixin, View):
     def post(self, request):
         form = InviteForm(request.POST)
         if form.is_valid():
-            name = form.cleaned_data['name']
+            # name = form.cleaned_data['name']
             email = form.cleaned_data['email']
             role_name = form.cleaned_data['role_name']
             role_type = form.cleaned_data['role_type']
@@ -128,7 +148,7 @@ class AddUserView(LoginRequiredMixin, View):
             # Send invitation email with registration link
             subject = 'Invitation to Register'
             message = render_to_string('Account_Management/account_activation_email.html', {
-                'user': name,
+                # 'user': name,
                 'domain': current_site.domain,
                 'invitation_token': invitation_token,
                 # 'register_link': register_link,
@@ -187,6 +207,7 @@ class RegisterWithInvitationView(View):
             new_user = CustomUser.objects.create_user(username=username, email=email, password=password)
             new_user.is_active = True
             new_user.save()
+            # team_invitation.user = new_user
 
             role = team_invitation.role
             group_name = f"{role.role_type.capitalize()} Group"
@@ -264,6 +285,21 @@ class ManageUserView(View):
     def get(self, request):
         current_account = self.get_account_for_user(request.user)
         accounts = AccountUserRelation.objects.filter(account=current_account)
+
+        # user_role_data = []  # To store user and corresponding role data
+
+        # for account in accounts:
+        #     user = account.user  # Get the user associated with the AccountUserRelation
+        #     team_invitation = TeamInvitation.objects.get(user=user)  # Use .filter() to avoid DoesNotExist
+
+        #     if team_invitation:
+        #         user_role_data.append({'user': user, 'role': team_invitation.role})
+
+        # context = {
+        #     'user_role_data': user_role_data,
+        # }
+
+        # return render(request, self.template_name, context)
         return render(request, self.template_name, {'accounts': accounts})
 
     # def get(self, request):
