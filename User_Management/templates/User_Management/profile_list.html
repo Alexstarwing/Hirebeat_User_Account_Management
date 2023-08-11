@@ -1,4 +1,5 @@
 {% extends 'User_Management/account_main.html' %}
+{% load replace %}
 {% block content %}
     <head>
         <title>Dashboard | HireBeat</title>
@@ -11,6 +12,14 @@
         <div class="page__heading">
             <div class="container-fluid page__container">
                 <h1 class="mb-0">Dashboard</h1>
+                {% if user_roles %}
+                    <p>{{ user_roles|slice:"2:-8"|replace:"_"}}</p>
+                {% else %}
+                    <p>You have no assigned role.</p>
+                {% endif %}
+                {% if user_roles.2 == 'H' or user_roles.2 == 'A' %}
+                    <p>I am HR or admin</p>
+                {% endif %}
             </div>
         </div>
         <div class="bg-white border-bottom mb-3">

@@ -21,6 +21,7 @@ from Account_Management.models import Profile, Account, AccountUserRelation
 from django.template.loader import render_to_string
 from django.contrib.auth.tokens import default_token_generator, PasswordResetTokenGenerator
 from .models import Role
+from django.contrib.auth.models import Group
 
 
 class AccountList(LoginRequiredMixin, ListView):
@@ -95,8 +96,10 @@ class AddUserView(LoginRequiredMixin, View):
         if form.is_valid():
             name = form.cleaned_data['name']
             email = form.cleaned_data['email']
+            role_name = form.cleaned_data['role_name']
+            role_type = form.cleaned_data['role_type']
 
-            # role_type = form.cleaned_data['role_type']
+            role = Role.objects.create(role_name=role_name, role_type=role_type)
 
             account_user_relation = AccountUserRelation.objects.get(user=request.user)
             account = account_user_relation.account
@@ -111,7 +114,7 @@ class AddUserView(LoginRequiredMixin, View):
                 account=account,
                 invited_email=email,
                 invited_by_user=request.user,
-                # role=current_role,
+                role=role,
                 invitation_token=invitation_token,
             )
             invitation.save()
@@ -179,12 +182,16 @@ class RegisterWithInvitationView(View):
         if form.is_valid():
             username = form.cleaned_data['username']
             email = form.cleaned_data['email']
-            # role_type = form.cleaned_data['role_type']
             password = form.cleaned_data['password1']
 
             new_user = CustomUser.objects.create_user(username=username, email=email, password=password)
             new_user.is_active = True
             new_user.save()
+
+            role = team_invitation.role
+            group_name = f"{role.role_type.capitalize()} Group"
+            associated_group = Group.objects.get(name=group_name)
+            new_user.groups.add(associated_group)
 
             AccountUserRelation.objects.create(account=team_invitation.account, user=new_user)
 

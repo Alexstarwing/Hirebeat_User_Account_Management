@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+{% load static %}
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Prevent the demo from appearing in search engines -->
+    <meta name="robots" content="noindex">
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    
+    
+    <!-- Perfect Scrollbar -->
+    <link type="text/css" href="{% static 'vendor/perfect-scrollbar.css' %}" rel="stylesheet">
+
+    <!-- App CSS -->
+    <link type="text/css" href="{% static 'css/app.css' %}" rel="stylesheet">
+    <link type="text/css" href="{% static 'css/app.rtl.css' %}" rel="stylesheet">
+
+    <!-- Material Design Icons -->
+    <link type="text/css" href="{% static 'css/vendor-material-icons.css' %}" rel="stylesheet">
+    <link type="text/css" href="{% static 'css/vendor-material-icons.rtl.css' %}" rel="stylesheet">
+
+    <!-- Font Awesome FREE Icons -->
+    <link type="text/css" href="{% static 'css/vendor-fontawesome-free.css' %}" rel="stylesheet">
+    <link type="text/css" href="{% static 'css/vendor-fontawesome-free.rtl.css' %}" rel="stylesheet">
+
+    <!-- ion Range Slider -->
+    <link type="text/css" href="{% static 'css/vendor-ion-rangeslider.css' %}" rel="stylesheet">
+    <link type="text/css" href="{% static 'css/vendor-ion-rangeslider.rtl.css' %}" rel="stylesheet">
+    <style>
+        .center-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh; /* Set to viewport height for full screen */
+        }
+        .row {
+            display: flex; /* Use flexbox to align children */
+            justify-content: space-between; /* Distribute children evenly across the row */
+            align-items: center; /* Vertically align children */
+            margin: 0; /* Remove default margin */
+        }
+        
+        /* Apply CSS styling to the paragraphs within columns */
+        .row .input-field p {
+            margin: 0; /* Reset margin */
+            font-size: 15px; /* Example font size */
+            color: #333; /* Example text color */
+        }
+        
+        /* Apply additional styling to the right-aligned column */
+        .row .input-field.col.l6 {
+            text-align: left; /* Align content to the right */
+        }
+        
+    </style>
+
+    {% block content%}
+
+    {% endblock content%}
+    <script src="{% static 'password_reset.js' %}"></script>
+    <!-- jQuery -->
+    
+    <script src="{% static 'vendor/jquery.min.js' %}"></script>
+
+    <!-- Bootstrap -->
+    <script src="{% static 'vendor/popper.min.js' %}"></script>
+    <script src="{% static 'vendor/bootstrap.min.js' %}"></script>
+
+    <!-- Perfect Scrollbar -->
+    <script src="{% static 'vendor/perfect-scrollbar.min.js' %}"></script>
+
+    <!-- DOM Factory -->
+    <script src="{% static 'vendor/dom-factory.js' %}"></script>
+
+    <!-- MDK -->
+    <script src="{% static 'vendor/material-design-kit.js' %}"></script>
+
+    <!-- Range Slider -->
+    <script src="{% static 'vendor/ion.rangeSlider.min.js' %}"></script>
+    <script src="{% static 'js/ion-rangeslider.js' %}"></script>
+
+    <!-- App -->
+    <script src="{% static 'js/toggle-check-all.js' %}"></script>
+    <script src="{% static 'js/check-selected-row.js' %}"></script>
+    <script src="{% static 'js/dropdown.js' %}"></script>
+    <script src="{% static 'js/sidebar-mini.js' %}"></script>
+    <script src="{% static 'js/app.js' %}"></script>
+
+    <!-- App Settings (safe to remove) -->
+    <script src="{% static 'js/app-settings.js' %}"></script>
+
+
+
+
+</body>
+
+</html>
+
+<head>

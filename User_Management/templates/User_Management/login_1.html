@@ -1,77 +1,84 @@
-{% extends "User_Management/blank.html" %}
+{% extends 'User_Management/main_1.html' %}
+{% block content%}
+    <title>Login</title>
 
-{% block page %}
-<div class="layout-login-centered-boxed__form">
-  <div class="d-flex flex-column justify-content-center align-items-center mt-2 mb-2 navbar-light">
-    <a href="{{ home_url }}" class="navbar-brand text-center mb-2 mr-0" style="min-width: 0">
-        <!-- LOGO -->
-        <svg width="26px" viewBox="0 0 27 26" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-          <g id="drawer-logo-wrapper" stroke="none" stroke-width="1" fill="currentColor" fill-rule="evenodd">    
-            <path d="M21.9257604,14.9506975 C20.582703,15.0217165 19.3145795,14.3502722 18.6558508,13.2193504 C18.5961377,13.1299507 18.488013,13.0821416 18.3788008,13.0968482 C18.2695887,13.1115549 18.1791809,13.1860986 18.1471473,13.287853 L16.3403333,18.8266167 C16.0783106,19.5012544 15.4036423,19.9432488 14.6567374,19.9295884 C13.9098324,19.915928 13.2530282,19.4495818 13.0177202,18.7658483 L10.3561926,9.20532122 C10.3224612,9.0828362 10.2066255,8.99820016 10.075223,9.00002907 C9.94382048,9.00185799 9.83056595,9.0896826 9.8005142,9.21305538 C9.53809432,10.6490488 9.07561673,12.0442508 8.42563983,13.3607751 C7.81040896,14.4321066 6.59978897,15.0547797 5.33446397,14.9506975 L0.286383595,14.9506975 C0.200836429,14.9508269 0.119789989,14.987678 0.0652579686,15.0512416 C0.0105052402,15.1148427 -0.011403821,15.1989481 0.00568007946,15.2799517 C1.26517458,21.5063521 6.92177656,26 13.500072,26 C20.0783674,26 25.7349694,21.5063521 26.9944639,15.2799517 C27.0112295,15.1987308 26.9894777,15.1145345 26.935158,15.050392 C26.8808383,14.9862496 26.7996356,14.9488738 26.7137603,14.9484877 C23.5217604,14.9499609 21.9257604,14.9506975 21.9257604,14.9506975 Z" opacity="0.539999962"></path>
-            <path d="M5.48262697,13.1162874 C6.53570764,13.1162874 6.62233928,13.1162874 7.63604194,9.25361392 C7.86780969,8.37139838 8.14008055,7.33311522 8.48548201,6.11058557 C8.7087856,5.42413873 9.37946641,4.96506482 10.1258577,4.98776578 C10.8742462,4.96784002 11.5440567,5.43246093 11.761733,6.1225074 L14.4619398,15.7986995 C14.4940991,15.9151627 14.6022445,15.9971672 14.7273152,15.9999282 C14.8523859,16.0026893 14.9643174,15.9255432 15.0019812,15.8106214 L16.5152221,11.1654422 C16.7421482,10.5403405 17.3447552,10.1140124 18.0318383,10.0924774 C18.6964712,10.0434044 19.3301356,10.3708193 19.6553377,10.9313408 C19.7678463,11.1405147 19.8803549,11.3453535 19.9759873,11.5426056 C20.6296623,12.8128226 20.8198019,13.1119522 21.7761252,13.1119522 L26.7186288,13.1119522 C26.7943575,13.1119652 26.8669186,13.0826781 26.9200192,13.030667 C26.9730799,12.97881 27.0019231,12.9083695 26.9999003,12.8355824 C26.9032945,5.71885474 20.8862135,-0.00118613704 13.4977698,1.84496545e-07 C6.10932623,0.00118650603 0.0942250201,5.72315932 8.19668591e-05,12.8399177 C-0.00175692205,12.9131783 0.0274115935,12.9840093 0.080884445,13.0361333 C0.134357296,13.0882573 0.207535985,13.1171917 0.283603687,13.1162874 L5.48262697,13.1162874 Z"></path>
-          </g>
-        </svg>
-        
-        <span class="ml-2">Educate</span>
-      </a>
+
+
+</head>
+
+<body class="layout-login-centered-boxed">
+    <div class="center-container">
+
+
+        <div class="layout-login-centered-boxed__form">
+            <div class="d-flex flex-column justify-content-center align-items-center mt-2 mb-4 navbar-light">
+                <a href="index.html" class="navbar-brand text-center mb-2 mr-0 flex-column" style="min-width: 0">
+                    <!-- LOGO -->
+                    <img id="icon" src="https://hirebeat-assets.s3.amazonaws.com/HireBeatLogo2.png" alt="HireBeat Logo"/> </img>
+                    
+
+                    <span class="mt-2">Please, login into your account</span>
+                </a>
+            </div>
+            <div class="card card-body">
+                <form class="login-form" method="post" action="{% url 'login' %}">
+                    {% csrf_token %}
+                <br>
+                    <div class="form-group">
+                        <label for="{{ form.username.id_for_label }}" class="text-label" id="username_label">Username:</label>
+                        <div class="input-group input-group-merge">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">
+                                    <span class="far fa-user"></span>
+                                </div>
+                            </div>
+                            {{ form.username }}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="{{ form.password.id_for_label }}" class="text-label" id="password_label">Password:</label>
+                        <div class="input-group input-group-merge">
+                            {{form.password}}
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">
+                                    <span class="material-icons prefix">lock_outline</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group mb-3 text-center">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" checked="" class="custom-control-input" id="terms" />
+                            <label class="custom-control-label" for="terms">I accept <a href="#">Terms and Conditions</a></label>
+                        </div>
+                    
+                    
+                        {% if messages %}
+                        <ul class="messages">
+                            {% for message in messages %}
+                            <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                            {% endfor %}
+                        </ul>
+                        {% endif %}
+                        <br>
+                        <button class="btn btn-primary mb-2" type="submit"> Login </button><br>
+                        
+                    </div>
+                    
+                    <div class="row">
+                        <div class="input-field col s6 m6 l6">
+                            <p class="margin medium-small"><a href="{% url 'register'%}">Register Now!</a></p>
+                        </div>
+                        <div class="input-field col s6 m6 l6">
+                            <p class="margin right-align medium-small"><a href="{% url 'password_reset'%}">Forgot password?</a></p>
+                        </div>
+                    </div>
+                    <br>
+                </form>
+                
+            </div>
+        </div>
     </div>
-  
-    <div class="card card-body">
+
+{% endblock content %}
     
-
-  <div class="alert alert-soft-success d-flex" role="alert">
-    <i class="material-icons mr-3">check_circle</i>
-    <div class="text-body">An email with password reset instructions has been sent to your email address, if it exists on our system.</div>
-  </div>
-
-  <a href="" class="btn btn-light btn-block">
-    <span class="mr-2">
-      <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="18px" height="18px" viewBox="0 0 48 48" class="abcRioButtonSvg"><g><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"></path><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"></path><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"></path><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"></path><path fill="none" d="M0 0h48v48H0z"></path></g></svg>
-    </span>  
-    Continue with Google
-  </a>
-
-  <div class="page-separator">
-    <div class="page-separator__text">or</div>
-  </div>
-
-  <form action="{{ home_url }}" novalidate>
-    <div class="form-group">
-      <label class="text-label" for="email_2">Email Address:</label>
-      <div class="input-group input-group-merge">
-        <input id="email_2" type="email" required="" class="form-control form-control-prepended" placeholder="john@doe.com">
-        <div class="input-group-prepend">
-          <div class="input-group-text">
-            <span class="far fa-envelope"></span>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="form-group">
-      <label class="text-label" for="password_2">Password:</label>
-      <div class="input-group input-group-merge">
-        <input id="password_2" type="password" required="" class="form-control form-control-prepended" placeholder="Enter your password">
-        <div class="input-group-prepend">
-          <div class="input-group-text">
-            <span class="fa fa-key"></span>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="form-group">
-      <button class="btn btn-block btn-primary" type="submit">Login</button>
-    </div>
-    <div class="form-group text-center">
-      <div class="custom-control custom-checkbox">
-        <input type="checkbox" class="custom-control-input" checked="" id="remember">
-        <label class="custom-control-label" for="remember">Remember me for 30 days</label>
-      </div> 
-    </div>
-    <div class="form-group text-center">
-      <a href="">Forgot password?</a> <br>
-      Don't have an account? <a class="text-body text-underline" href="signup.html">Sign up!</a>
-    </div>
-  </form>
-</div>
-</div>
-{% endblock %}

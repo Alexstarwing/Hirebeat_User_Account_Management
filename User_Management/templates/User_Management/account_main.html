@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
-
+{% load replace %}
 {% load static %}
 
 <head>
@@ -100,12 +100,7 @@
 
                                             </div>
                                         </li>
-                                        <!-- <li class="nav-item ">
-    <a class="nav-link" href="ui-forms.html">Forms</a>
-  </li>
-  <li class="nav-item ">
-    <a class="nav-link" href="ui-charts.html">Charts</a>
-  </li> -->
+
                                         <li class="nav-item dropdown">
                                             <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Layouts</a>
                                             <div class="dropdown-menu">
@@ -348,7 +343,7 @@
                 </span>
                 <span class="flex d-flex flex-column">
                     <span class="sidebar-brand">{{ request.user|title }}</span>
-                    <small>Company Name</small>
+                    <small>{{ user_roles|slice:"2:-8"|replace:"_"}}</small>
                 </span>
             </a>
         </div>
@@ -373,18 +368,22 @@
                         <span class="sidebar-menu-text">Account Settings</span>
                     </a>
                 </li>
+                {% if user_roles.2 == 'H' or user_roles.2 == 'A' %}
                 <li class="sidebar-menu-item">
                     <a class="sidebar-menu-button" href="student-courses.html">
                         <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">queue_play_next</i>
                         <span class="sidebar-menu-text">Delete Account</span>
                     </a>
                 </li>
+                {% endif %}
+                {% if user_roles.2 == 'H' or user_roles.2 == 'A' %}
                 <li class="sidebar-menu-item">
                     <a class="sidebar-menu-button" href="student-courses.html">
                         <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">queue_play_next</i>
                         <span class="sidebar-menu-text">Delete User</span>
                     </a>
                 </li>
+                {% endif %}
                 <li class="sidebar-menu-item">
                     <a class="sidebar-menu-button" href="{% url 'logout' %}">
                         <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">exit_to_app</i>
@@ -396,15 +395,15 @@
     </div>
 </div>
 </div>
-<!-- // END drawer-layout -->
+    <!-- // END drawer-layout -->
 <div id="app-settings">
-    <app-settings layout-active="default" :layout-location="{
-  'default': 'edit_account.html',
-  'fixed': 'fixed-edit-account.html',
-  'fluid': 'fluid-edit-account.html',
-  'mini': 'mini-edit-account.html'
-}"></app-settings>
-</div>
+      <app-settings layout-active="default" :layout-location="{
+      'default': 'edit_account.html',
+      'fixed': 'fixed-edit-account.html',
+      'fluid': 'fluid-edit-account.html',
+      'mini': 'mini-edit-account.html'
+    }"></app-settings>
+    </div>
     
     <!-- jQuery -->
     <script src="{% static 'vendor/jquery.min.js' %}"></script>
@@ -460,4 +459,5 @@
     <script src="{% static 'js/page.analytics.js' %}"></script>
 
 
+</div>
 </body>

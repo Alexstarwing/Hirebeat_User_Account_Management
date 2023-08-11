@@ -1,7 +1,7 @@
 import pdb
 from django.http import HttpResponse
 from typing import Any, Dict
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.views.generic import View
 from django.views.generic.list import ListView
 from django.views.generic.edit import FormView
@@ -17,14 +17,15 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_text
 from django.core.mail import send_mail
 from django.contrib import messages
-from .forms import UserCreationForm  # , ResendActivationEmailForm
+from .forms import UserCreationForm, CustomLoginForm  # , ResendActivationEmailForm
 from .models import Profile, CustomUser
 from Account_Management.models import Account, AccountUserRelation
 from .tokens import account_activation_token
 
 
 class CustomLoginView(LoginView):
-    template_name = 'User_Management/login.html'
+    authentication_form = CustomLoginForm
+    template_name = 'User_Management/login_1.html'
     fields = '__all__'
     redirect_authenticated_user = True
 
@@ -33,7 +34,7 @@ class CustomLoginView(LoginView):
 
 
 class RegisterPage(FormView):
-    template_name = 'User_Management/register.html'
+    template_name = 'User_Management/signup.html'
     form_class = UserCreationForm
     redirect_authenticated_user = True
     success_url = reverse_lazy('profiles')  # where user will be redirect after success registration
@@ -83,13 +84,26 @@ class ActivateAccount(View):
             messages.success(request, 'Your account have been confirmed.')
             return redirect('login')
         else:
-            messages.warning(request, ('The confirmation link was invalid, possibly because it has already been used.'))
+            messages.warning(request, 'The confirmation link was invalid, possibly because it has already been used.')
             return redirect('register')
 
 
 class ProfileList(LoginRequiredMixin, ListView):
     model = Profile
     context_object_name = 'profiles'
+
+    def get_user_roles(self):
+        user = self.request.user
+        user_groups = user.groups.all()
+        user_roles = [group.name for group in user_groups]
+        # pdb.set_trace()  # 断点
+        return force_text(user_roles)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user_roles = self.get_user_roles()
+        context['user_roles'] = user_roles
+        return context
 
 
 class EditAccountView(LoginRequiredMixin, ListView):
