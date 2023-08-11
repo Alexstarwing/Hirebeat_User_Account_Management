@@ -239,7 +239,6 @@ class InvitationView(LoginRequiredMixin, View):
         user_roles = [group.name for group in user_groups]
         # pdb.set_trace()  # 断点
         return render(request, self.template_name, {'user_roles': user_roles[0]})
-        # return render(request, self.template_name)
 
 
 class OrganizationView(LoginRequiredMixin, ListView):
@@ -265,7 +264,13 @@ class OrganizationView(LoginRequiredMixin, ListView):
         # except Account.DoesNotExist:
         #     account = None
 
-        return render(request, 'organization.html', {'account': account})
+        return render(request, self.template_name, {'account': account})
+
+    def get(self, request):
+        current_user = request.user
+        user_groups = current_user.groups.all()
+        user_roles = [group.name for group in user_groups]
+        return render(request, self.template_name, {'user_roles': user_roles[0]})
 
 
 class ManageUserView(View):
@@ -298,7 +303,9 @@ class ManageUserView(View):
     def get(self, request):
         current_account = self.get_account_for_user(request.user)
         accounts = AccountUserRelation.objects.filter(account=current_account)
-
+        current_user = request.user
+        user_groups = current_user.groups.all()
+        user_roles = [group.name for group in user_groups]
         # user_role_data = []  # To store user and corresponding role data
 
         # for account in accounts:
@@ -313,7 +320,7 @@ class ManageUserView(View):
         # }
 
         # return render(request, self.template_name, context)
-        return render(request, self.template_name, {'accounts': accounts})
+        return render(request, self.template_name, {'accounts': accounts, 'user_roles': user_roles[0]})
 
     # def get(self, request):
     #     current_account = self.get_account_for_user(request.user)
