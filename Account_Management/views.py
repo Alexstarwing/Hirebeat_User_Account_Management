@@ -77,6 +77,13 @@ class ConfigureView(LoginRequiredMixin, ListView):
     model = Account
     context_object_name = 'settings'
 
+    # def get(self, request, *args, **kwargs):
+    #     # pdb.set_trace()
+    #     current_user = request.user
+    #     user_groups = current_user.groups.all()
+    #     user_roles = [group.name for group in user_groups]
+    #     return render(request, self.template_name, {'user_roles': user_roles})
+
 
 class AddUserView(LoginRequiredMixin, View):
     model = TeamInvitation
@@ -105,7 +112,12 @@ class AddUserView(LoginRequiredMixin, View):
 
     def get(self, request):
         form = InviteForm()  # Create an instance of the InviteForm
-        return render(request, self.template_name, {'form': form})
+        # get role
+        current_user = request.user
+        user_groups = current_user.groups.all()
+        user_roles = [group.name for group in user_groups]
+        # pdb.set_trace()  # 断点
+        return render(request, self.template_name, {'form': form, 'user_roles': user_roles[0]})
 
     def post(self, request):
         form = InviteForm(request.POST)
