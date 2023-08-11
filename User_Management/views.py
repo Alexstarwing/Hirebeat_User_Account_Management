@@ -105,24 +105,6 @@ class ProfileList(LoginRequiredMixin, ListView):
         context['user_roles'] = user_roles
         return context
 
-
-class EditAccountView(LoginRequiredMixin, ListView):
-    model = Profile
-    context_object_name = 'edit-account'
-    template_name = 'User_Management/edit-account.html'
-
-
-class SettingView(LoginRequiredMixin, ListView):
-    model = Profile
-    context_object_name = 'author-settings'
-    template_name = 'User_Management/author-settings.html'
-
-
-class AddUserView(LoginRequiredMixin, ListView):
-    model = Profile
-    context_object_name = 'add-user'
-    template_name = 'User_Management/add_user.html'
-
 # def resend_activation_email(request): 
 #     if request.user.is_authenticated:
 #         return redirect('profiles')
