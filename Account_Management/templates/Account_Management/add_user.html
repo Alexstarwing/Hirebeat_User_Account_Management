@@ -1,10 +1,11 @@
-{% extends 'User_Management/account_main.html' %}
+{% extends 'Account_Management/account_main.html' %}
 {% load static %}
+{% load replace %}
 {% block content %}
     <!DOCTYPE html>
     <html lang="en">
         <head>
-            <title>Add new user | HireBeat</title>
+            <title>Invite new user | HireBeat</title>
             <style>
                 .form-group {
                     display: flex;
@@ -83,14 +84,6 @@
                     color: #1167C9;
                 }
 
-
-                  
-                  
-                  
-                  
-
-                
-
             </style>
         </head>
         <body>
@@ -98,7 +91,8 @@
 
 
                 <div class="container-fluid page__container page__heading d-flex align-items-center border-bottom  ">
-                    <h1 class="mb-0">Add New User</h1>
+                    <h1 class="mb-0">Invite New User</h1>
+{#                    <p>{{ user_roles|slice:"0:-5"|replace:"_"}}</p>#}
                 </div>
                 <div class="container-fluid page__container">
                     <div class="col s14 z-depth-6 card-panel custom-panel">

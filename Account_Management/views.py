@@ -1,3 +1,5 @@
+import pdb
+
 from django.http import HttpResponse, Http404
 from django.contrib import messages
 from django.shortcuts import render, redirect
@@ -29,7 +31,7 @@ class AccountList(LoginRequiredMixin, ListView):
     context_object_name = 'Accounts'
 
 
-class EditAccountView(LoginRequiredMixin, View):
+class AccountSettingView(LoginRequiredMixin, View):
     model = Account
     context_object_name = 'edit_account'
     template_name = 'Account_Management/edit_account.html'
@@ -37,6 +39,7 @@ class EditAccountView(LoginRequiredMixin, View):
     def get_account_for_user(self, user):
         try:
             account_user_relation = AccountUserRelation.objects.get(user=user)
+            # pdb.set_trace()
             return account_user_relation.account
         except AccountUserRelation.DoesNotExist:
             return None
@@ -49,16 +52,10 @@ class EditAccountView(LoginRequiredMixin, View):
             raise Http404("No account linked with the current user.")
 
         form = OrganizationForm(initial={'organization': account.organization})
-        return render(request, self.template_name, {'form': form})
+        user_groups = current_user.groups.all()
+        user_roles = [group.name for group in user_groups]
 
-        # try:
-        #     profile = Profile.objects.get(user=request.user)
-        #     account = Account.objects.filter(profile=profile).first()
-        #     form = OrganizationForm(initial={'organization': account.organization}) if account else OrganizationForm()
-        # except Profile.DoesNotExist:
-        #     form = OrganizationForm()
-
-        # return render(request, self.template_name, {'form': form})
+        return render(request, self.template_name, {'form': form, 'user_roles': user_roles[0]})
 
     def post(self, request):
         form = OrganizationForm(request.POST)
@@ -76,10 +73,22 @@ class EditAccountView(LoginRequiredMixin, View):
         return render(request, self.template_name, {'form': form})
 
 
-class SettingView(LoginRequiredMixin, ListView):
+class ConfigureView(LoginRequiredMixin, ListView):
     model = Account
     context_object_name = 'settings'
-    template_name = 'Account_Management/settings.html'
+
+    def get_user_role(self, request, *args, **kwargs):
+        # pdb.set_trace()
+        current_user = request.user
+        user_groups = current_user.groups.all()
+        user_roles = [group.name for group in user_groups]
+        return force_str(user_roles)
+
+    def get_context_data(self, **kwargs):
+        context = super(ConfigureView, self).get_context_data()
+        user_roles = self.get_user_role(self.request)
+        context['user_roles'] = user_roles
+        return context
 
 
 class AddUserView(LoginRequiredMixin, View):
@@ -109,7 +118,12 @@ class AddUserView(LoginRequiredMixin, View):
 
     def get(self, request):
         form = InviteForm()  # Create an instance of the InviteForm
-        return render(request, self.template_name, {'form': form})
+        # get role
+        current_user = request.user
+        user_groups = current_user.groups.all()
+        user_roles = [group.name for group in user_groups]
+        # pdb.set_trace()  # 断点
+        return render(request, self.template_name, {'form': form, 'user_roles': user_roles[0]})
 
     def post(self, request):
         form = InviteForm(request.POST)
@@ -226,7 +240,11 @@ class InvitationView(LoginRequiredMixin, View):
     template_name = 'Account_Management/invitation.html'
 
     def get(self, request):
-        return render(request, self.template_name)
+        current_user = request.user
+        user_groups = current_user.groups.all()
+        user_roles = [group.name for group in user_groups]
+        # pdb.set_trace()  # 断点
+        return render(request, self.template_name, {'user_roles': user_roles[0]})
 
 
 class OrganizationView(LoginRequiredMixin, ListView):
@@ -252,7 +270,13 @@ class OrganizationView(LoginRequiredMixin, ListView):
         # except Account.DoesNotExist:
         #     account = None
 
-        return render(request, 'organization.html', {'account': account})
+        return render(request, self.template_name, {'account': account})
+
+    def get(self, request):
+        current_user = request.user
+        user_groups = current_user.groups.all()
+        user_roles = [group.name for group in user_groups]
+        return render(request, self.template_name, {'user_roles': user_roles[0]})
 
 
 class ManageUserView(View):
@@ -285,7 +309,9 @@ class ManageUserView(View):
     def get(self, request):
         current_account = self.get_account_for_user(request.user)
         accounts = AccountUserRelation.objects.filter(account=current_account)
-
+        current_user = request.user
+        user_groups = current_user.groups.all()
+        user_roles = [group.name for group in user_groups]
         # user_role_data = []  # To store user and corresponding role data
 
         # for account in accounts:
@@ -300,7 +326,7 @@ class ManageUserView(View):
         # }
 
         # return render(request, self.template_name, context)
-        return render(request, self.template_name, {'accounts': accounts})
+        return render(request, self.template_name, {'accounts': accounts, 'user_roles': user_roles[0]})
 
     # def get(self, request):
     #     current_account = self.get_account_for_user(request.user)
