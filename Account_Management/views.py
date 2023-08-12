@@ -77,12 +77,18 @@ class ConfigureView(LoginRequiredMixin, ListView):
     model = Account
     context_object_name = 'settings'
 
-    # def get(self, request, *args, **kwargs):
-    #     # pdb.set_trace()
-    #     current_user = request.user
-    #     user_groups = current_user.groups.all()
-    #     user_roles = [group.name for group in user_groups]
-    #     return render(request, self.template_name, {'user_roles': user_roles})
+    def get_user_role(self, request, *args, **kwargs):
+        # pdb.set_trace()
+        current_user = request.user
+        user_groups = current_user.groups.all()
+        user_roles = [group.name for group in user_groups]
+        return force_str(user_roles)
+
+    def get_context_data(self, **kwargs):
+        context = super(ConfigureView, self).get_context_data()
+        user_roles = self.get_user_role(self.request)
+        context['user_roles'] = user_roles
+        return context
 
 
 class AddUserView(LoginRequiredMixin, View):
