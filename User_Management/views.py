@@ -20,6 +20,7 @@ from django.contrib import messages
 from .forms import UserCreationForm, CustomLoginForm  # , ResendActivationEmailForm
 from .models import Profile, CustomUser
 from Account_Management.models import Account, AccountUserRelation
+from django.contrib.auth.models import Group
 from .tokens import account_activation_token
 
 
@@ -53,10 +54,13 @@ class RegisterPage(FormView):
             'token': token,
         })
         send_mail(mail_subject, message, 'yifandsb666@gmail.com', [user.email])
+        # pdb.set_trace()
         email_sent_message = "Activation email has been sent to your email address."  # flash message
         messages.success(self.request, email_sent_message)
+        admin_group = Group.objects.get(name='Admin Group')  # Replace 'admin' with your actual group name
+        user.groups.add(admin_group)
         # return redirect('resend_activation_email') #Notify about the sent in another page
-        return super().form_valid(form)  # Redirect to success_url
+        return self.render_to_response(self.get_context_data(form=form))
 
     def get(self, *args, **kwargs):
         if self.request.user.is_authenticated:
