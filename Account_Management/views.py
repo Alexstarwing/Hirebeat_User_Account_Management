@@ -57,15 +57,15 @@ class AccountSettingView(LoginRequiredMixin, View):
         if not account:
             raise Http404("No account linked with the current user.")
 
-        form = OrganizationForm(initial={'organization': account.organization})
+        org_form = OrganizationForm(initial={'organization': account.organization})
         user_groups = current_user.groups.all()
         user_roles = [group.name for group in user_groups]
 
-        return render(request, self.template_name, {'form': form, 'user_roles': user_roles[0]})
+        return render(request, self.template_name, {'org_form': org_form, 'user_roles': user_roles[0]})
 
     def post(self, request):
-        form = OrganizationForm(request.POST)
-        if form.is_valid():
+        org_form = OrganizationForm(request.POST)
+        if org_form.is_valid():
             current_user = request.user
             account = self.get_account_for_user(current_user)
 
@@ -73,10 +73,10 @@ class AccountSettingView(LoginRequiredMixin, View):
                 raise Http404("No account linked with the current user.")
             # profile = Profile.objects.get(user=request.user)
             # account, created = Account.objects.get_or_create(profile=profile)
-            account.organization = form.cleaned_data['organization']
+            account.organization = org_form.cleaned_data['organization']
             account.save()
             return redirect('account_management:edit_account')
-        return render(request, self.template_name, {'form': form})
+        return render(request, self.template_name, {'org_form': org_form})
 
 
 class ConfigureView(LoginRequiredMixin, ListView):

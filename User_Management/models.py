@@ -32,6 +32,8 @@ class CustomUserManager(BaseUserManager):
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     password = models.CharField(max_length=128)
+    first_name = models.CharField(max_length=255, default='')
+    last_name = models.CharField(max_length=255, default='')
     email = models.EmailField()
     username = models.CharField(max_length=255, unique=True)
     is_active = models.BooleanField(default=False)
