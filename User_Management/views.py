@@ -115,6 +115,15 @@ class ProfileList(LoginRequiredMixin, ListView):
         user_roles = self.get_user_roles()
         context['user_roles'] = user_roles
 
+        # get user's firstname and lastname
+        current_user = self.request.user
+        first_name = current_user.first_name
+        last_name = current_user.last_name
+
+        # put firstname and lastname in context
+        context['first_name'] = first_name
+        context['last_name'] = last_name
+
         account_relation = AccountUserRelation.objects.filter(user=self.request.user).first()
         if account_relation:
             context['account'] = account_relation.account
