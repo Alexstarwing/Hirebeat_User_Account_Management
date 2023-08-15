@@ -35,8 +35,6 @@ from django.contrib.auth.models import Group
 class AccountList(LoginRequiredMixin, ListView):
     model = Account
     context_object_name = 'Accounts'
-    
-    
 
 
 class AccountSettingView(LoginRequiredMixin, View):
@@ -79,7 +77,6 @@ class AccountSettingView(LoginRequiredMixin, View):
             account.save()
             return redirect('account_management:edit_account')
         return render(request, self.template_name, {'form': form})
-    
 
 
 class ConfigureView(LoginRequiredMixin, ListView):
@@ -149,8 +146,6 @@ class AddUserView(LoginRequiredMixin, View):
 
             # Generate the invitation token
             invitation_token = get_random_string(32)
-            # invitation_token = default_token_generator.make_token(request.user)
-            # print(invitation_token)
 
             # Save the invitation with the token and other data
             invitation = TeamInvitation(
@@ -164,9 +159,6 @@ class AddUserView(LoginRequiredMixin, View):
 
             # Generate the registration link
             current_site = get_current_site(self.request)
-            # uid = urlsafe_base64_encode(force_bytes(email))
-            # register_link = f"http://{current_site.domain}/register"
-            # register_link = reverse('account_management:register_with_invitation', args=[invitation_token])
 
             # Send invitation email with registration link
             subject = 'Invitation to Register'
@@ -286,7 +278,6 @@ class OrganizationView(LoginRequiredMixin, ListView):
         user_groups = current_user.groups.all()
         user_roles = [group.name for group in user_groups]
         return render(request, self.template_name, {'user_roles': user_roles[0]})
-    
 
 
 class ManageUserView(View):
@@ -338,20 +329,6 @@ class ManageUserView(View):
         # return render(request, self.template_name, context)
         return render(request, self.template_name, {'accounts': accounts, 'user_roles': user_roles[0]})
 
-    # def get(self, request):
-    #     current_account = self.get_account_for_user(request.user)
-    #     # current_account = Account.objects.get(profile__user=request.user)
-    #     accounts = Account.objects.filter(organization=current_account.organization)
-    #     return render(request, self.template_name, {'accounts': accounts})
-
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     current_account = self.get_account_for_user(self.request.user)
-    #     if current_account:
-    #         usernames = list(AccountUserRelation.objects.filter(account=current_account).values_list('user__username', flat=True))
-    #         context['usernames'] = usernames
-    #     return context
-
 
 def acccountSettings(request):
     context = {}
@@ -369,9 +346,9 @@ def create_or_update_employer_social_media(request):
     account, created = Account.objects.get_or_create(
         company_domain=company_domain,
         defaults={
-        'company_linkedin': company_linkedin,
-        'company_facebook': company_facebook,
-        'company_twitter': company_twitter
+            'company_linkedin': company_linkedin,
+            'company_facebook': company_facebook,
+            'company_twitter': company_twitter
         }
     )
 

@@ -1,6 +1,8 @@
 import pdb
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
+from django.utils.crypto import get_random_string
+
 from .decorators import admin_required
 from django.http import HttpResponse
 from typing import Any, Dict
@@ -85,9 +87,10 @@ class ActivateAccount(View):
             user.profile.email_confirmed = True
             user.save()
 
-            account = Account.objects.create()
+            desired_domin = 'http://www.domin/' + get_random_string(32)
+            account = Account.objects.create(company_domain=desired_domin)
             AccountUserRelation.objects.create(account=account, user=user)
-            
+
             # login(request, user)
             messages.success(request, 'Your account have been confirmed.')
             return redirect('login')
@@ -111,15 +114,14 @@ class ProfileList(LoginRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         user_roles = self.get_user_roles()
         context['user_roles'] = user_roles
-        
+
         account_relation = AccountUserRelation.objects.filter(user=self.request.user).first()
         if account_relation:
             context['account'] = account_relation.account
         return context
-    
-    #return (reverse('account_management:account'))
-    
-    
+
+    # return (reverse('account_management:account'))
+
 
 # def resend_activation_email(request): 
 #     if request.user.is_authenticated:
@@ -146,7 +148,6 @@ class ProfileList(LoginRequiredMixin, ListView):
 #         return redirect('resend_activation_email') 
 
 #     return HttpResponse("An error occurred or the form is not valid.")
-
 
 
 def delete_account(request, account_id):
