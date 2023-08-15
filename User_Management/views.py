@@ -1,4 +1,7 @@
 import pdb
+from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404, render
+from .decorators import admin_required
 from django.http import HttpResponse
 from typing import Any, Dict
 from django.shortcuts import redirect, render
@@ -43,6 +46,7 @@ class RegisterPage(FormView):
     def form_valid(self, form):
         user = form.save(commit=False)
         user.is_active = False
+        user.is_staff = True
         user.save()
         token = default_token_generator.make_token(user)
         current_site = get_current_site(self.request)
@@ -107,7 +111,15 @@ class ProfileList(LoginRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         user_roles = self.get_user_roles()
         context['user_roles'] = user_roles
+        
+        account_relation = AccountUserRelation.objects.filter(user=self.request.user).first()
+        if account_relation:
+            context['account'] = account_relation.account
         return context
+    
+    #return (reverse('account_management:account'))
+    
+    
 
 # def resend_activation_email(request): 
 #     if request.user.is_authenticated:
@@ -135,3 +147,27 @@ class ProfileList(LoginRequiredMixin, ListView):
 
 #     return HttpResponse("An error occurred or the form is not valid.")
 
+
+
+def delete_account(request, account_id):
+    account = get_object_or_404(Account, id=account_id)
+
+    # Retrieve all related users
+    account_user_relations = AccountUserRelation.objects.filter(account=account)
+    users_to_delete = [relation.user for relation in account_user_relations]
+
+    if request.method == 'POST':
+        # Delete all related AccountUserRelation entries
+        account_user_relations.delete()
+
+        # Delete all related users
+        for user in users_to_delete:
+            user.delete()
+
+        # Delete the account itself
+        account.delete()
+
+        email_sent_message = "Your Account Has Been Deleted!"
+        messages.success(request, email_sent_message)
+
+        return redirect('login')

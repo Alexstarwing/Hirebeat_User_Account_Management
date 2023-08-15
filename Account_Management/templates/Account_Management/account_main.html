@@ -369,16 +369,21 @@
                     </a>
                 </li>
                 {% if user_roles.0 == 'H' or user_roles.0 == 'A' %}
-                <li class="sidebar-menu-item">
-                    <a class="sidebar-menu-button" href="student-courses.html">
-                        <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">queue_play_next</i>
-                        <span class="sidebar-menu-text">Delete Account</span>
-                    </a>
-                </li>
+                    {% if account %}
+                        <li class="sidebar-menu-item">
+                            <a class="sidebar-menu-button">
+                                <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">queue_play_next</i>
+                                <form method="post" action="{% url 'delete_account' account.id %}">
+                                    {% csrf_token %}
+                                    <button type="submit">Delete Account</button>
+                                </form>
+                            </a>
+                        </li>
+                    {% endif %}
                 {% endif %}
                 {% if user_roles.0 == 'H' or user_roles.0 == 'A' %}
                 <li class="sidebar-menu-item">
-                    <a class="sidebar-menu-button" href="student-courses.html">
+                    <a class="sidebar-menu-button" href="{% url 'account_management:manage_users' %}">
                         <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">queue_play_next</i>
                         <span class="sidebar-menu-text">Delete User</span>
                     </a>

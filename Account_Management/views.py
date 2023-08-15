@@ -1,5 +1,11 @@
 import pdb
-
+from django.utils.encoding import force_bytes, force_text
+from django.http import HttpResponseRedirect
+from rest_framework import status
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from django.shortcuts import get_object_or_404, render
+from .decorators import admin_required
 from django.http import HttpResponse, Http404
 from django.contrib import messages
 from django.shortcuts import render, redirect
@@ -29,6 +35,8 @@ from django.contrib.auth.models import Group
 class AccountList(LoginRequiredMixin, ListView):
     model = Account
     context_object_name = 'Accounts'
+    
+    
 
 
 class AccountSettingView(LoginRequiredMixin, View):
@@ -71,6 +79,7 @@ class AccountSettingView(LoginRequiredMixin, View):
             account.save()
             return redirect('account_management:edit_account')
         return render(request, self.template_name, {'form': form})
+    
 
 
 class ConfigureView(LoginRequiredMixin, ListView):
@@ -277,6 +286,7 @@ class OrganizationView(LoginRequiredMixin, ListView):
         user_groups = current_user.groups.all()
         user_roles = [group.name for group in user_groups]
         return render(request, self.template_name, {'user_roles': user_roles[0]})
+    
 
 
 class ManageUserView(View):
@@ -346,3 +356,59 @@ class ManageUserView(View):
 def acccountSettings(request):
     context = {}
     return render(request, 'accounts/origanization.html', context)
+
+
+# create_or_update_employer_social_media: Creates or updates an employer's social media profiles
+@api_view(['POST'])
+def create_or_update_employer_social_media(request):
+    company_domain = request.data["user_id"]
+    company_linkedin = request.data["linkedin"]
+    company_facebook = request.data["facebook"]
+    company_twitter = request.data["twitter"]
+
+    account, created = Account.objects.get_or_create(
+        company_domain=company_domain,
+        defaults={
+        'company_linkedin': company_linkedin,
+        'company_facebook': company_facebook,
+        'company_twitter': company_twitter
+        }
+    )
+
+    if not created:
+        account.company_linkedin = company_linkedin
+        account.company_facebook = company_facebook
+        account.company_twitter = company_twitter
+        account.save()
+
+    return Response("Create or Update employer social media successfully", status=status.HTTP_201_CREATED)
+
+
+def delete_account(request, account_id):
+    account = get_object_or_404(Account, id=account_id)
+
+    # Retrieve all related users
+    account_user_relations = AccountUserRelation.objects.filter(account=account)
+    users_to_delete = [relation.user for relation in account_user_relations]
+
+    if request.method == 'POST':
+        # Delete all related AccountUserRelation entries
+        account_user_relations.delete()
+
+        # Delete all related users
+        for user in users_to_delete:
+            user.delete()
+
+        # Delete the account itself
+        account.delete()
+
+        email_sent_message = "Your Account Has Been Deleted!"
+        messages.success(request, email_sent_message)
+
+        return redirect('login')
+
+
+def delete_user(request, user_id):
+    user = get_object_or_404(CustomUser, id=user_id)
+    user.delete()
+    return HttpResponseRedirect(reverse('login'))

@@ -1,0 +1,13 @@
+<!-- delete_user_confirmation.html -->
+
+{% extends 'manage_user.html' %}
+
+{% block content %}
+    <h2>Confirm User Deletion</h2>
+    <p>Are you sure you want to delete the user '{{ user.username }}'?</p>
+    <form method="post" action="{% url 'account_management:delete_user' user.id %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Delete</button>
+        <a href="{% url 'account_management:delete_user' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+{% endblock %}
