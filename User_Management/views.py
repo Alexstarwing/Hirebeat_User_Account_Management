@@ -148,30 +148,26 @@ class ProfileList(LoginRequiredMixin, ListView):
 #     return HttpResponse("An error occurred or the form is not valid.")
 
 
+
 def delete_account(request, account_id):
     account = get_object_or_404(Account, id=account_id)
 
-    try:
-        account_user_relation = AccountUserRelation.objects.get(account=account)
-        user = account_user_relation.user
-        account = account_user_relation.account
-        
-    except AccountUserRelation.DoesNotExist:
-        account_user_relation = None
-        user = None
-        account = None
-  
-    
+    # Retrieve all related users
+    account_user_relations = AccountUserRelation.objects.filter(account=account)
+    users_to_delete = [relation.user for relation in account_user_relations]
+
     if request.method == 'POST':
-        AccountUserRelation.objects.filter(account=account).delete()
-        
-        if user:
+        # Delete all related AccountUserRelation entries
+        account_user_relations.delete()
+
+        # Delete all related users
+        for user in users_to_delete:
             user.delete()
-        
+
+        # Delete the account itself
         account.delete()
-        email_sent_message = "You Account Has Been Deleted!"  # flash message
+
+        email_sent_message = "Your Account Has Been Deleted!"
         messages.success(request, email_sent_message)
-        
+
         return redirect('login')
-    
-   

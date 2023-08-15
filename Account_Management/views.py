@@ -1,4 +1,5 @@
 import pdb
+from django.utils.encoding import force_bytes, force_text
 from django.http import HttpResponseRedirect
 from rest_framework import status
 from rest_framework.decorators import api_view
@@ -34,6 +35,7 @@ from django.contrib.auth.models import Group
 class AccountList(LoginRequiredMixin, ListView):
     model = Account
     context_object_name = 'Accounts'
+    
     
 
 
@@ -77,6 +79,7 @@ class AccountSettingView(LoginRequiredMixin, View):
             account.save()
             return redirect('account_management:edit_account')
         return render(request, self.template_name, {'form': form})
+    
 
 
 class ConfigureView(LoginRequiredMixin, ListView):
