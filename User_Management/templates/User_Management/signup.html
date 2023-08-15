@@ -80,6 +80,7 @@
                         <label class="custom-control-label" for="terms">I accept <a href="#">Terms and Conditions</a></label>
                     </div>
                 </div>
+                {{form.errors}} <!--Display the error message-->
                 <div class="form-group text-center">
                     <button class="btn btn-primary mb-2" type="submit">Create Account</button><br>
                     <span>Have an account?</span> <a class="text-body text-underline" href="{% url 'login' %}"> Login</a>
