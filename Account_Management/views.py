@@ -384,24 +384,31 @@ def create_or_update_employer_social_media(request):
     return Response("Create or Update employer social media successfully", status=status.HTTP_201_CREATED)
 
 
-@admin_required
 def delete_account(request, account_id):
     account = get_object_or_404(Account, id=account_id)
 
-    try:
-        user = account.accountuserrelation.user
-    except AccountUserRelation.DoesNotExist:
-        user = None
-    
-    if request.method == 'POST':
-        AccountUserRelation.objects.filter(account=account).delete()
-        
-        if user:
-            user.delete()
-        
-        account.delete()
-        
-        return HttpResponseRedirect(reverse('delete_account_success'))
+    # Retrieve all related users
+    account_user_relations = AccountUserRelation.objects.filter(account=account)
+    users_to_delete = [relation.user for relation in account_user_relations]
 
-    context = {'account': account}
-    return render(request, 'accounts/delete_account_success.html', context)
+    if request.method == 'POST':
+        # Delete all related AccountUserRelation entries
+        account_user_relations.delete()
+
+        # Delete all related users
+        for user in users_to_delete:
+            user.delete()
+
+        # Delete the account itself
+        account.delete()
+
+        email_sent_message = "Your Account Has Been Deleted!"
+        messages.success(request, email_sent_message)
+
+        return redirect('login')
+
+
+def delete_user(request, user_id):
+    user = get_object_or_404(CustomUser, id=user_id)
+    user.delete()
+    return HttpResponseRedirect(reverse('login'))
