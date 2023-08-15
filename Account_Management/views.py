@@ -1,4 +1,7 @@
 import pdb
+from rest_framework import status
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
 
 from django.http import HttpResponse, Http404
 from django.contrib import messages
@@ -277,6 +280,7 @@ class OrganizationView(LoginRequiredMixin, ListView):
         user_groups = current_user.groups.all()
         user_roles = [group.name for group in user_groups]
         return render(request, self.template_name, {'user_roles': user_roles[0]})
+    
 
 
 class ManageUserView(View):
@@ -346,3 +350,30 @@ class ManageUserView(View):
 def acccountSettings(request):
     context = {}
     return render(request, 'accounts/origanization.html', context)
+
+
+# create_or_update_employer_social_media: Creates or updates an employer's social media profiles
+@api_view(['POST'])
+def create_or_update_employer_social_media(request):
+    company_domain = request.data["user_id"]
+    company_linkedin = request.data["linkedin"]
+    company_facebook = request.data["facebook"]
+    company_twitter = request.data["twitter"]
+
+    account, created = Account.objects.get_or_create(
+        company_domain=company_domain,
+        defaults={
+        'company_linkedin': company_linkedin,
+        'company_facebook': company_facebook,
+        'company_twitter': company_twitter
+        }
+    )
+
+    if not created:
+        account.company_linkedin = company_linkedin
+        account.company_facebook = company_facebook
+        account.company_twitter = company_twitter
+        account.save()
+
+    return Response("Create or Update employer social media successfully", status=status.HTTP_201_CREATED)
+
