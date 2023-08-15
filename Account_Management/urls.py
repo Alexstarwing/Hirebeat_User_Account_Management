@@ -15,4 +15,5 @@ urlpatterns = [
    path('organization/', OrganizationView.as_view(), name='organization'),
    path('manage_users/', ManageUserView.as_view(), name='manage_users'),
    path('register/<invitation_token>/', RegisterWithInvitationView.as_view(), name='register_with_invitation'),
+   #path('delete_account/<int:account_id>/', views.delete_account, name='delete_account_success'),
 ]

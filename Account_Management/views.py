@@ -1,8 +1,10 @@
 import pdb
+from django.http import HttpResponseRedirect
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-
+from django.shortcuts import get_object_or_404, render
+from .decorators import admin_required
 from django.http import HttpResponse, Http404
 from django.contrib import messages
 from django.shortcuts import render, redirect
@@ -32,6 +34,7 @@ from django.contrib.auth.models import Group
 class AccountList(LoginRequiredMixin, ListView):
     model = Account
     context_object_name = 'Accounts'
+    
 
 
 class AccountSettingView(LoginRequiredMixin, View):
@@ -377,3 +380,25 @@ def create_or_update_employer_social_media(request):
 
     return Response("Create or Update employer social media successfully", status=status.HTTP_201_CREATED)
 
+
+@admin_required
+def delete_account(request, account_id):
+    account = get_object_or_404(Account, id=account_id)
+
+    try:
+        user = account.accountuserrelation.user
+    except AccountUserRelation.DoesNotExist:
+        user = None
+    
+    if request.method == 'POST':
+        AccountUserRelation.objects.filter(account=account).delete()
+        
+        if user:
+            user.delete()
+        
+        account.delete()
+        
+        return HttpResponseRedirect(reverse('delete_account_success'))
+
+    context = {'account': account}
+    return render(request, 'accounts/delete_account_success.html', context)

@@ -370,9 +370,13 @@
                 </li>
                 {% if user_roles.0 == 'H' or user_roles.0 == 'A' %}
                 <li class="sidebar-menu-item">
-                    <a class="sidebar-menu-button" href="student-courses.html">
+                    <a class="sidebar-menu-button" > {% comment %} href="student-courses.html" {% endcomment %}
                         <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">queue_play_next</i>
-                        <span class="sidebar-menu-text">Delete Account</span>
+                        {% comment %} <span class="sidebar-menu-text">Delete Account</span> {% endcomment %}
+                        <form method="post" action="{% url 'delete-account' account.id %}">
+                            {% csrf_token %}
+                            <button type="submit">Delete Account</button>
+                          </form>
                     </a>
                 </li>
                 {% endif %}
