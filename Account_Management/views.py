@@ -23,7 +23,7 @@ from django.conf import settings
 from django.views import View
 from django.utils.crypto import get_random_string
 from User_Management.models import CustomUser
-from .forms import InviteForm, OrganizationForm, RegisterWithInvitationForm
+from .forms import InviteForm, OrganizationForm, RegisterWithInvitationForm, UserInfoForm
 from User_Management.forms import UserCreationForm
 from Account_Management.models import Profile, Account, AccountUserRelation
 from django.template.loader import render_to_string
@@ -58,13 +58,22 @@ class AccountSettingView(LoginRequiredMixin, View):
             raise Http404("No account linked with the current user.")
 
         org_form = OrganizationForm(initial={'organization': account.organization})
+        user_info_form = UserInfoForm(initial={'first_name': current_user.first_name, 'last_name': current_user.last_name})
         user_groups = current_user.groups.all()
         user_roles = [group.name for group in user_groups]
 
-        return render(request, self.template_name, {'org_form': org_form, 'user_roles': user_roles[0]})
+        return render(request, self.template_name, {'org_form': org_form, 'user_info_form': user_info_form, 'user_roles': user_roles[0]})
 
     def post(self, request):
         org_form = OrganizationForm(request.POST)
+        user_info_form = UserInfoForm(request.POST)
+        if user_info_form.is_valid():
+            current_user = request.user
+
+            current_user.first_name = user_info_form.cleaned_data['first_name']
+            current_user.last_name = user_info_form.cleaned_data['last_name']
+            current_user.save()
+            return redirect('account_management:edit_account')
         if org_form.is_valid():
             current_user = request.user
             account = self.get_account_for_user(current_user)
