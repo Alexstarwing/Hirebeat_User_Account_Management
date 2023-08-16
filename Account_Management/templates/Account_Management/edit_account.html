@@ -10,7 +10,7 @@
 
             <div class="page__heading border-bottom">
                 <div class="container-fluid page__container d-flex align-items-center">
-                    <h1 class="mb-0">Account Settings</h1>
+                    <h1 class="mb-0">Account Settings </h1>
 {#                    <p>{{ user_roles|slice:"0:-5"|replace:"_"}}</p>#}
                 </div>
             </div>
@@ -26,6 +26,12 @@
                             <div class="row">
                                 <div class="col">
                                     <div class="form-group">
+                                        <label for="office-list">Company Name: </label>
+                                        {{ company_name }}
+                                        <br><br>
+
+                                        
+                                        
                                         {% if messages %}
                                             <ul class="messages">
                                                 {% for message in messages %}
@@ -33,6 +39,7 @@
                                                 {% endfor %}
                                             </ul>
                                         {% endif %}
+                                        
                                         <form method="post" class="form-inline">
                                             {% csrf_token %}
                                             {{ org_form.as_p }}
@@ -45,6 +52,7 @@
                             </div>
 
                             <div class="form-group">
+                                
                                 <label for="office-list">Offices</label>
                                 <button id="add-office-btn" class="btn btn-primary">+ Add Office</button>
                                 <ul id="office-list" class="list-group"></ul>
