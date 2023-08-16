@@ -15,7 +15,7 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
 from django.core.mail import send_mail
 from django.contrib import messages
-from .forms import UserCreationForm, CustomLoginForm, UpdateEmailForm  # , ResendActivationEmailForm
+from .forms import UserCreationForm, CustomLoginForm, UpdateEmailForm, UserInfoForm  # , ResendActivationEmailForm
 from .models import Profile, CustomUser
 from Account_Management.models import Account, AccountUserRelation
 from django.contrib.auth.models import Group
@@ -124,11 +124,24 @@ class ProfileList(LoginRequiredMixin, ListView):
 
 class UserSettingView(LoginRequiredMixin, View):
     model = Profile
+    context_object_name = 'user_settings'
     template_name = 'User_Management/user_setting.html'
 
     def get(self, request):
-        form = UpdateEmailForm()
-        return render(request, self.template_name, {'form': form})
+        current_user = request.user
+        user_info_form = UserInfoForm(
+            initial={'first_name': current_user.first_name, 'last_name': current_user.last_name})
+        return render(request, self.template_name, {'user_info_form': user_info_form})
+
+    def post(self, request):
+        user_info_form = UserInfoForm(request.POST)
+        if user_info_form.is_valid():
+            current_user = request.user
+
+            current_user.first_name = user_info_form.cleaned_data['first_name']
+            current_user.last_name = user_info_form.cleaned_data['last_name']
+            current_user.save()
+            return redirect('user_setting')
 
 
 

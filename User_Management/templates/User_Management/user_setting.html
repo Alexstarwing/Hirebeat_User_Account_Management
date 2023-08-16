@@ -1,1 +1,73 @@
-<h1>This is user setting page</h1>
+{% extends 'User_Management/account_main.html' %}
+{% load replace %}
+{% block content %}
+    <head>
+        <title>User Setting| HireBeat</title>
+    </head>
+    <body>
+    <div class="mdk-header-layout__content mdk-header-layout__content--fullbleed mdk-header-layout__content--scrollable page" style="padding-top: 60px;">
+
+
+            <div class="page__heading border-bottom">
+                <div class="container-fluid page__container d-flex align-items-center">
+                    <h1 class="mb-0">User Settings </h1>
+{#                    <p>{{ user_roles|slice:"0:-5"|replace:"_"}}</p>#}
+                </div>
+            </div>
+
+            <div class="container-fluid page__container">
+
+                <div class="card card-form">
+                    <div class="row no-gutters">
+                        <div class="col-lg-4 card-body">
+                            <p><strong class="headings-color">Users</strong></p>
+                            <p class="text-muted mb-0">Update your personal information.</p>
+                        </div>
+                        <div class="col-lg-8 card-form__body card-body">
+                            <form method="post" class="form-inline">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <label for="fname">First name</label>
+                                </div>
+                                <div class="form-group">
+                                    {{ user_info_form.first_name }}
+                                </div>
+
+                                <div class="form-group" style="margin-left: 15px">
+                                    <label for="lname">Last name</label>
+                                </div>
+                                <div class="form-group">
+                                    {{ user_info_form.last_name }}
+                                </div>
+                                <div class="col">
+                                    <button type="submit" class="btn btn-primary">Save</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-right mb-5">
+                    <a href="{% url 'account_management:account'%}" class="btn btn-success">Go Back</a>
+                </div>
+            </div>
+
+
+        </div>
+
+
+
+
+
+
+    <!-- App Settings FAB -->
+    <div id="app-settings">
+        <app-settings layout-active="default" :layout-location="{
+      'default': 'edit-account.html',
+      'fixed': 'fixed-edit-account.html',
+      'fluid': 'fluid-edit-account.html',
+      'mini': 'mini-edit-account.html'
+    }"></app-settings>
+    </div>
+    </body>
+{% endblock content %}

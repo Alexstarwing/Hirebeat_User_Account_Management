@@ -63,3 +63,8 @@ class CustomLoginForm(AuthenticationForm):
 
 class UpdateEmailForm(forms.Form):
     new_email = forms.EmailField(label='new email')
+
+
+class UserInfoForm(forms.Form):
+    first_name = forms.CharField(max_length=200, label='First name')
+    last_name = forms.CharField(max_length=200, label='Last name')
