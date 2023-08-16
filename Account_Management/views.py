@@ -1,11 +1,9 @@
 import pdb
-from django.utils.encoding import force_bytes, force_text
 from django.http import HttpResponseRedirect
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404, render
-from .decorators import admin_required
 from django.http import HttpResponse, Http404
 from django.contrib import messages
 from django.shortcuts import render, redirect
@@ -15,19 +13,14 @@ from Account_Management.models import Account, TeamInvitation
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.mail import send_mail
 from django.contrib.sites.shortcuts import get_current_site
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
-from django.template.loader import render_to_string
-from django.utils.html import strip_tags
-from django.conf import settings
 from django.views import View
 from django.utils.crypto import get_random_string
 from User_Management.models import CustomUser
-from .forms import InviteForm, OrganizationForm, RegisterWithInvitationForm, UserInfoForm
+from .forms import InviteForm, OrganizationForm, UserInfoForm
 from User_Management.forms import UserCreationForm
 from Account_Management.models import Profile, Account, AccountUserRelation
 from django.template.loader import render_to_string
-from django.contrib.auth.tokens import default_token_generator, PasswordResetTokenGenerator
 from .models import Role
 from django.contrib.auth.models import Group
 
@@ -45,7 +38,6 @@ class AccountSettingView(LoginRequiredMixin, View):
     def get_account_for_user(self, user):
         try:
             account_user_relation = AccountUserRelation.objects.get(user=user)
-            # pdb.set_trace()
             return account_user_relation.account
         except AccountUserRelation.DoesNotExist:
             return None
@@ -93,7 +85,6 @@ class ConfigureView(LoginRequiredMixin, ListView):
     context_object_name = 'settings'
 
     def get_user_role(self, request, *args, **kwargs):
-        # pdb.set_trace()
         current_user = request.user
         user_groups = current_user.groups.all()
         user_roles = [group.name for group in user_groups]
@@ -132,18 +123,16 @@ class AddUserView(LoginRequiredMixin, View):
         return super().dispatch(request, *args, **kwargs)
 
     def get(self, request):
-        form = InviteForm()  # Create an instance of the InviteForm
+        form = InviteForm()
         # get role
         current_user = request.user
         user_groups = current_user.groups.all()
         user_roles = [group.name for group in user_groups]
-        # pdb.set_trace()  # 断点
         return render(request, self.template_name, {'form': form, 'user_roles': user_roles[0]})
 
     def post(self, request):
         form = InviteForm(request.POST)
         if form.is_valid():
-            # name = form.cleaned_data['name']
             email = form.cleaned_data['email']
             role_name = form.cleaned_data['role_name']
             role_type = form.cleaned_data['role_type']
@@ -172,10 +161,8 @@ class AddUserView(LoginRequiredMixin, View):
             # Send invitation email with registration link
             subject = 'Invitation to Register'
             message = render_to_string('Account_Management/account_activation_email.html', {
-                # 'user': name,
                 'domain': current_site.domain,
                 'invitation_token': invitation_token,
-                # 'register_link': register_link,
             })
             from_email = 'yifandsb666@gmail.com'
             recipient_list = [email]
@@ -191,16 +178,11 @@ class RegisterWithInvitationView(View):
     def get(self, request, invitation_token):
         # Decode the uidb64 and check if the invitation is valid
         try:
-            # uid = force_str(urlsafe_base64_decode(uidb64))
             self.team_invitation = TeamInvitation.objects.get(
                 invitation_token=invitation_token)
-            # (id=uid, invitation_token=invitation_token) but no id field inside TeamInvitation model
         except TeamInvitation.DoesNotExist:  # (TypeError, ValueError, OverflowError, TeamInvitation.DoesNotExist):
             messages.error(request, "Invalid invitation link.")
-            # return redirect('account_management:invalid_invitation')
 
-        # return redirect('user_management:register')
-        # form = RegisterWithInvitationForm()
         form = UserCreationForm()
         return render(request, self.template_name, {'form': form})
 
