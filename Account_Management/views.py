@@ -58,6 +58,7 @@ class AccountSettingView(LoginRequiredMixin, View):
         company_name = get_company_name(current_user)
 
         return render(request, self.template_name, {
+            'account': account,
             'org_form': org_form,
             'user_info_form': user_info_form,
             'user_roles': user_roles[0],
@@ -106,8 +107,13 @@ class ConfigureView(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super(ConfigureView, self).get_context_data()
         user_roles = self.get_user_role(self.request)
+        current_user = self.request.user
+        account = getAccount(current_user)
         context['user_roles'] = user_roles
+        context['account'] = account
         return context
+    
+
 
 
 class AddUserView(LoginRequiredMixin, View):
@@ -139,9 +145,10 @@ class AddUserView(LoginRequiredMixin, View):
         form = InviteForm()
         # get role
         current_user = request.user
+        account = getAccount(current_user)
         user_groups = current_user.groups.all()
         user_roles = [group.name for group in user_groups]
-        return render(request, self.template_name, {'form': form, 'user_roles': user_roles[0]})
+        return render(request, self.template_name, {'form': form, 'user_roles': user_roles[0], 'account':account})
 
     def post(self, request):
         form = InviteForm(request.POST)
@@ -281,9 +288,11 @@ class OrganizationView(LoginRequiredMixin, ListView):
         current_user = request.user
         user_groups = current_user.groups.all()
         user_roles = [group.name for group in user_groups]
+        account = self.get_account_for_user(current_user)
         company_name = get_company_name(current_user)
         company_name_exists = check_company_name_existence(company_name)
-        return render(request, self.template_name, {'user_roles': user_roles[0], 'company_name': company_name, 'company_name_exists': company_name_exists})
+        return render(request, self.template_name, {'user_roles': user_roles[0], 'company_name': company_name, 
+                                                    'company_name_exists': company_name_exists, 'account': account})
     
 
 
@@ -334,7 +343,8 @@ class ManageUserView(View):
         # }
 
         # return render(request, self.template_name, context)
-        return render(request, self.template_name, {'accounts': accounts, 'user_roles': user_roles[0]})
+        return render(request, self.template_name, {'accounts': accounts, 'user_roles': user_roles[0], 
+                                                    'account':current_account})
 
 
 def acccountSettings(request):
@@ -368,8 +378,7 @@ def create_or_update_employer_social_media(request):
     return Response("Create or Update employer social media successfully", status=status.HTTP_201_CREATED)
 
 
-def delete_account(request, account_id):
-    account = get_object_or_404(Account, id=account_id)
+def delete_account(request, account):
 
     # Retrieve all related users
     account_user_relations = AccountUserRelation.objects.filter(account=account)
