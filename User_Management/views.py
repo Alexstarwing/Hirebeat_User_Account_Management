@@ -1,5 +1,5 @@
 import pdb
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render
 from django.utils.crypto import get_random_string
 from django.shortcuts import redirect
 from django.views.generic import View
@@ -15,7 +15,7 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
 from django.core.mail import send_mail
 from django.contrib import messages
-from .forms import UserCreationForm, CustomLoginForm  # , ResendActivationEmailForm
+from .forms import UserCreationForm, CustomLoginForm, UpdateEmailForm  # , ResendActivationEmailForm
 from .models import Profile, CustomUser
 from Account_Management.models import Account, AccountUserRelation
 from django.contrib.auth.models import Group
@@ -121,7 +121,17 @@ class ProfileList(LoginRequiredMixin, ListView):
             context['account'] = account_relation.account
         return context
 
-    # return (reverse('account_management:account'))
+
+class UserSettingView(LoginRequiredMixin, View):
+    model = Profile
+    template_name = 'User_Management/user_setting.html'
+
+    def get(self, request):
+        form = UpdateEmailForm()
+        return render(request, self.template_name, {'form': form})
+
+
+
 
 
 # def resend_activation_email(request): 

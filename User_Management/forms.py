@@ -59,3 +59,7 @@ class CustomLoginForm(AuthenticationForm):
         widget=forms.PasswordInput(attrs={'class': 'form-control form-control-prepended'}),
         label='Password'
     )
+
+
+class UpdateEmailForm(forms.Form):
+    new_email = forms.EmailField(label='new email')

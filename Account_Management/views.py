@@ -50,7 +50,8 @@ class AccountSettingView(LoginRequiredMixin, View):
             raise Http404("No account linked with the current user.")
 
         org_form = OrganizationForm(initial={'organization': account.organization})
-        user_info_form = UserInfoForm(initial={'first_name': current_user.first_name, 'last_name': current_user.last_name})
+        user_info_form = UserInfoForm(
+            initial={'first_name': current_user.first_name, 'last_name': current_user.last_name})
         user_groups = current_user.groups.all()
         user_roles = [group.name for group in user_groups]
         # account_user_relation = AccountUserRelation.objects.filter(user=current_user).first()
@@ -87,11 +88,6 @@ class AccountSettingView(LoginRequiredMixin, View):
             account.save()
             return redirect('account_management:edit_account')
         return render(request, self.template_name, {'org_form': org_form})
-    
-
-    
-    
-
 
 
 class ConfigureView(LoginRequiredMixin, ListView):
@@ -112,8 +108,6 @@ class ConfigureView(LoginRequiredMixin, ListView):
         context['user_roles'] = user_roles
         context['account'] = account
         return context
-    
-
 
 
 class AddUserView(LoginRequiredMixin, View):
@@ -148,7 +142,7 @@ class AddUserView(LoginRequiredMixin, View):
         account = getAccount(current_user)
         user_groups = current_user.groups.all()
         user_roles = [group.name for group in user_groups]
-        return render(request, self.template_name, {'form': form, 'user_roles': user_roles[0], 'account':account})
+        return render(request, self.template_name, {'form': form, 'user_roles': user_roles[0], 'account': account})
 
     def post(self, request):
         form = InviteForm(request.POST)
@@ -291,9 +285,8 @@ class OrganizationView(LoginRequiredMixin, ListView):
         account = self.get_account_for_user(current_user)
         company_name = get_company_name(current_user)
         company_name_exists = check_company_name_existence(company_name)
-        return render(request, self.template_name, {'user_roles': user_roles[0], 'company_name': company_name, 
+        return render(request, self.template_name, {'user_roles': user_roles[0], 'company_name': company_name,
                                                     'company_name_exists': company_name_exists, 'account': account})
-    
 
 
 class ManageUserView(View):
@@ -343,8 +336,8 @@ class ManageUserView(View):
         # }
 
         # return render(request, self.template_name, context)
-        return render(request, self.template_name, {'accounts': accounts, 'user_roles': user_roles[0], 
-                                                    'account':current_account})
+        return render(request, self.template_name, {'accounts': accounts, 'user_roles': user_roles[0],
+                                                    'account': current_account})
 
 
 def acccountSettings(request):
@@ -379,7 +372,6 @@ def create_or_update_employer_social_media(request):
 
 
 def delete_account(request, account):
-
     # Retrieve all related users
     account_user_relations = AccountUserRelation.objects.filter(account=account)
     users_to_delete = [relation.user for relation in account_user_relations]
@@ -406,19 +398,20 @@ def delete_user(request, user_id):
     user.delete()
     return HttpResponseRedirect(reverse('login'))
 
+
 def getAccount(user):
     account_user_relation = AccountUserRelation.objects.filter(user=user).first()
-    return  account_user_relation.account
+    return account_user_relation.account
+
 
 def get_company_name(user):
     account = getAccount(user)
     company_name = account.company_name
     return company_name
 
+
 def check_company_name_existence(target_name):
     if Account.objects.filter(company_name=target_name).exists():
         return "Company name is existed"
-    else: 
+    else:
         return "Company name is brand new!"
-
-    
