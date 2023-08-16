@@ -20,8 +20,8 @@
                 <div class="card card-form">
                     <div class="row no-gutters">
                         <div class="col-lg-4 card-body">
-                            <p><strong class="headings-color">Users</strong></p>
-                            <p class="text-muted mb-0">Update your personal information.</p>
+                            <p><strong class="headings-color">Basic Information</strong></p>
+                            <p class="text-muted mb-0">Update your information.</p>
                         </div>
                         <div class="col-lg-8 card-form__body card-body">
                             <form method="post" class="form-inline">
@@ -44,6 +44,39 @@
                                 </div>
                             </form>
                         </div>
+                    </div>
+                </div>
+
+                <div class="card card-form">
+                    <div class="row no-gutters">
+                      <div class="col-lg-4 card-body">
+                        <p><strong class="headings-color">Update Your Email</strong></p>
+                        <p class="text-muted mb-0">Change your Email.</p>
+                      </div>
+                      <div class="col-lg-8 card-form__body card-body">
+                        <div class="row">
+                          <div class="col-md-6">
+                              <form method="post" class="form-inline">
+                                  {% csrf_token %}
+{#                                  <div class="form-group">#}
+{#                                      <label for="opass">Old Password</label>#}
+{#                                  </div>#}
+                                  <div class="form-group">
+                                      <label for="npass">New Email</label>
+                                      {{ update_email_form }}
+                                      <small class="invalid-feedback">The new password must not be empty.</small>
+                                  </div>
+                                  <div class="form-group">
+                                      <label for="cpass">Confirm Password</label>
+                                      <input id="cpass" type="password" class="form-control" placeholder="Confirm password">
+                                  </div>
+                                  <div class="col">
+                                    <button type="submit" class="btn btn-primary">Save</button>
+                                  </div>
+                              </form>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                 </div>
 

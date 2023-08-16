@@ -131,21 +131,31 @@ class UserSettingView(LoginRequiredMixin, View):
         current_user = request.user
         user_info_form = UserInfoForm(
             initial={'first_name': current_user.first_name, 'last_name': current_user.last_name})
+        update_email_form = UpdateEmailForm(initial={'new_email': current_user.email})
+        # get user's role
         user_groups = current_user.groups.all()
         user_roles = [group.name for group in user_groups]
         return render(request, self.template_name, {
             'user_info_form': user_info_form,
+            'update_email_form': update_email_form,
             'user_roles': user_roles[0]})
 
     def post(self, request):
+        current_user = request.user
         user_info_form = UserInfoForm(request.POST)
-        if user_info_form.is_valid():
-            current_user = request.user
+        update_email_form = UpdateEmailForm(request.POST)
 
+        if user_info_form.is_valid():
             current_user.first_name = user_info_form.cleaned_data['first_name']
             current_user.last_name = user_info_form.cleaned_data['last_name']
             current_user.save()
             return redirect('user_setting')
+
+        if update_email_form.is_valid():
+            current_user.email = update_email_form.cleaned_data['new_email']
+            current_user.save()
+            return redirect('user_setting')
+
 
 
 
