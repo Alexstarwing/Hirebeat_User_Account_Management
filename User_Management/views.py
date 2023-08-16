@@ -131,7 +131,11 @@ class UserSettingView(LoginRequiredMixin, View):
         current_user = request.user
         user_info_form = UserInfoForm(
             initial={'first_name': current_user.first_name, 'last_name': current_user.last_name})
-        return render(request, self.template_name, {'user_info_form': user_info_form})
+        user_groups = current_user.groups.all()
+        user_roles = [group.name for group in user_groups]
+        return render(request, self.template_name, {
+            'user_info_form': user_info_form,
+            'user_roles': user_roles[0]})
 
     def post(self, request):
         user_info_form = UserInfoForm(request.POST)
