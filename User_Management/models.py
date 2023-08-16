@@ -32,6 +32,8 @@ class CustomUserManager(BaseUserManager):
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     password = models.CharField(max_length=128)
+    first_name = models.CharField(max_length=255, default='')
+    last_name = models.CharField(max_length=255, default='')
     email = models.EmailField()
     username = models.CharField(max_length=255, unique=True)
     is_active = models.BooleanField(default=False)
@@ -44,7 +46,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = ['email']
 
 
-class Profile(models.Model):  # model represents additional information associated with a user in Django's authentication system
+# model represents additional information associated with a user in Django's authentication system
+class Profile(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     email_confirmed = models.BooleanField(default=False)
 

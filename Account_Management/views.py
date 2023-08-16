@@ -1,11 +1,9 @@
 import pdb
-from django.utils.encoding import force_bytes, force_text
 from django.http import HttpResponseRedirect
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404, render
-from .decorators import admin_required
 from django.http import HttpResponse, Http404
 from django.contrib import messages
 from django.shortcuts import render, redirect
@@ -15,19 +13,14 @@ from Account_Management.models import Account, TeamInvitation
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.mail import send_mail
 from django.contrib.sites.shortcuts import get_current_site
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
-from django.template.loader import render_to_string
-from django.utils.html import strip_tags
-from django.conf import settings
 from django.views import View
 from django.utils.crypto import get_random_string
 from User_Management.models import CustomUser
-from .forms import InviteForm, OrganizationForm, RegisterWithInvitationForm
+from .forms import InviteForm, OrganizationForm, UserInfoForm
 from User_Management.forms import UserCreationForm
 from Account_Management.models import Profile, Account, AccountUserRelation
 from django.template.loader import render_to_string
-from django.contrib.auth.tokens import default_token_generator, PasswordResetTokenGenerator
 from .models import Role
 from django.contrib.auth.models import Group
 
@@ -35,8 +28,6 @@ from django.contrib.auth.models import Group
 class AccountList(LoginRequiredMixin, ListView):
     model = Account
     context_object_name = 'Accounts'
-    
-    
 
 
 class AccountSettingView(LoginRequiredMixin, View):
@@ -47,7 +38,6 @@ class AccountSettingView(LoginRequiredMixin, View):
     def get_account_for_user(self, user):
         try:
             account_user_relation = AccountUserRelation.objects.get(user=user)
-            # pdb.set_trace()
             return account_user_relation.account
         except AccountUserRelation.DoesNotExist:
             return None
@@ -59,15 +49,33 @@ class AccountSettingView(LoginRequiredMixin, View):
         if not account:
             raise Http404("No account linked with the current user.")
 
-        form = OrganizationForm(initial={'organization': account.organization})
+        org_form = OrganizationForm(initial={'organization': account.organization})
+        user_info_form = UserInfoForm(initial={'first_name': current_user.first_name, 'last_name': current_user.last_name})
         user_groups = current_user.groups.all()
         user_roles = [group.name for group in user_groups]
+        # account_user_relation = AccountUserRelation.objects.filter(user=current_user).first()
+        # company_name = account_user_relation.account.company_name
+        company_name = get_company_name(current_user)
 
-        return render(request, self.template_name, {'form': form, 'user_roles': user_roles[0]})
+        return render(request, self.template_name, {
+            'account': account,
+            'org_form': org_form,
+            'user_info_form': user_info_form,
+            'user_roles': user_roles[0],
+            'company_name': company_name,
+        })
 
     def post(self, request):
-        form = OrganizationForm(request.POST)
-        if form.is_valid():
+        org_form = OrganizationForm(request.POST)
+        user_info_form = UserInfoForm(request.POST)
+        if user_info_form.is_valid():
+            current_user = request.user
+
+            current_user.first_name = user_info_form.cleaned_data['first_name']
+            current_user.last_name = user_info_form.cleaned_data['last_name']
+            current_user.save()
+            return redirect('account_management:edit_account')
+        if org_form.is_valid():
             current_user = request.user
             account = self.get_account_for_user(current_user)
 
@@ -75,11 +83,15 @@ class AccountSettingView(LoginRequiredMixin, View):
                 raise Http404("No account linked with the current user.")
             # profile = Profile.objects.get(user=request.user)
             # account, created = Account.objects.get_or_create(profile=profile)
-            account.organization = form.cleaned_data['organization']
+            account.organization = org_form.cleaned_data['organization']
             account.save()
             return redirect('account_management:edit_account')
-        return render(request, self.template_name, {'form': form})
+        return render(request, self.template_name, {'org_form': org_form})
     
+
+    
+    
+
 
 
 class ConfigureView(LoginRequiredMixin, ListView):
@@ -87,7 +99,6 @@ class ConfigureView(LoginRequiredMixin, ListView):
     context_object_name = 'settings'
 
     def get_user_role(self, request, *args, **kwargs):
-        # pdb.set_trace()
         current_user = request.user
         user_groups = current_user.groups.all()
         user_roles = [group.name for group in user_groups]
@@ -96,8 +107,13 @@ class ConfigureView(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super(ConfigureView, self).get_context_data()
         user_roles = self.get_user_role(self.request)
+        current_user = self.request.user
+        account = getAccount(current_user)
         context['user_roles'] = user_roles
+        context['account'] = account
         return context
+    
+
 
 
 class AddUserView(LoginRequiredMixin, View):
@@ -126,18 +142,17 @@ class AddUserView(LoginRequiredMixin, View):
         return super().dispatch(request, *args, **kwargs)
 
     def get(self, request):
-        form = InviteForm()  # Create an instance of the InviteForm
+        form = InviteForm()
         # get role
         current_user = request.user
+        account = getAccount(current_user)
         user_groups = current_user.groups.all()
         user_roles = [group.name for group in user_groups]
-        # pdb.set_trace()  # 断点
-        return render(request, self.template_name, {'form': form, 'user_roles': user_roles[0]})
+        return render(request, self.template_name, {'form': form, 'user_roles': user_roles[0], 'account':account})
 
     def post(self, request):
         form = InviteForm(request.POST)
         if form.is_valid():
-            # name = form.cleaned_data['name']
             email = form.cleaned_data['email']
             role_name = form.cleaned_data['role_name']
             role_type = form.cleaned_data['role_type']
@@ -149,8 +164,6 @@ class AddUserView(LoginRequiredMixin, View):
 
             # Generate the invitation token
             invitation_token = get_random_string(32)
-            # invitation_token = default_token_generator.make_token(request.user)
-            # print(invitation_token)
 
             # Save the invitation with the token and other data
             invitation = TeamInvitation(
@@ -164,17 +177,12 @@ class AddUserView(LoginRequiredMixin, View):
 
             # Generate the registration link
             current_site = get_current_site(self.request)
-            # uid = urlsafe_base64_encode(force_bytes(email))
-            # register_link = f"http://{current_site.domain}/register"
-            # register_link = reverse('account_management:register_with_invitation', args=[invitation_token])
 
             # Send invitation email with registration link
             subject = 'Invitation to Register'
             message = render_to_string('Account_Management/account_activation_email.html', {
-                # 'user': name,
                 'domain': current_site.domain,
                 'invitation_token': invitation_token,
-                # 'register_link': register_link,
             })
             from_email = 'yifandsb666@gmail.com'
             recipient_list = [email]
@@ -190,16 +198,11 @@ class RegisterWithInvitationView(View):
     def get(self, request, invitation_token):
         # Decode the uidb64 and check if the invitation is valid
         try:
-            # uid = force_str(urlsafe_base64_decode(uidb64))
             self.team_invitation = TeamInvitation.objects.get(
                 invitation_token=invitation_token)
-            # (id=uid, invitation_token=invitation_token) but no id field inside TeamInvitation model
         except TeamInvitation.DoesNotExist:  # (TypeError, ValueError, OverflowError, TeamInvitation.DoesNotExist):
             messages.error(request, "Invalid invitation link.")
-            # return redirect('account_management:invalid_invitation')
 
-        # return redirect('user_management:register')
-        # form = RegisterWithInvitationForm()
         form = UserCreationForm()
         return render(request, self.template_name, {'form': form})
 
@@ -285,7 +288,11 @@ class OrganizationView(LoginRequiredMixin, ListView):
         current_user = request.user
         user_groups = current_user.groups.all()
         user_roles = [group.name for group in user_groups]
-        return render(request, self.template_name, {'user_roles': user_roles[0]})
+        account = self.get_account_for_user(current_user)
+        company_name = get_company_name(current_user)
+        company_name_exists = check_company_name_existence(company_name)
+        return render(request, self.template_name, {'user_roles': user_roles[0], 'company_name': company_name, 
+                                                    'company_name_exists': company_name_exists, 'account': account})
     
 
 
@@ -336,21 +343,8 @@ class ManageUserView(View):
         # }
 
         # return render(request, self.template_name, context)
-        return render(request, self.template_name, {'accounts': accounts, 'user_roles': user_roles[0]})
-
-    # def get(self, request):
-    #     current_account = self.get_account_for_user(request.user)
-    #     # current_account = Account.objects.get(profile__user=request.user)
-    #     accounts = Account.objects.filter(organization=current_account.organization)
-    #     return render(request, self.template_name, {'accounts': accounts})
-
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     current_account = self.get_account_for_user(self.request.user)
-    #     if current_account:
-    #         usernames = list(AccountUserRelation.objects.filter(account=current_account).values_list('user__username', flat=True))
-    #         context['usernames'] = usernames
-    #     return context
+        return render(request, self.template_name, {'accounts': accounts, 'user_roles': user_roles[0], 
+                                                    'account':current_account})
 
 
 def acccountSettings(request):
@@ -369,9 +363,9 @@ def create_or_update_employer_social_media(request):
     account, created = Account.objects.get_or_create(
         company_domain=company_domain,
         defaults={
-        'company_linkedin': company_linkedin,
-        'company_facebook': company_facebook,
-        'company_twitter': company_twitter
+            'company_linkedin': company_linkedin,
+            'company_facebook': company_facebook,
+            'company_twitter': company_twitter
         }
     )
 
@@ -384,8 +378,7 @@ def create_or_update_employer_social_media(request):
     return Response("Create or Update employer social media successfully", status=status.HTTP_201_CREATED)
 
 
-def delete_account(request, account_id):
-    account = get_object_or_404(Account, id=account_id)
+def delete_account(request, account):
 
     # Retrieve all related users
     account_user_relations = AccountUserRelation.objects.filter(account=account)
@@ -412,3 +405,20 @@ def delete_user(request, user_id):
     user = get_object_or_404(CustomUser, id=user_id)
     user.delete()
     return HttpResponseRedirect(reverse('login'))
+
+def getAccount(user):
+    account_user_relation = AccountUserRelation.objects.filter(user=user).first()
+    return  account_user_relation.account
+
+def get_company_name(user):
+    account = getAccount(user)
+    company_name = account.company_name
+    return company_name
+
+def check_company_name_existence(target_name):
+    if Account.objects.filter(company_name=target_name).exists():
+        return "Company name is existed"
+    else: 
+        return "Company name is brand new!"
+
+    

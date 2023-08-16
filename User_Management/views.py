@@ -1,35 +1,29 @@
 import pdb
-from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404, render
-from .decorators import admin_required
-from django.http import HttpResponse
-from typing import Any, Dict
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404
+from django.utils.crypto import get_random_string
+from django.shortcuts import redirect
 from django.views.generic import View
 from django.views.generic.list import ListView
 from django.views.generic.edit import FormView
 from django.urls import reverse_lazy
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
-from django.contrib.auth import login
 from django.contrib.auth.tokens import default_token_generator
-# from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-from django.utils.encoding import force_bytes, force_text
+from django.utils.encoding import force_bytes, force_str
 from django.core.mail import send_mail
 from django.contrib import messages
 from .forms import UserCreationForm, CustomLoginForm  # , ResendActivationEmailForm
 from .models import Profile, CustomUser
 from Account_Management.models import Account, AccountUserRelation
 from django.contrib.auth.models import Group
-from .tokens import account_activation_token
 
 
 class CustomLoginView(LoginView):
     authentication_form = CustomLoginForm
-    template_name = 'User_Management/login_1.html'
+    template_name = 'User_Management/login.html'
     fields = '__all__'
     redirect_authenticated_user = True
 
@@ -75,7 +69,7 @@ class RegisterPage(FormView):
 class ActivateAccount(View):
     def get(self, request, uidb64, token, *args, **kwargs):
         try:
-            uid = force_text(urlsafe_base64_decode(uidb64))
+            uid = force_str(urlsafe_base64_decode(uidb64))
             user = CustomUser.objects.get(pk=uid)
         except (TypeError, ValueError, OverflowError, CustomUser.DoesNotExist):
             user = None
@@ -85,9 +79,10 @@ class ActivateAccount(View):
             user.profile.email_confirmed = True
             user.save()
 
-            account = Account.objects.create()
+            desired_domin = 'http://www.domin/' + get_random_string(32)
+            account = Account.objects.create(company_domain=desired_domin)
             AccountUserRelation.objects.create(account=account, user=user)
-            
+
             # login(request, user)
             messages.success(request, 'Your account have been confirmed.')
             return redirect('login')
@@ -105,21 +100,29 @@ class ProfileList(LoginRequiredMixin, ListView):
         user_groups = user.groups.all()
         user_roles = [group.name for group in user_groups]
         # pdb.set_trace()  # 断点
-        return force_text(user_roles)
+        return force_str(user_roles)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         user_roles = self.get_user_roles()
         context['user_roles'] = user_roles
-        
+
+        # get user's firstname and lastname
+        current_user = self.request.user
+        first_name = current_user.first_name
+        last_name = current_user.last_name
+
+        # put firstname and lastname in context
+        context['first_name'] = first_name
+        context['last_name'] = last_name
+
         account_relation = AccountUserRelation.objects.filter(user=self.request.user).first()
         if account_relation:
             context['account'] = account_relation.account
         return context
-    
-    #return (reverse('account_management:account'))
-    
-    
+
+    # return (reverse('account_management:account'))
+
 
 # def resend_activation_email(request): 
 #     if request.user.is_authenticated:
@@ -146,7 +149,6 @@ class ProfileList(LoginRequiredMixin, ListView):
 #         return redirect('resend_activation_email') 
 
 #     return HttpResponse("An error occurred or the form is not valid.")
-
 
 
 def delete_account(request, account_id):

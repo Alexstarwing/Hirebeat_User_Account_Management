@@ -1,25 +1,27 @@
 from django import forms
 from .models import Profile, CustomUser
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+
+
 # from django.contrib.auth.models import User
 
 
 class UserCreationForm(UserCreationForm):
-    email = forms.EmailField(required=True, 
-        widget=forms.TextInput(attrs={'class': 'form-control form-control-prepended'}),
-        label='Email'
-    )
-    
+    email = forms.EmailField(required=True,
+                             widget=forms.TextInput(attrs={'class': 'form-control form-control-prepended'}),
+                             label='Email'
+                             )
+
     username = forms.CharField(
         widget=forms.TextInput(attrs={'class': 'form-control form-control-prepended'}),
         label='Username'
     )
-    
+
     password1 = forms.CharField(
         widget=forms.PasswordInput(attrs={'class': 'form-control form-control-prepended'}),
         label='Password1'
     )
-    
+
     password2 = forms.CharField(
         widget=forms.PasswordInput(attrs={'class': 'form-control form-control-prepended'}),
         label='Password2'
@@ -35,7 +37,8 @@ class UserCreationForm(UserCreationForm):
         if commit:
             user.save()
         return user
-    
+
+
 # class ResendActivationEmailForm(forms.Form):
 #     email = forms.EmailField(required=True)
 
@@ -44,7 +47,8 @@ class CustonmerForm(forms.ModelForm):
         model = Profile
         fields = '__all__'
         exclude = ['user']
-        
+
+
 class CustomLoginForm(AuthenticationForm):
     username = forms.CharField(
         widget=forms.TextInput(attrs={'class': 'form-control form-control-prepended'}),
@@ -55,4 +59,3 @@ class CustomLoginForm(AuthenticationForm):
         widget=forms.PasswordInput(attrs={'class': 'form-control form-control-prepended'}),
         label='Password'
     )
-    

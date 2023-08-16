@@ -15,12 +15,17 @@
         <div class="card card-form">
             <div class="row no-gutters">
                 <div class="col-lg-4 card-body">
-                    <p><strong class="headings-color">Profile Settings</strong></p>
+                    <p><strong class="headings-color">Profile Detail</strong></p>
                     <p class="text-muted mb-0">Update your public profile with relevant and meaningful information.</p>
                 </div>
                 <div class="col-lg-8 card-form__body card-body">
                     <div class="form-group">
-                        <label>Avatar</label>
+                        <label for="office-list">Company Name: </label>
+                        {{ company_name }}
+                        <br>
+                        <label for="office-list">Testing: check if a company name existence: </label>
+                        {{ company_name_exists }}
+                        <br><br>
                         <div class="dz-clickable media align-items-center" data-toggle="dropzone" data-dropzone-url="http://" data-dropzone-clickable=".dz-clickable" data-dropzone-files='["assets/images/account-add-photo.svg"]'>
                             <div class="dz-preview dz-file-preview dz-clickable mr-3">
                                 <div class="avatar avatar-lg">
