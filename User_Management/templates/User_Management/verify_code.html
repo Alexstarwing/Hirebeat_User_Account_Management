@@ -1,0 +1,6 @@
+<form method="post">
+    {% csrf_token %}
+    <label for="verification_code">Enter Verification Code:</label>
+    {{ verify_form.as_p }}
+    <button type="submit">Verify Code</button>
+</form>

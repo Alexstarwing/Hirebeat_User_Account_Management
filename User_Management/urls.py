@@ -1,6 +1,6 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views
-from .views import ProfileList, CustomLoginView, RegisterPage, ActivateAccount, UserSettingView
+from .views import ProfileList, CustomLoginView, RegisterPage, ActivateAccount, UserSettingView, VerifyCodeView
 from django.contrib.auth.views import LogoutView
 from . import views
 
@@ -26,4 +26,5 @@ urlpatterns = [
          name='password_reset_complete'),  # Password successfully changed message
     path('delete_account/<int:account_id>/', views.delete_account, name='delete_account'),
     path('user_setting/', UserSettingView.as_view(), name='user_setting'),
+    path('verify_code/', VerifyCodeView.as_view(), name='verify_code'),
 ]

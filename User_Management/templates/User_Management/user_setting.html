@@ -3,6 +3,16 @@
 {% block content %}
     <head>
         <title>User Setting| HireBeat</title>
+    <style>
+        .shadow-border {
+            border: none;
+            border-bottom: 1px solid transparent;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 添加浅灰色阴影效果 */
+            background-color: #DDDDDD;
+            width: 100%;
+            padding: 5px;
+        }
+    </style>
     </head>
     <body>
     <div class="mdk-header-layout__content mdk-header-layout__content--fullbleed mdk-header-layout__content--scrollable page" style="padding-top: 60px;">
@@ -58,20 +68,22 @@
                           <div class="col-md-6">
                               <form method="post" class="form-inline">
                                   {% csrf_token %}
-{#                                  <div class="form-group">#}
-{#                                      <label for="opass">Old Password</label>#}
-{#                                  </div>#}
                                   <div class="form-group">
-                                      <label for="npass">New Email</label>
-                                      {{ update_email_form }}
-                                      <small class="invalid-feedback">The new password must not be empty.</small>
+                                      <label for="npass">New Email:</label>
+                                      {{ update_email_form.new_email }}
+                                      <div>
+                                          {% if messages %}
+                                            <ul class="messages">
+                                                {% for message in messages %}
+                                                <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>
+                                                    {{ message }}</li>
+                                                {% endfor %}
+                                            </ul>
+                                            {% endif %}
+                                      </div>
                                   </div>
-                                  <div class="form-group">
-                                      <label for="cpass">Confirm Password</label>
-                                      <input id="cpass" type="password" class="form-control" placeholder="Confirm password">
-                                  </div>
-                                  <div class="col">
-                                    <button type="submit" class="btn btn-primary">Save</button>
+                                  <div class="col" style="margin-top: 15px">
+                                    <button type="submit" class="btn btn-primary">Change</button>
                                   </div>
                               </form>
                           </div>

@@ -135,35 +135,35 @@
                     </div>
                 </div>
 
-                <div class="card card-form">
-                    <div class="row no-gutters">
-                        <div class="col-lg-4 card-body">
-                            <p><strong class="headings-color">Users</strong></p>
-                            <p class="text-muted mb-0">Update your personal information.</p>
-                        </div>
-                        <div class="col-lg-8 card-form__body card-body">
-                            <form method="post" class="form-inline">
-                                {% csrf_token %}
-                                <div class="form-group">
-                                    <label for="fname">First name</label>
-                                </div>
-                                <div class="form-group">
-                                    {{ user_info_form.first_name }}
-                                </div>
-
-                                <div class="form-group" style="margin-left: 15px">
-                                    <label for="lname">Last name</label>
-                                </div>
-                                <div class="form-group">
-                                    {{ user_info_form.last_name }}
-                                </div>
-                                <div class="col">
-                                    <button type="submit" class="btn btn-primary">Save</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
+{#                <div class="card card-form">#}
+{#                    <div class="row no-gutters">#}
+{#                        <div class="col-lg-4 card-body">#}
+{#                            <p><strong class="headings-color">Users</strong></p>#}
+{#                            <p class="text-muted mb-0">Update your personal information.</p>#}
+{#                        </div>#}
+{#                        <div class="col-lg-8 card-form__body card-body">#}
+{#                            <form method="post" class="form-inline">#}
+{#                                {% csrf_token %}#}
+{#                                <div class="form-group">#}
+{#                                    <label for="fname">First name</label>#}
+{#                                </div>#}
+{#                                <div class="form-group">#}
+{#                                    {{ user_info_form.first_name }}#}
+{#                                </div>#}
+{##}
+{#                                <div class="form-group" style="margin-left: 15px">#}
+{#                                    <label for="lname">Last name</label>#}
+{#                                </div>#}
+{#                                <div class="form-group">#}
+{#                                    {{ user_info_form.last_name }}#}
+{#                                </div>#}
+{#                                <div class="col">#}
+{#                                    <button type="submit" class="btn btn-primary">Save</button>#}
+{#                                </div>#}
+{#                            </form>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
 
                 <div class="text-right mb-5">
                     <a href="{% url 'account_management:account'%}" class="btn btn-success">Go Back</a>

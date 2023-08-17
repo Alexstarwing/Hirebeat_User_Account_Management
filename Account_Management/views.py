@@ -284,7 +284,7 @@ class OrganizationView(LoginRequiredMixin, ListView):
         user_roles = [group.name for group in user_groups]
         account = self.get_account_for_user(current_user)
         company_name = get_company_name(current_user)
-        company_name_exists = check_company_name_existence(company_name)
+        company_name_exists = check_company_name_existence('company_name')
         return render(request, self.template_name, {'user_roles': user_roles[0], 'company_name': company_name,
                                                     'company_name_exists': company_name_exists, 'account': account})
 
