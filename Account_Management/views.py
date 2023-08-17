@@ -417,32 +417,31 @@ def check_company_name_existence(target_name):
         return "Company name is brand new!"
     
 # create_or_update_employer_basic_info: Creates or updates basic information for an employer's profile
-# def create_or_update_employer_basic_info(request):
-#     if request.method == 'POST':
-#         company_domain = request.data["user_id"]
-#         company_industry = request.data["company_type"]
-#         company_email = request.data["contactEmail"]
-#         company_location = request.data["location"]
-#         #company_size_range = request.data["company_size"]
+def create_or_update_employer_basic_info(request):
+    if request.method == 'POST':
+        company_domain = request.POST.get("user_id")
+        company_industry = request.POST.get("company_type")
+        company_email = request.POST.get("contactEmail")
+        company_location = request.POST.get("location")
+        company_size_range = request.POST.get("company_size")
 
-#         account, created = Account.objects.get_or_create(
-#             company_domain=company_domain,
-#             defaults={
-#             'company_industry': company_industry,
-#             'company_email': company_email,
-#             'company_location': company_location,
-#             #'company_size_range': company_size_range
-#             }
-#         )
+        account, created = Account.objects.get_or_create(
+            company_domain=company_domain,
+            defaults={
+            'company_industry': company_industry,
+            'company_email': company_email,
+            'company_location': company_location,
+            'company_size_range': company_size_range
+            }
+        )
 
-#         if not created:
-#             account.company_industry = company_industry
-#             account.company_email = company_email
-#             account.company_location = company_location
-#             #account.company_size_range = company_size_range
-#             account.save()
-#         return Response("Create or Update employer basic info successfully", status=status.HTTP_201_CREATED)
-
-#     else:
-#         # Return a form for GET requests
-#         return render(request, 'Account_Management/basic_info.html')
+        if not created:
+            account.company_industry = company_industry
+            account.company_email = company_email
+            account.company_location = company_location
+            account.company_size_range = company_size_range
+            account.save()
+        return redirect('account_management:edit_account')
+    else:
+        # Return a form for GET requests
+        return render(request, 'Account_Management/basic_info.html')
