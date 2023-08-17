@@ -32,7 +32,7 @@ class Account(models.Model):
     # account_status = models.CharField(max_length=255, choices=ACCOUNT_STATUS_CHOICES)
     company_summary = models.TextField(null=True, blank=True)
     company_industry = models.CharField(max_length=255, null=True, blank=True)
-    # company_size_range = models.CharField(max_length=255, null=True, blank=True, choices=COMPANY_SIZE_RANGE_CHOICES)
+    company_size_range = models.CharField(max_length=255, null=True, blank=True, choices=COMPANY_SIZE_RANGE_CHOICES)
     company_website = models.URLField(max_length=255, null=True, blank=True)
     company_location = models.CharField(max_length=255, null=True, blank=True)
     company_domain = models.CharField(max_length=255, unique=True, default="")
@@ -50,7 +50,7 @@ class Account(models.Model):
         indexes = [
             models.Index(fields=['company_name']),
             # models.Index(fields=['account_status']),
-            # models.Index(fields=['company_industry']),
+            models.Index(fields=['company_industry']),
             models.Index(fields=['company_domain']),
         ]
         # def __str__(self):

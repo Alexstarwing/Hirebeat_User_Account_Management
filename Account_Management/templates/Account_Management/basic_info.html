@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create or Update Employer Basic Info</title>
+</head>
+<body>
+    <h1>Create or Update Employer Basic Info</h1>
+    <form method="post" action="/account/create_or_update_employer/">
+        {% csrf_token %}
+        <label for="user_id">Company Domain:</label>
+        <input type="text" name="user_id" required><br>
+        
+        <label for="company_type">Company Industry:</label>
+        <input type="text" name="company_type" required><br>
+        
+        <label for="contactEmail">Contact Email:</label>
+        <input type="email" name="contactEmail" required><br>
+        
+        <label for="location">Location:</label>
+        <input type="text" name="location" required><br>
+        
+        <label for="company_size">Company Size:</label>
+        <input type="text" name="company_size" required><br>
+        
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>
