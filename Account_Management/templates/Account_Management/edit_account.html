@@ -63,77 +63,113 @@
                                 <button id="add-department-btn" class="btn btn-primary">+ New Department</button>
                                 <ul id="department-list" class="list-group"></ul>
                             </div>
-
-                            <script>
-                                document.addEventListener('DOMContentLoaded', function() {
-                                    const addOfficeBtn = document.getElementById('add-office-btn');
-                                    const addDepartmentBtn = document.getElementById('add-department-btn');
-
-                                    function createItem(list, itemName, editFunction, deleteFunction) {
-                                        const listItem = document.createElement('li');
-                                        listItem.className = 'list-group-item d-flex justify-content-between align-items-center';
-
-                                        const itemNameSpan = document.createElement('span');
-                                        itemNameSpan.textContent = itemName;
-                                        listItem.appendChild(itemNameSpan);
-
-                                        const buttonsContainer = document.createElement('div');
-                                        buttonsContainer.className = 'd-flex';
-
-                                        const editBtn = document.createElement('button');
-                                        editBtn.className = 'btn btn-secondary me-2';
-                                        editBtn.textContent = 'Edit';
-                                        editBtn.addEventListener('click', () => {
-                                            editFunction(itemNameSpan);
-                                        });
-                                        buttonsContainer.appendChild(editBtn);
-
-                                        const deleteBtn = document.createElement('button');
-                                        deleteBtn.className = 'btn btn-danger';
-                                        deleteBtn.textContent = 'Delete';
-                                        deleteBtn.addEventListener('click', () => {
-                                            deleteFunction(list, listItem);
-                                        });
-                                        buttonsContainer.appendChild(deleteBtn);
-
-                                        listItem.appendChild(buttonsContainer);
-
-                                        list.appendChild(listItem);
-                                    }
-
-                                    function editItemName(itemNameSpan) {
-                                        const newItemName = prompt('Enter the new name:', itemNameSpan.textContent);
-                                        if (newItemName !== null) {
-                                            itemNameSpan.textContent = newItemName;
-                                        }
-                                    }
-
-                                    function deleteItem(list, listItem) {
-                                        const isConfirmed = confirm('Are you sure you want to delete this item?');
-                                        if (isConfirmed) {
-                                            list.removeChild(listItem);
-                                        }
-                                    }
-
-                                    function showInputForm(list) {
-                                        const itemName = prompt('Enter the name:');
-                                        if (itemName) {
-                                            createItem(list, itemName, editItemName, deleteItem);
-                                        }
-                                    }
-
-                                    addOfficeBtn.addEventListener('click', function() {
-                                        showInputForm(document.getElementById('office-list'));
-                                    });
-
-                                    addDepartmentBtn.addEventListener('click', function() {
-                                        showInputForm(document.getElementById('department-list'));
-                                    });
-                                });
-                            </script>
                         </div>
                     </div>
                 </div>
+                <div class="card card-form">
+                    <div class="row no-gutters">
+                        <div class="col-lg-4 card-body">
+                            <p><strong class="headings-color">Basic Info</strong></p>
+                            <p class="text-muted mb-0">Create or Update Employer Basic Info.</p>
+                        </div>
+                        <div class="col-lg-8 card-form__body card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="form-group">
+                                        <form method="post" action="/account/create_or_update_employer/">
+                                            {% csrf_token %}
+                                            <label for="user_id">Company Domain:</label>
+                                            <input type="text" name="user_id" required><br>
+                                            
+                                            <label for="company_type">Company Industry:</label>
+                                            <input type="text" name="company_type" required><br>
+                                            
+                                            <label for="contactEmail">Contact Email:</label>
+                                            <input type="email" name="contactEmail" required><br>
+                                            
+                                            <label for="location">Location:</label>
+                                            <input type="text" name="location" required><br>
+                                            
+                                            <label for="company_size">Company Size:</label>
+                                            <input type="text" name="company_size" required><br>
+                                            
+                                            <input type="submit" value="Submit">
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            const addOfficeBtn = document.getElementById('add-office-btn');
+                            const addDepartmentBtn = document.getElementById('add-department-btn');
+
+                            function createItem(list, itemName, editFunction, deleteFunction) {
+                                const listItem = document.createElement('li');
+                                listItem.className = 'list-group-item d-flex justify-content-between align-items-center';
+
+                                const itemNameSpan = document.createElement('span');
+                                itemNameSpan.textContent = itemName;
+                                listItem.appendChild(itemNameSpan);
+
+                                const buttonsContainer = document.createElement('div');
+                                buttonsContainer.className = 'd-flex';
+
+                                const editBtn = document.createElement('button');
+                                editBtn.className = 'btn btn-secondary me-2';
+                                editBtn.textContent = 'Edit';
+                                editBtn.addEventListener('click', () => {
+                                    editFunction(itemNameSpan);
+                                });
+                                buttonsContainer.appendChild(editBtn);
+
+                                const deleteBtn = document.createElement('button');
+                                deleteBtn.className = 'btn btn-danger';
+                                deleteBtn.textContent = 'Delete';
+                                deleteBtn.addEventListener('click', () => {
+                                    deleteFunction(list, listItem);
+                                });
+                                buttonsContainer.appendChild(deleteBtn);
+
+                                listItem.appendChild(buttonsContainer);
+
+                                list.appendChild(listItem);
+                            }
+
+                            function editItemName(itemNameSpan) {
+                                const newItemName = prompt('Enter the new name:', itemNameSpan.textContent);
+                                if (newItemName !== null) {
+                                    itemNameSpan.textContent = newItemName;
+                                }
+                            }
+
+                            function deleteItem(list, listItem) {
+                                const isConfirmed = confirm('Are you sure you want to delete this item?');
+                                if (isConfirmed) {
+                                    list.removeChild(listItem);
+                                }
+                            }
+
+                            function showInputForm(list) {
+                                const itemName = prompt('Enter the name:');
+                                if (itemName) {
+                                    createItem(list, itemName, editItemName, deleteItem);
+                                }
+                            }
+
+                            addOfficeBtn.addEventListener('click', function() {
+                                showInputForm(document.getElementById('office-list'));
+                            });
+
+                            addDepartmentBtn.addEventListener('click', function() {
+                                showInputForm(document.getElementById('department-list'));
+                            });
+                        });
+                    </script>
+                </div>
+            </div>
+        </div>
 
 {#                <div class="card card-form">#}
 {#                    <div class="row no-gutters">#}
