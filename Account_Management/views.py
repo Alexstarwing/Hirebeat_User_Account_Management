@@ -34,8 +34,6 @@ class AccountSettingView(LoginRequiredMixin, View):
     model = Account
     context_object_name = 'edit_account'
     template_name = 'Account_Management/edit_account.html'
-    
-    
 
     def get_account_for_user(self, user):
         try:
@@ -89,16 +87,14 @@ class AccountSettingView(LoginRequiredMixin, View):
             account.organization = org_form.cleaned_data['organization']
             account.save()
             return redirect('account_management:edit_account')
-        
-        
+
         self.create_or_update_employer_basic_info(request)
         self.create_or_update_employer_info(request)
-        
-        
+
         return render(request, self.template_name, {'org_form': org_form})
-        #Thinking of rediect user to organiztion, which view the changes.
-        #return render(request, 'Account_Management/organization.html', {'org_form': org_form})
-        
+        # Thinking of rediect user to organiztion, which view the changes.
+        # return render(request, 'Account_Management/organization.html', {'org_form': org_form})
+
     def create_or_update_employer_basic_info(self, request):
         if request.method == 'POST':
             company_domain = request.POST.get("user_id")
@@ -106,14 +102,14 @@ class AccountSettingView(LoginRequiredMixin, View):
             company_email = request.POST.get("contactEmail")
             company_location = request.POST.get("location")
             company_size_range = request.POST.get("company_size")
-            
+
             account, created = Account.objects.get_or_create(
                 company_domain=company_domain,
                 defaults={
-                'company_industry': company_industry,
-                'company_email': company_email,
-                'company_location': company_location,
-                'company_size_range': company_size_range
+                    'company_industry': company_industry,
+                    'company_email': company_email,
+                    'company_location': company_location,
+                    'company_size_range': company_size_range
                 }
             )
 
@@ -127,7 +123,7 @@ class AccountSettingView(LoginRequiredMixin, View):
         else:
             # Return a form for GET requests
             return render(request, 'Account_Management/basic_info.html')
-    
+
     def create_or_update_employer_info(self, request):
         if request.method == 'POST':
             company_domain = request.POST.get("user_id")
@@ -137,8 +133,8 @@ class AccountSettingView(LoginRequiredMixin, View):
             account, created = Account.objects.get_or_create(
                 company_domain=company_domain,
                 defaults={
-                'company_name': company_name,
-                'company_website': company_website,
+                    'company_name': company_name,
+                    'company_website': company_website,
                 }
             )
 
@@ -151,7 +147,6 @@ class AccountSettingView(LoginRequiredMixin, View):
         else:
             # Return a form for GET requests
             return render(request, 'Account_Management/edit_account.html')
-    
 
 
 class ConfigureView(LoginRequiredMixin, ListView):
@@ -304,8 +299,6 @@ class RegisterWithInvitationView(View):
             return redirect('/login/')
         else:
             return render(request, self.template_name, {'form': form})
-        
-
 
 
 class InvitationView(LoginRequiredMixin, View):
@@ -481,7 +474,7 @@ def check_company_name_existence(target_name):
         return "Company name is existed"
     else:
         return "Company name is brand new!"
-    
+
 # create_or_update_employer_basic_info: Creates or updates basic information for an employer's profile
 # def create_or_update_employer_basic_info(request):
 #     if request.method == 'POST':
@@ -511,7 +504,7 @@ def check_company_name_existence(target_name):
 #     else:
 #         # Return a form for GET requests
 #         return render(request, 'Account_Management/basic_info.html')
-    
+
 # def create_or_update_employer_info(request):
 #         if request.method == 'POST':
 #             company_domain = request.POST.get("user_id")

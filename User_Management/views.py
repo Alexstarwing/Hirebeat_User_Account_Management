@@ -1,6 +1,7 @@
 import pdb
 import random
 
+from django.contrib.auth import update_session_auth_hash
 from django.shortcuts import get_object_or_404, render
 from django.utils.crypto import get_random_string
 from django.shortcuts import redirect
@@ -18,7 +19,7 @@ from django.utils.encoding import force_bytes, force_str
 from django.core.mail import send_mail
 from django.contrib import messages
 from .forms import UserCreationForm, CustomLoginForm, UpdateEmailForm, UserInfoForm, \
-    VerificationForm  # , ResendActivationEmailForm
+    VerificationForm, UpdatePasswordForm  # , ResendActivationEmailForm
 from .models import Profile, CustomUser
 from Account_Management.models import Account, AccountUserRelation
 from django.contrib.auth.models import Group
@@ -132,9 +133,13 @@ class UserSettingView(LoginRequiredMixin, View):
 
     def get(self, request):
         current_user = request.user
+
+        # forms render
         user_info_form = UserInfoForm(
             initial={'first_name': current_user.first_name, 'last_name': current_user.last_name})
         update_email_form = UpdateEmailForm(initial={'new_email': current_user.email})
+        update_password_form = UpdatePasswordForm(initial={'old_password': current_user.password})
+
         # get user's role
         user_groups = current_user.groups.all()
         user_roles = [group.name for group in user_groups]
@@ -146,6 +151,7 @@ class UserSettingView(LoginRequiredMixin, View):
         return render(request, self.template_name, {
             'user_info_form': user_info_form,
             'update_email_form': update_email_form,
+            'update_password_form': update_password_form,
             'account': account,
             'user_roles': user_roles[0]})
 
@@ -153,6 +159,7 @@ class UserSettingView(LoginRequiredMixin, View):
         current_user = request.user
         user_info_form = UserInfoForm(request.POST)
         update_email_form = UpdateEmailForm(request.POST)
+        update_password_form = UpdatePasswordForm(request.POST)
 
         if user_info_form.is_valid():
             current_user.first_name = user_info_form.cleaned_data['first_name']
@@ -162,7 +169,6 @@ class UserSettingView(LoginRequiredMixin, View):
 
         if update_email_form.is_valid():
             new_email = update_email_form.cleaned_data['new_email']
-            # current_user.email = new_email
 
             # generate a 6-digit verification code
             verification_code = "".join(random.choices('0123456789', k=6))
@@ -180,6 +186,31 @@ class UserSettingView(LoginRequiredMixin, View):
             self.request.session['verification_code'] = verification_code
             self.request.session['new_email'] = new_email
             return redirect('verify_code')
+
+        if update_password_form.is_valid():
+            old_password = update_password_form.cleaned_data['old_password']
+            if not current_user.check_password(old_password):
+                update_password_form.add_error('old_password', 'Old password is incorrect.')
+            else:
+                new_password1 = update_password_form.cleaned_data['new_password1']
+                new_password2 = update_password_form.cleaned_data['new_password2']
+                if new_password1 == new_password2:
+                    current_user.password = new_password1
+                    current_user.save()
+
+                    # Update session auth hash to keep the user logged in
+                    update_session_auth_hash(request, current_user)
+
+                    send_mail(
+                        'Your password has been changed',
+                        'We noticed the password for your Greenhouse account was recently changed. '
+                        'If this was you, you can ignore this email – we’re just checking in.'
+                        'If it wasn’t you, please reset your password to keep your account secure.',
+                        'yifandsb666@gmail.com',
+                        [current_user.email],
+                        fail_silently=False,
+                    )
+                    messages.success(request, 'Password updated successfully.')
 
         return redirect('user_setting')
 

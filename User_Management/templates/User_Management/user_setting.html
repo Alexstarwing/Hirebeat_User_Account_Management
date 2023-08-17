@@ -7,8 +7,8 @@
         .shadow-border {
             border: none;
             border-bottom: 1px solid transparent;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 添加浅灰色阴影效果 */
-            background-color: #DDDDDD;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            background-color: #FFFFFF;
             width: 100%;
             padding: 5px;
         }
@@ -71,7 +71,7 @@
                                   <div class="form-group">
                                       <label for="npass">New Email:</label>
                                       {{ update_email_form.new_email }}
-                                      <div>
+                                      <div style="margin-top: 20px">
                                           {% if messages %}
                                             <ul class="messages">
                                                 {% for message in messages %}
@@ -92,6 +92,52 @@
                     </div>
                 </div>
 
+                <div class="card card-form">
+                    <div class="row no-gutters">
+                      <div class="col-lg-4 card-body">
+                        <p><strong class="headings-color">Update Your Password</strong></p>
+                        <p class="text-muted mb-0">Change your password.</p>
+                      </div>
+                      <div class="col-lg-8 card-form__body card-body">
+                        <div class="row">
+                          <div class="col-md-6">
+                              <form method="post" class="form-inline">
+                                  {% csrf_token %}
+                                  <div class="form-group">
+                                      <label for="opass">Old Password:</label>
+                                      {{ update_password_form.old_password }}
+                                  </div>
+
+                                  <div class="form-group" style="margin-top: 20px">
+                                      <label for="npass">New Password:</label>
+{#                                      <input id="npass" type="password" class="form-control is-invalid">#}
+                                      {{ update_password_form.new_password1 }}
+                                      <small class="invalid-feedback">The new password must not be empty.</small>
+                                  </div>
+
+                                  <div class="form-group" style="margin-top: 20px">
+                                      <label for="cpass">Confirm Password:</label>
+{#                                      <input id="cpass" type="password" class="form-control" placeholder="Confirm password">#}
+                                      {{ update_password_form.new_password2 }}
+                                  </div>
+                                  <div style="margin-top: 20px">
+                                      {% if messages %}
+                                        <ul class="messages">
+                                            {% for message in messages %}
+                                            <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>
+                                                {{ message }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                      {% endif %}
+                                  </div>
+                                  <button type="submit" class="btn btn-primary" style="margin-top: 20px">Save</button>
+                              </form>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+
                 <div class="text-right mb-5">
                     <a href="{% url 'account_management:account'%}" class="btn btn-success">Go Back</a>
                 </div>
@@ -99,11 +145,19 @@
 
 
         </div>
+        <script>
+            const newPassword1 = document.getElementById('new_password1');
+            const newPassword2 = document.getElementById('new_password2');
+            const passwordMismatchMsg = document.getElementById('password_mismatch');
 
-
-
-
-
+            newPassword2.addEventListener('input', function() {
+                if (newPassword1.value !== newPassword2.value) {
+                    passwordMismatchMsg.style.display = 'block';
+                } else {
+                    passwordMismatchMsg.style.display = 'none';
+                }
+            });
+        </script>
 
     <!-- App Settings FAB -->
     <div id="app-settings">
