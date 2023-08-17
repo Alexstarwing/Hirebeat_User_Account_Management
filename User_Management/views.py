@@ -189,8 +189,18 @@ class VerifyCodeView(FormView):
     context_object_name = 'verify_code'
 
     def get(self, request, *args, **kwargs):
+        # get user's role
+        current_user = self.request.user
+        user_groups = current_user.groups.all()
+        user_roles = [group.name for group in user_groups]
+
+        # delete account function
+        account_user_relation = AccountUserRelation.objects.filter(user=current_user).first()
+        account = account_user_relation.account
         verify_form = VerificationForm()
-        return render(request, self.template_name, {'verify_form': verify_form})
+        return render(request, self.template_name, {'verify_form': verify_form,
+                                                    'account': account,
+                                                    'user_roles': user_roles[0]})
 
     def post(self, request, *args, **kwargs):
         verify_form = VerificationForm(request.POST)
@@ -213,11 +223,7 @@ class VerifyCodeView(FormView):
         return self.form_invalid(verify_form)
 
 
-
-
-
-
-# def resend_activation_email(request): 
+# def resend_activation_email(request):
 #     if request.user.is_authenticated:
 #         return redirect('profiles')
 

@@ -67,7 +67,8 @@ class UpdateEmailForm(forms.Form):
 
 
 class VerificationForm(forms.Form):
-    verification_code = forms.CharField(max_length=20, label='Verification Code')
+    verification_code = forms.CharField(widget=forms.TextInput(attrs={'class': 'shadow-border'}),
+                                        max_length=20, label='Verification Code')
 
 
 class UserInfoForm(forms.Form):

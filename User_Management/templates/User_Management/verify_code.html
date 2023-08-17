@@ -1,6 +1,90 @@
-<form method="post">
-    {% csrf_token %}
-    <label for="verification_code">Enter Verification Code:</label>
-    {{ verify_form.as_p }}
-    <button type="submit">Verify Code</button>
-</form>
+{% extends 'Account_Management/account_main.html' %}
+{% load replace %}
+{% block content %}
+    <head>
+        <title>Verify New Email|HireBeat</title>
+    <style>
+            .go_back_link {
+                    cursor: pointer;
+                }
+
+                .go_back_link:hover {
+                    color: #1167C9;
+                }
+
+            .col.s14.z-depth-6.card-panel {
+                max-width: 500px;
+                margin: 0 auto;
+                padding: 20px;
+                justify-content: center;
+            }
+
+            .button {
+                display: inline-block;
+                text-align: center;
+                width: 50%;
+                margin-top: 10px;
+                background-color: #2196F3;
+                border: 1px solid white;
+                color: white;
+                cursor: pointer;
+                border-radius: 5px;
+
+            }
+
+            .shadow-border {
+            border: none;
+            border-bottom: 1px solid transparent;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 添加浅灰色阴影效果 */
+            background-color: #DDDDDD;
+            width: 50%;
+            padding: 5px;
+        }
+    </style>
+    </head>
+    <body>
+        <div class="mdk-header-layout__content mdk-header-layout__content--fullbleed mdk-header-layout__content--scrollable page" style="padding-top: 60px;">
+            <div class="container-fluid page__container page__heading d-flex align-items-center border-bottom  ">
+                <h1 class="mb-0">Verify New Email</h1>
+            </div>
+            <div class="container-fluid page__container">
+                <div class="col s14 z-depth-6 card-panel custom-panel">
+                    <div class="card card-body">
+                        <div style="margin: auto; font-family: Arial, Helvetica, sans-serif; text-align: center ">
+                            <h5 class="header">Verification Code Sent</h5>
+                            <div class="col s12 z-depth-6 card-panel">
+                                <div class="card-content left-align">
+                                    <p>Verification code has been sent to New Email address.</p>
+                                    <p>Please enter your verification code here.</p>
+                                    <form method="post">
+                                        {% csrf_token %}
+{#                                        <label for="verification_code">Enter Verification Code:</label>#}
+                                        {{ verify_form.as_p }}
+
+                                        <div class="row" style="text-align: center">
+                                            <div class="col"></div>
+                                            <div class="col">
+                                                <button type="submit" class="btn btn-success"
+                                                        style="width: 80%;background-color: #2196F3;
+                                                        border: 1px solid transparent;">Verify</button>
+                                            </div>
+                                            <div class="col">
+{#                                                <a href="{% url 'user_setting' %}" class="btn btn-success">Go Back</a>#}
+                                            </div>
+                                        </div>
+                                    </form>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+{#            <a href="{% url 'user_setting' %}" class="btn btn-success">Go Back</a>#}
+        </div>
+
+    </body>
+
+{% endblock content %}
