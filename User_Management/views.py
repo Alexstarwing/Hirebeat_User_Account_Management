@@ -195,7 +195,7 @@ class UserSettingView(LoginRequiredMixin, View):
                 new_password1 = update_password_form.cleaned_data['new_password1']
                 new_password2 = update_password_form.cleaned_data['new_password2']
                 if new_password1 == new_password2:
-                    current_user.password = new_password1
+                    current_user.set_password(new_password1)
                     current_user.save()
 
                     # Update session auth hash to keep the user logged in
@@ -210,7 +210,7 @@ class UserSettingView(LoginRequiredMixin, View):
                         [current_user.email],
                         fail_silently=False,
                     )
-                    messages.success(request, 'Password updated successfully.')
+                    messages.success(request, 'Password updated successfully.', extra_tags='signup')
 
         return redirect('user_setting')
 
@@ -246,7 +246,7 @@ class VerifyCodeView(FormView):
             if stored_code == user_entered_code:
                 current_user.email = new_email
                 current_user.save()
-                messages.success(self.request, 'Email address updated successfully.')
+                messages.success(self.request, 'Email address updated successfully.', extra_tags='login')
                 return redirect('user_setting')
             else:
                 messages.error(self.request, 'Invalid verification code. Please try again.')

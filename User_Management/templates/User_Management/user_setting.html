@@ -71,16 +71,15 @@
                                   <div class="form-group">
                                       <label for="npass">New Email:</label>
                                       {{ update_email_form.new_email }}
+{#                                        message#}
                                       <div style="margin-top: 20px">
-                                          {% if messages %}
-                                            <ul class="messages">
-                                                {% for message in messages %}
-                                                <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>
-                                                    {{ message }}</li>
-                                                {% endfor %}
-                                            </ul>
-                                            {% endif %}
+                                          {%for message in messages %}
+                                             {%if "login" in message.tags %}
+                                                  <p> {{message}} </p>   {# show login error message #}
+                                             {%endif%}
+                                          {%endfor%}
                                       </div>
+
                                   </div>
                                   <div class="col" style="margin-top: 15px">
                                     <button type="submit" class="btn btn-primary">Change</button>
@@ -120,15 +119,15 @@
 {#                                      <input id="cpass" type="password" class="form-control" placeholder="Confirm password">#}
                                       {{ update_password_form.new_password2 }}
                                   </div>
+
                                   <div style="margin-top: 20px">
-                                      {% if messages %}
-                                        <ul class="messages">
-                                            {% for message in messages %}
-                                            <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>
-                                                {{ message }}</li>
-                                            {% endfor %}
-                                        </ul>
-                                      {% endif %}
+                                      <div style="margin-top: 20px">
+                                          {%for message in messages %}
+                                             {%if "signup" in message.tags %}
+                                                  <p> {{message}} </p>   {# show login error message #}
+                                             {%endif%}
+                                          {%endfor%}
+                                      </div>
                                   </div>
                                   <button type="submit" class="btn btn-primary" style="margin-top: 20px">Save</button>
                               </form>
