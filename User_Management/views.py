@@ -210,7 +210,7 @@ class UserSettingView(LoginRequiredMixin, View):
                         [current_user.email],
                         fail_silently=False,
                     )
-                    messages.success(request, 'Password updated successfully.', extra_tags='signup')
+                    messages.success(request, 'Password updated successfully.', extra_tags='password')
 
         return redirect('user_setting')
 
@@ -246,10 +246,11 @@ class VerifyCodeView(FormView):
             if stored_code == user_entered_code:
                 current_user.email = new_email
                 current_user.save()
-                messages.success(self.request, 'Email address updated successfully.', extra_tags='login')
+                messages.success(self.request, 'Email address updated successfully.', extra_tags='email')
                 return redirect('user_setting')
             else:
                 messages.error(self.request, 'Invalid verification code. Please try again.')
+                return redirect('verify_code')
 
         return self.form_invalid(verify_form)
 
