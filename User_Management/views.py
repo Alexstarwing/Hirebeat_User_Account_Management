@@ -1,5 +1,7 @@
 import pdb
-from django.shortcuts import get_object_or_404
+import random
+
+from django.shortcuts import get_object_or_404, render
 from django.utils.crypto import get_random_string
 from django.shortcuts import redirect
 from django.views.generic import View
@@ -15,7 +17,8 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
 from django.core.mail import send_mail
 from django.contrib import messages
-from .forms import UserCreationForm, CustomLoginForm  # , ResendActivationEmailForm
+from .forms import UserCreationForm, CustomLoginForm, UpdateEmailForm, UserInfoForm, \
+    VerificationForm  # , ResendActivationEmailForm
 from .models import Profile, CustomUser
 from Account_Management.models import Account, AccountUserRelation
 from django.contrib.auth.models import Group
@@ -121,10 +124,106 @@ class ProfileList(LoginRequiredMixin, ListView):
             context['account'] = account_relation.account
         return context
 
-    # return (reverse('account_management:account'))
+
+class UserSettingView(LoginRequiredMixin, View):
+    model = Profile
+    context_object_name = 'user_settings'
+    template_name = 'User_Management/user_setting.html'
+
+    def get(self, request):
+        current_user = request.user
+        user_info_form = UserInfoForm(
+            initial={'first_name': current_user.first_name, 'last_name': current_user.last_name})
+        update_email_form = UpdateEmailForm(initial={'new_email': current_user.email})
+        # get user's role
+        user_groups = current_user.groups.all()
+        user_roles = [group.name for group in user_groups]
+
+        # delete account function
+        account_user_relation = AccountUserRelation.objects.filter(user=current_user).first()
+        account = account_user_relation.account
+
+        return render(request, self.template_name, {
+            'user_info_form': user_info_form,
+            'update_email_form': update_email_form,
+            'account': account,
+            'user_roles': user_roles[0]})
+
+    def post(self, request):
+        current_user = request.user
+        user_info_form = UserInfoForm(request.POST)
+        update_email_form = UpdateEmailForm(request.POST)
+
+        if user_info_form.is_valid():
+            current_user.first_name = user_info_form.cleaned_data['first_name']
+            current_user.last_name = user_info_form.cleaned_data['last_name']
+            current_user.save()
+            return redirect('user_setting')
+
+        if update_email_form.is_valid():
+            new_email = update_email_form.cleaned_data['new_email']
+            # current_user.email = new_email
+
+            # generate a 6-digit verification code
+            verification_code = "".join(random.choices('0123456789', k=6))
+
+            # send the verification email
+            send_mail(
+                'Email Verification Code | HireBeat',
+                f'Your Verification Code is: {verification_code}',
+                'yifandsb666@gmail.com',
+                [new_email],
+                fail_silently=False,
+            )
+
+            # save the verification_code and the new email address in session
+            self.request.session['verification_code'] = verification_code
+            self.request.session['new_email'] = new_email
+            return redirect('verify_code')
+
+        return redirect('user_setting')
 
 
-# def resend_activation_email(request): 
+class VerifyCodeView(FormView):
+    template_name = 'User_Management/verify_code.html'
+    context_object_name = 'verify_code'
+
+    def get(self, request, *args, **kwargs):
+        # get user's role
+        current_user = self.request.user
+        user_groups = current_user.groups.all()
+        user_roles = [group.name for group in user_groups]
+
+        # delete account function
+        account_user_relation = AccountUserRelation.objects.filter(user=current_user).first()
+        account = account_user_relation.account
+        verify_form = VerificationForm()
+        return render(request, self.template_name, {'verify_form': verify_form,
+                                                    'account': account,
+                                                    'user_roles': user_roles[0]})
+
+    def post(self, request, *args, **kwargs):
+        verify_form = VerificationForm(request.POST)
+        if verify_form.is_valid():
+            # pdb.set_trace()
+            current_user = self.request.user
+            user_entered_code = verify_form.cleaned_data['verification_code']
+            stored_code = self.request.session.get('verification_code')
+            new_email = self.request.session.get('new_email')
+
+            # verify whether is code is correct
+            if stored_code == user_entered_code:
+                current_user.email = new_email
+                current_user.save()
+                messages.success(self.request, 'Email address updated successfully.')
+                return redirect('user_setting')
+            else:
+                messages.error(self.request, 'Invalid verification code. Please try again.')
+
+        return self.form_invalid(verify_form)
+
+
+# def resend_activation_email(request):
 #     if request.user.is_authenticated:
 #         return redirect('profiles')
 
