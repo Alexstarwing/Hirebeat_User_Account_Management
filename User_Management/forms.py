@@ -59,3 +59,20 @@ class CustomLoginForm(AuthenticationForm):
         widget=forms.PasswordInput(attrs={'class': 'form-control form-control-prepended'}),
         label='Password'
     )
+
+
+class UpdateEmailForm(forms.Form):
+    new_email = forms.EmailField(
+        widget=forms.TextInput(attrs={'class': 'shadow-border'}), label='new email')
+
+
+class VerificationForm(forms.Form):
+    verification_code = forms.CharField(widget=forms.TextInput(attrs={'class': 'shadow-border'}),
+                                        max_length=20, label='Verification Code')
+
+
+class UserInfoForm(forms.Form):
+    first_name = forms.CharField(widget=forms.TextInput(attrs={'class': 'shadow-border'}),
+                                 max_length=200, label='First name')
+    last_name = forms.CharField(widget=forms.TextInput(attrs={'class': 'shadow-border'}),
+                                max_length=200, label='Last name')
