@@ -16,6 +16,4 @@ urlpatterns = [
    path('manage_users/', ManageUserView.as_view(), name='manage_users'),
    path('register/<invitation_token>/', RegisterWithInvitationView.as_view(), name='register_with_invitation'),
    path('delete_user/<int:user_id>/', views.delete_user, name='delete_user'),
-   path('create_or_update_employer/', views.create_or_update_employer_basic_info, name='create_or_update_employer'),
-   
 ]
