@@ -82,6 +82,26 @@
                     
                 }
 
+                .summary {
+                    margin-bottom: 10px;
+                    border: none;
+                    border-bottom: 1px solid transparent;
+                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                    background-color: #FFFFFF;
+                }
+
+                .summary[type="text"][name="user_id"] {
+                    margin-left: 10px;
+                    margin-bottom: 10px;
+                    
+                }
+
+                .summary[name="summary"] {
+                    margin-left: 145px;
+                    margin-bottom: 10px;
+                    
+                }
+
 
                 
 
@@ -118,14 +138,6 @@
                                         <br><br> -->
 
                                         
-                                        
-                                        {% if messages %}
-                                            <ul class="messages">
-                                                {% for message in messages %}
-                                                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-                                                {% endfor %}
-                                            </ul>
-                                        {% endif %}
                                         
                                         <form method="post" class="form-inline">
                                             {% csrf_token %}
@@ -192,6 +204,12 @@
                                             
                                             
                                             <input class="btn btn-primary" type="submit" value="Submit">
+
+                                            <div style="margin-top: 20px">
+                                                {%if extra_tags is 'basic_info' %}
+                                                    <p> {{message}} </p>
+                                                {%endif%}
+                                            </div>
                                         </form>
                                     </div>
                                 </div>
@@ -221,7 +239,47 @@
                                             <input type="text" name="website" required class="info"><br><br>
                                             
                                             <input class="btn btn-primary" type="submit" value="Submit">
+                                            <div style="margin-top: 20px">
+                                                {%for message in messages %}
+                                                   {%if "info" == message.tags %}
+                                                        <p> {{message}} </p>
+                                                   {%endif%}
+                                                {%endfor%}
+                                            </div>
     
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card card-form">
+                    <div class="row no-gutters">
+                        <div class="col-lg-4 card-body">
+                            <p><strong class="headings-color">Summary</strong></p>
+                            <p class="text-muted mb-0">Create or updates company summary or description.</p>
+                        </div>
+                        <div class="col-lg-8 card-form__body card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="form-group">
+                                        <form method="post" action="{% url 'account_management:edit_account' %}">
+                                            {% csrf_token %}
+                                            <label for="user_id">Company Domain:</label>
+                                            <input type="text" name="user_id" required class="summary"><br>
+                                            
+                                            <label for="summary">Company Summary:</label>
+                                            <textarea name="summary" id="summary" rows="10" cols="45" class="summary">{{ form.company_summary.value }}</textarea><br><br>
+
+                                            <input class="btn btn-primary" type="submit" value="Submit">
+                                            
+                                            <div style="margin-top: 20px">
+                                                {%if extra_tags is 'summary' %}
+                                                        <p> {{message}} </p>
+                                                   {%endif%}
+                                            </div>
                                         </form>
                                     </div>
                                 </div>
@@ -242,6 +300,7 @@
                 const addDepartmentBtn = document.getElementById('add-department-btn');
                 const selectElement = document.getElementById("companySizeSelect");
                 const inputElement = document.getElementById("companySizeInput");
+                const textareaElement = document.getElementById("summary");
 
                 selectElement.addEventListener("change", function() {
                     const selectedValue = selectElement.value;
