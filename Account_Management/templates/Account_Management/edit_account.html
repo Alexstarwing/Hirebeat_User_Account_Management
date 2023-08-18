@@ -3,6 +3,93 @@
 {% block content %}
         <head>
             <title>Account Settings | HireBeat</title>
+            <style>
+                .shadow-border {
+                    border: none;
+                    border-bottom: 1px solid transparent;
+                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                    background-color: #FFFFFF;
+                    width: 100%;
+                    padding: 5px;
+                }
+
+                .basic_info {
+                    margin-bottom: 10px;
+                    border: none;
+                    border-bottom: 1px solid transparent;
+                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                    background-color: #FFFFFF;
+                }
+
+
+                .basic_info[type="text"][name="user_id"] {
+                    margin-left: 13.5px;
+                    margin-bottom: 10px;
+                }
+
+                .basic_info[type="text"][name="company_type"] {
+
+                    margin-bottom: 10px;
+
+                }
+
+                .basic_info[type="email"][name="contactEmail"] {
+                    margin-left: 27.5px;
+                    margin-bottom: 10px;
+                }
+
+                .basic_info[type="text"][name="location"] {
+                    margin-left: 69px;
+                    margin-bottom: 10px;
+                }
+
+                .basic_info[type="text"][name="company_size"] {
+                    margin-left: 36px;
+                    margin-bottom: 10px;
+                }
+
+                .basic_info select {
+                    font-size: 14px;
+                    margin-left: 36px;
+                    margin-bottom: 10px;
+                }
+
+                .info[type="text"][name="user_id"] {
+                    margin-left: 7px;
+                    margin-bottom: 10px;
+                    border: none;
+                    border-bottom: 1px solid transparent;
+                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                    background-color: #FFFFFF;
+                }
+
+                .info[type="text"][name="name"] {
+                    margin-left: 22px;
+                    margin-bottom: 10px;
+                    border: none;
+                    border-bottom: 1px solid transparent;
+                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                    background-color: #FFFFFF;
+                    
+                }
+
+                .info[type="text"][name="website"] {
+                    margin-bottom: 10px;
+                    border: none;
+                    border-bottom: 1px solid transparent;
+                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                    background-color: #FFFFFF;
+                    
+                }
+
+
+                
+
+                
+
+                
+            </style>
+
         </head>
         <!-- Header Layout Content -->
         <div class="mdk-header-layout__content mdk-header-layout__content--fullbleed mdk-header-layout__content--scrollable page" style="padding-top: 60px;">
@@ -78,22 +165,33 @@
                                     <div class="form-group">
                                         <form method="post" action="{% url 'account_management:edit_account' %}">
                                             {% csrf_token %}
+                                            
+                                            
                                             <label for="user_id">Company Domain:</label>
-                                            <input type="text" name="user_id" required><br>
+                                            <input type="text" name="user_id" required class="basic_info"><br>
+                                        
                                             
                                             <label for="company_type">Company Industry:</label>
-                                            <input type="text" name="company_type" required><br>
+                                            <input type="text" name="company_type" required class="basic_info"><br>
                                             
                                             <label for="contactEmail">Contact Email:</label>
-                                            <input type="email" name="contactEmail" required><br>
+                                            <input type="email" name="contactEmail" required class="basic_info"><br>
                                             
                                             <label for="location">Location:</label>
-                                            <input type="text" name="location" required><br>
+                                            <input type="text" name="location" required class="basic_info"><br>
                                             
                                             <label for="company_size">Company Size:</label>
-                                            <input type="text" name="company_size" required><br>
+                                            <select name="company_size" id="companySizeSelect" class = "basic_info" style="font-size: 16px;
+                                            margin-left: 36px;
+                                            margin-bottom: 10px;">
+                                                {% for size_choice in account.COMPANY_SIZE_RANGE_CHOICES %}
+                                                    <option value="{{ size_choice.0 }}">{{ size_choice.1 }}</option>
+                                                {% endfor %}
+                                            </select><br><br>
+                                            <input type="text" name="company_size" id="companySizeInput" required style="display: none;" readonly>
                                             
-                                            <input type="submit" value="Submit">
+                                            
+                                            <input class="btn btn-primary" type="submit" value="Submit">
                                         </form>
                                     </div>
                                 </div>
@@ -114,15 +212,15 @@
                                         <form method="post" action="{% url 'account_management:edit_account' %}">
                                             {% csrf_token %}
                                             <label for="user_id">Company Domain:</label>
-                                            <input type="text" name="user_id" required><br>
+                                            <input type="text" name="user_id" required class="info"><br>
                                             
                                             <label for="name">Company Name:</label>
-                                            <input type="text" name="name" required><br>
+                                            <input type="text" name="name" required class="info"><br>
                                             
                                             <label for="website">Company Website:</label>
-                                            <input type="text" name="website" required><br>
+                                            <input type="text" name="website" required class="info"><br><br>
                                             
-                                            <input type="submit" value="Create Company">
+                                            <input class="btn btn-primary" type="submit" value="Submit">
     
                                         </form>
                                     </div>
@@ -134,9 +232,21 @@
             </div>
         </div>
         <script>
+
+            
+
+            
+
             document.addEventListener('DOMContentLoaded', function() {
                 const addOfficeBtn = document.getElementById('add-office-btn');
                 const addDepartmentBtn = document.getElementById('add-department-btn');
+                const selectElement = document.getElementById("companySizeSelect");
+                const inputElement = document.getElementById("companySizeInput");
+
+                selectElement.addEventListener("change", function() {
+                    const selectedValue = selectElement.value;
+                    inputElement.value = selectedValue;
+                });
 
                 function createItem(list, itemName, editFunction, deleteFunction) {
                     const listItem = document.createElement('li');
