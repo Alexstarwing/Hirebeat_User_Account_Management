@@ -13,9 +13,16 @@
                     padding: 5px;
                 }
 
+                .basic_info {
+                    margin-bottom: 10px;
+                    border: none;
+                    border-bottom: 1px solid transparent;
+                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                    background-color: #FFFFFF;
+                }
+
 
                 .basic_info[type="text"][name="user_id"] {
-                    width: 27.8%;
                     margin-left: 13.5px;
                     margin-bottom: 10px;
                 }
@@ -23,6 +30,7 @@
                 .basic_info[type="text"][name="company_type"] {
 
                     margin-bottom: 10px;
+
                 }
 
                 .basic_info[type="email"][name="contactEmail"] {
@@ -40,21 +48,40 @@
                     margin-bottom: 10px;
                 }
 
+                .basic_info select {
+                    font-size: 14px;
+                    margin-left: 36px;
+                    margin-bottom: 10px;
+                }
+
                 .info[type="text"][name="user_id"] {
                     margin-left: 7px;
                     margin-bottom: 10px;
+                    border: none;
+                    border-bottom: 1px solid transparent;
+                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                    background-color: #FFFFFF;
                 }
 
                 .info[type="text"][name="name"] {
                     margin-left: 22px;
                     margin-bottom: 10px;
+                    border: none;
+                    border-bottom: 1px solid transparent;
+                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                    background-color: #FFFFFF;
                     
                 }
 
                 .info[type="text"][name="website"] {
                     margin-bottom: 10px;
+                    border: none;
+                    border-bottom: 1px solid transparent;
+                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                    background-color: #FFFFFF;
                     
                 }
+
 
                 
 
@@ -154,7 +181,15 @@
                                             <input type="text" name="location" required class="basic_info"><br>
                                             
                                             <label for="company_size">Company Size:</label>
-                                            <input type="text" name="company_size" required class="basic_info"><br><br>
+                                            <select name="company_size" id="companySizeSelect" class = "basic_info" style="font-size: 16px;
+                                            margin-left: 36px;
+                                            margin-bottom: 10px;">
+                                                {% for size_choice in account.COMPANY_SIZE_RANGE_CHOICES %}
+                                                    <option value="{{ size_choice.0 }}">{{ size_choice.1 }}</option>
+                                                {% endfor %}
+                                            </select><br><br>
+                                            <input type="text" name="company_size" id="companySizeInput" required style="display: none;" readonly>
+                                            
                                             
                                             <input class="btn btn-primary" type="submit" value="Submit">
                                         </form>
@@ -197,9 +232,21 @@
             </div>
         </div>
         <script>
+
+            
+
+            
+
             document.addEventListener('DOMContentLoaded', function() {
                 const addOfficeBtn = document.getElementById('add-office-btn');
                 const addDepartmentBtn = document.getElementById('add-department-btn');
+                const selectElement = document.getElementById("companySizeSelect");
+                const inputElement = document.getElementById("companySizeInput");
+
+                selectElement.addEventListener("change", function() {
+                    const selectedValue = selectElement.value;
+                    inputElement.value = selectedValue;
+                });
 
                 function createItem(list, itemName, editFunction, deleteFunction) {
                     const listItem = document.createElement('li');
