@@ -61,6 +61,13 @@ class CustomLoginForm(AuthenticationForm):
     )
 
 
+class UserInfoForm(forms.Form):
+    first_name = forms.CharField(widget=forms.TextInput(attrs={'class': 'shadow-border'}),
+                                 max_length=200, label='First name')
+    last_name = forms.CharField(widget=forms.TextInput(attrs={'class': 'shadow-border'}),
+                                max_length=200, label='Last name')
+
+
 class UpdateEmailForm(forms.Form):
     new_email = forms.EmailField(
         widget=forms.TextInput(attrs={'class': 'shadow-border'}), label='new email')
@@ -71,8 +78,10 @@ class VerificationForm(forms.Form):
                                         max_length=20, label='Verification Code')
 
 
-class UserInfoForm(forms.Form):
-    first_name = forms.CharField(widget=forms.TextInput(attrs={'class': 'shadow-border'}),
-                                 max_length=200, label='First name')
-    last_name = forms.CharField(widget=forms.TextInput(attrs={'class': 'shadow-border'}),
-                                max_length=200, label='Last name')
+class UpdatePasswordForm(forms.Form):
+    old_password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'shadow-border'}),
+                                   label="Old Password")
+    new_password1 = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'shadow-border'}),
+                                    label="New Password")
+    new_password2 = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'shadow-border'}),
+                                    label="Confirm New Password")

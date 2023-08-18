@@ -1,6 +1,7 @@
 import pdb
 import random
-
+import re
+from django.contrib.auth import update_session_auth_hash
 from django.shortcuts import get_object_or_404, render
 from django.utils.crypto import get_random_string
 from django.shortcuts import redirect
@@ -18,7 +19,7 @@ from django.utils.encoding import force_bytes, force_str
 from django.core.mail import send_mail
 from django.contrib import messages
 from .forms import UserCreationForm, CustomLoginForm, UpdateEmailForm, UserInfoForm, \
-    VerificationForm  # , ResendActivationEmailForm
+    VerificationForm, UpdatePasswordForm  # , ResendActivationEmailForm
 from .models import Profile, CustomUser
 from Account_Management.models import Account, AccountUserRelation
 from django.contrib.auth.models import Group
@@ -125,6 +126,19 @@ class ProfileList(LoginRequiredMixin, ListView):
         return context
 
 
+def check_password_strength(password):
+    if len(password) < 8:
+        return "Password must be at least 8 characters long. Please try again."
+
+    if not re.search(r'\d', password):
+        return "Password must contain at least one digit. Please try again."
+
+    if not re.search(r'[a-zA-Z]', password):
+        return "Password must contain at least one letter. Please try again."
+
+    return "Password meets the complexity requirements."
+
+
 class UserSettingView(LoginRequiredMixin, View):
     model = Profile
     context_object_name = 'user_settings'
@@ -132,9 +146,13 @@ class UserSettingView(LoginRequiredMixin, View):
 
     def get(self, request):
         current_user = request.user
+
+        # forms render
         user_info_form = UserInfoForm(
             initial={'first_name': current_user.first_name, 'last_name': current_user.last_name})
         update_email_form = UpdateEmailForm(initial={'new_email': current_user.email})
+        update_password_form = UpdatePasswordForm(initial={'old_password': current_user.password})
+
         # get user's role
         user_groups = current_user.groups.all()
         user_roles = [group.name for group in user_groups]
@@ -146,6 +164,7 @@ class UserSettingView(LoginRequiredMixin, View):
         return render(request, self.template_name, {
             'user_info_form': user_info_form,
             'update_email_form': update_email_form,
+            'update_password_form': update_password_form,
             'account': account,
             'user_roles': user_roles[0]})
 
@@ -153,6 +172,7 @@ class UserSettingView(LoginRequiredMixin, View):
         current_user = request.user
         user_info_form = UserInfoForm(request.POST)
         update_email_form = UpdateEmailForm(request.POST)
+        update_password_form = UpdatePasswordForm(request.POST)
 
         if user_info_form.is_valid():
             current_user.first_name = user_info_form.cleaned_data['first_name']
@@ -162,7 +182,6 @@ class UserSettingView(LoginRequiredMixin, View):
 
         if update_email_form.is_valid():
             new_email = update_email_form.cleaned_data['new_email']
-            # current_user.email = new_email
 
             # generate a 6-digit verification code
             verification_code = "".join(random.choices('0123456789', k=6))
@@ -180,6 +199,38 @@ class UserSettingView(LoginRequiredMixin, View):
             self.request.session['verification_code'] = verification_code
             self.request.session['new_email'] = new_email
             return redirect('verify_code')
+
+        if update_password_form.is_valid():
+            old_password = update_password_form.cleaned_data['old_password']
+            if not current_user.check_password(old_password):
+                update_password_form.add_error('old_password', 'Old password is incorrect.')
+            else:
+                new_password1 = update_password_form.cleaned_data['new_password1']
+                new_password2 = update_password_form.cleaned_data['new_password2']
+                password_check_result = check_password_strength(new_password1)
+                if password_check_result != "Password meets the complexity requirements.":
+                    messages.error(self.request, password_check_result, extra_tags='password')
+                elif new_password1 != new_password2:
+                    messages.error(request, "Two passwords don't match. Please try again.", extra_tags='password')
+                else:
+                    current_user.set_password(new_password1)
+                    current_user.save()
+
+                    # Update session auth hash to keep the user logged in
+                    update_session_auth_hash(request, current_user)
+
+                    send_mail(
+                        'Your password has been changed',
+                        'We noticed the password for your Greenhouse account was recently changed. '
+                        'If this was you, you can ignore this email – we’re just checking in.'
+                        'If it wasn’t you, please reset your password to keep your account secure.',
+                        'yifandsb666@gmail.com',
+                        [current_user.email],
+                        fail_silently=False,
+                    )
+                    messages.success(request, 'Your password has been successfully updated. '
+                                              'Remember to keep your password secure and avoid sharing it with anyone.',
+                                     extra_tags='password')
 
         return redirect('user_setting')
 
@@ -215,10 +266,12 @@ class VerifyCodeView(FormView):
             if stored_code == user_entered_code:
                 current_user.email = new_email
                 current_user.save()
-                messages.success(self.request, 'Email address updated successfully.')
+                messages.success(self.request, 'Congratulations! Your email address has been successfully updated.',
+                                 extra_tags='email')
                 return redirect('user_setting')
             else:
                 messages.error(self.request, 'Invalid verification code. Please try again.')
+                return redirect('verify_code')
 
         return self.form_invalid(verify_form)
 

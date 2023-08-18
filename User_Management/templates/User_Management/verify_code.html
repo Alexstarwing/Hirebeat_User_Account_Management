@@ -72,8 +72,16 @@
 {#                                                <a href="{% url 'user_setting' %}" class="btn btn-success">Go Back</a>#}
                                             </div>
                                         </div>
+                                        <div style="margin-top: 20px">
+                                            {% if messages %}
+                                            <ul class="messages">
+                                                {% for message in messages %}
+                                                    <p style="color: red">{{ message }}</p>
+                                                {% endfor %}
+                                            </ul>
+                                        {% endif %}
+                                        </div>
                                     </form>
-
                                 </div>
 
                             </div>
