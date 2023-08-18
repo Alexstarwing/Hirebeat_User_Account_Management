@@ -202,8 +202,9 @@
                                             </select><br><br>
                                             <input type="text" name="company_size" id="companySizeInput" required style="display: none;" readonly>
                                             
-                                            
-                                            <input class="btn btn-primary" type="submit" value="Submit">
+                                            <div class="text-right mb-5">
+                                                <input class="btn btn-primary" type="submit" value="Submit">
+                                            </div>
 
                                             <div style="margin-top: 20px">
                                                 {%if extra_tags is 'basic_info' %}
@@ -237,8 +238,9 @@
                                             
                                             <label for="website">Company Website:</label>
                                             <input type="text" name="website" required class="info"><br><br>
-                                            
-                                            <input class="btn btn-primary" type="submit" value="Submit">
+                                            <div class="text-right mb-5">
+                                                <input class="btn btn-primary" type="submit" value="Submit">
+                                            </div>
                                             <div style="margin-top: 20px">
                                                 {%for message in messages %}
                                                    {%if "info" == message.tags %}
@@ -271,9 +273,10 @@
                                             <input type="text" name="user_id" required class="summary"><br>
                                             
                                             <label for="summary">Company Summary:</label>
-                                            <textarea name="summary" id="summary" rows="10" cols="45" class="summary">{{ form.company_summary.value }}</textarea><br><br>
-
-                                            <input class="btn btn-primary" type="submit" value="Submit">
+                                            <textarea name="summary" id="summary" rows="10" cols="45" class="summary" placeholder=" Description ...">{{ form.company_summary.value }}</textarea><br><br>
+                                            <div class="text-right mb-5">
+                                                <input class="btn btn-primary" type="submit" value="Submit">
+                                            </div>
                                             
                                             <div style="margin-top: 20px">
                                                 {%if extra_tags is 'summary' %}
@@ -287,8 +290,62 @@
                         </div>
                     </div>
                 </div>
+                <div class="card card-form">
+                    <div class="row no-gutters">
+                        <div class="col-lg-4 card-body">
+                            <p><strong class="headings-color">Social links</strong></p>
+                            <p class="text-muted mb-0">Create or update your social links.</p>
+                        </div>
+                        <div class="col-lg-8 card-form__body card-body">
+                            
+                            <div class="form-group">
+                                <label for="social1">Social links</label>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <form method="post" action="{% url 'account_management:edit_account' %}">
+                                        {% csrf_token %}
+                                        <div class="input-group input-group-merge mb-2">
+                                            <input id="social3" type="text" name="linkedin" class="form-control form-control-prepended" placeholder="linkedin">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">
+                                                    <span class="fab fa-linkedin text-linkedin"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="input-group input-group-merge mb-2">
+                                            <input id="social1" type="text" name="facebook" class="form-control form-control-prepended" placeholder="Facebook">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">
+                                                    <span class="fab fa-facebook text-facebook"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="input-group input-group-merge mb-2">
+                                            <input id="social2" type="text" name="twitter" class="form-control form-control-prepended" placeholder="Twitter">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">
+                                                    <span class="fab fa-twitter text-twitter"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+        
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="text-right mb-5">
+                                <a href="" class="btn btn-primary">Save</a>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                
             </div>
         </div>
+        
         <script>
 
             

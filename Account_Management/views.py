@@ -87,10 +87,11 @@ class AccountSettingView(LoginRequiredMixin, View):
             account.organization = org_form.cleaned_data['organization']
             account.save()
             return redirect('account_management:edit_account')
-        else:
-            self.create_or_update_employer_basic_info(request)
-            self.create_or_update_employer_info(request)
-            self.create_or_update_employer_summary(request)
+        
+        self.create_or_update_employer_basic_info(request)
+        self.create_or_update_employer_info(request)
+        self.create_or_update_employer_summary(request)
+        self.create_or_update_employer_social_media(request)
 
         #return render(request, self.template_name, {'org_form': org_form})
         # Thinking of rediect user to organiztion, which view the changes.
@@ -173,6 +174,31 @@ class AccountSettingView(LoginRequiredMixin, View):
                                  extra_tags='summary')
             
         return redirect('account_management:organization')
+    
+    # create_or_update_employer_social_media: Creates or updates an employer's social media profiles
+    def create_or_update_employer_social_media(self, request):
+        company_domain = request.POST.get("user_id")
+        company_linkedin = request.POST.get("linkedin")
+        company_facebook = request.POST.get("facebook")
+        company_twitter = request.POST.get("twitter")
+
+        account, created = Account.objects.get_or_create(
+            company_domain=company_domain,
+            defaults={
+                'company_linkedin': company_linkedin,
+                'company_facebook': company_facebook,
+                'company_twitter': company_twitter
+            }
+        )
+
+        if not created:
+            account.company_linkedin = company_linkedin
+            account.company_facebook = company_facebook
+            account.company_twitter = company_twitter
+            account.save()
+
+        return redirect('account_management:organization')
+        #return Response("Create or Update employer social media successfully", status=status.HTTP_201_CREATED)
 
 
 
@@ -432,30 +458,6 @@ def acccountSettings(request):
     return render(request, 'accounts/origanization.html', context)
 
 
-# create_or_update_employer_social_media: Creates or updates an employer's social media profiles
-@api_view(['POST'])
-def create_or_update_employer_social_media(request):
-    company_domain = request.data["user_id"]
-    company_linkedin = request.data["linkedin"]
-    company_facebook = request.data["facebook"]
-    company_twitter = request.data["twitter"]
-
-    account, created = Account.objects.get_or_create(
-        company_domain=company_domain,
-        defaults={
-            'company_linkedin': company_linkedin,
-            'company_facebook': company_facebook,
-            'company_twitter': company_twitter
-        }
-    )
-
-    if not created:
-        account.company_linkedin = company_linkedin
-        account.company_facebook = company_facebook
-        account.company_twitter = company_twitter
-        account.save()
-
-    return Response("Create or Update employer social media successfully", status=status.HTTP_201_CREATED)
 
 
 def delete_account(request, account):

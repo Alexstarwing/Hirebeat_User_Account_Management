@@ -20,8 +20,7 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
 from django.core.mail import send_mail
 from django.contrib import messages
-from .forms import UserCreationForm, CustomLoginForm, UpdateEmailForm, UserInfoForm, \
-    VerificationForm, UpdatePasswordForm  # , ResendActivationEmailForm
+from .forms import UserCreationForm, CustomLoginForm, UpdateEmailForm, UserInfoForm, UpdatePasswordForm , VerificationForm  # , ResendActivationEmailForm
 from .models import Profile, CustomUser
 from Account_Management.models import Account, AccountUserRelation
 from django.contrib.auth.models import Group
