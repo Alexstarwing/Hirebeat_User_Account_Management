@@ -343,7 +343,7 @@ class OrganizationView(LoginRequiredMixin, ListView):
         user_roles = [group.name for group in user_groups]
         account = self.get_account_for_user(current_user)
         company_name = get_company_name(current_user)
-        company_name_exists = check_company_name_existence('company_name')
+        company_name_exists = check_company_name_existence(company_name)
         return render(request, self.template_name, {'user_roles': user_roles[0], 'company_name': company_name,
                                                     'company_name_exists': company_name_exists, 'account': account})
 
@@ -465,12 +465,14 @@ def getAccount(user):
 
 def get_company_name(user):
     account = getAccount(user)
-    company_name = account.company_name
+    company_name = account.organization
+    # company_name = account.company_name
     return company_name
 
 
 def check_company_name_existence(target_name):
-    if Account.objects.filter(company_name=target_name).exists():
+    if Account.objects.filter(organization=target_name).exists():
+    # if Account.objects.filter(company_name=target_name).exists():
         return "Company name is existed"
     else:
         return "Company name is brand new!"
