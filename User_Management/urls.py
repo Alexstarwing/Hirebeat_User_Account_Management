@@ -26,6 +26,6 @@ urlpatterns = [
          name='password_reset_complete'),  # Password successfully changed message
     path('delete_account/<int:account_id>/', views.delete_account, name='delete_account'),
     path('user_setting/', UserSettingView.as_view(), name='user_setting'),
-    path('verify_code/', VerifyCodeView.as_view(), name='verify_code'),
+    #path('verify_code/', VerifyCodeView.as_view(), name='verify_code'),
 #     path('resend_activation_email/', ResendActivationEmailView.as_view(), name='resend_activation_email')
 ]
