@@ -71,18 +71,16 @@
                                   <div class="form-group">
                                       <label for="npass">New Email:</label>
                                       {{ update_email_form.new_email }}
-{#                                        message#}
-                                      <div style="margin-top: 20px">
-                                          {%for message in messages %}
-                                             {%if "email" in message.tags %}
-                                                  <p> {{message}} </p>   {# show login error message #}
-                                             {%endif%}
-                                          {%endfor%}
-                                      </div>
-
                                   </div>
                                   <div class="col" style="margin-top: 15px">
                                     <button type="submit" class="btn btn-primary">Change</button>
+                                  </div>
+                                  <div style="margin-top: 20px">
+                                      {%for message in messages %}
+                                         {%if "email" in message.tags %}
+                                              <p> {{message}} </p>
+                                         {%endif%}
+                                      {%endfor%}
                                   </div>
                               </form>
                           </div>
@@ -109,27 +107,24 @@
 
                                   <div class="form-group" style="margin-top: 20px">
                                       <label for="npass">New Password:</label>
-{#                                      <input id="npass" type="password" class="form-control is-invalid">#}
                                       {{ update_password_form.new_password1 }}
                                       <small class="invalid-feedback">The new password must not be empty.</small>
                                   </div>
 
                                   <div class="form-group" style="margin-top: 20px">
                                       <label for="cpass">Confirm Password:</label>
-{#                                      <input id="cpass" type="password" class="form-control" placeholder="Confirm password">#}
                                       {{ update_password_form.new_password2 }}
                                   </div>
-
-                                  <div style="margin-top: 20px">
-                                      <div style="margin-top: 20px">
-                                          {%for message in messages %}
-                                             {%if "password" in message.tags %}
-                                                  <p> {{message}} </p>   {# show login error message #}
-                                             {%endif%}
-                                          {%endfor%}
-                                      </div>
+                                  <div class="col">
+                                      <button type="submit" class="btn btn-primary" style="margin-top: 20px">Save</button>
                                   </div>
-                                  <button type="submit" class="btn btn-primary" style="margin-top: 20px">Save</button>
+                                  <div style="margin-top: 20px">
+                                      {%for message in messages %}
+                                         {%if "password" in message.tags %}
+                                              <p> {{message}} </p>
+                                         {%endif%}
+                                      {%endfor%}
+                                  </div>
                               </form>
                           </div>
                         </div>

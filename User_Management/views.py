@@ -1,6 +1,6 @@
 import pdb
 import random
-
+import re
 from django.contrib.auth import update_session_auth_hash
 from django.shortcuts import get_object_or_404, render
 from django.utils.crypto import get_random_string
@@ -126,6 +126,19 @@ class ProfileList(LoginRequiredMixin, ListView):
         return context
 
 
+def check_password_strength(password):
+    if len(password) < 8:
+        return "Password must be at least 8 characters long. Please try again."
+
+    if not re.search(r'\d', password):
+        return "Password must contain at least one digit. Please try again."
+
+    if not re.search(r'[a-zA-Z]', password):
+        return "Password must contain at least one letter. Please try again."
+
+    return "Password meets the complexity requirements."
+
+
 class UserSettingView(LoginRequiredMixin, View):
     model = Profile
     context_object_name = 'user_settings'
@@ -194,7 +207,12 @@ class UserSettingView(LoginRequiredMixin, View):
             else:
                 new_password1 = update_password_form.cleaned_data['new_password1']
                 new_password2 = update_password_form.cleaned_data['new_password2']
-                if new_password1 == new_password2:
+                password_check_result = check_password_strength(new_password1)
+                if password_check_result != "Password meets the complexity requirements.":
+                    messages.error(self.request, password_check_result, extra_tags='password')
+                elif new_password1 != new_password2:
+                    messages.error(request, "Two passwords don't match. Please try again.", extra_tags='password')
+                else:
                     current_user.set_password(new_password1)
                     current_user.save()
 
@@ -210,7 +228,9 @@ class UserSettingView(LoginRequiredMixin, View):
                         [current_user.email],
                         fail_silently=False,
                     )
-                    messages.success(request, 'Password updated successfully.', extra_tags='password')
+                    messages.success(request, 'Your password has been successfully updated. '
+                                              'Remember to keep your password secure and avoid sharing it with anyone.',
+                                     extra_tags='password')
 
         return redirect('user_setting')
 
@@ -246,7 +266,8 @@ class VerifyCodeView(FormView):
             if stored_code == user_entered_code:
                 current_user.email = new_email
                 current_user.save()
-                messages.success(self.request, 'Email address updated successfully.', extra_tags='email')
+                messages.success(self.request, 'Congratulations! Your email address has been successfully updated.',
+                                 extra_tags='email')
                 return redirect('user_setting')
             else:
                 messages.error(self.request, 'Invalid verification code. Please try again.')
