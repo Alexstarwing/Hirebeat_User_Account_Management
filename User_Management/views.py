@@ -20,7 +20,7 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
 from django.core.mail import send_mail
 from django.contrib import messages
-from .forms import UserCreationForm, CustomLoginForm, UpdateEmailForm, UserInfoForm, UpdatePasswordForm , VerificationForm  # , ResendActivationEmailForm
+from .forms import UserCreationForm, CustomLoginForm, UpdateEmailForm, UserInfoForm, UpdatePasswordForm , VerificationForm, ResendActivationEmailForm
 from .models import Profile, CustomUser
 from Account_Management.models import Account, AccountUserRelation
 from django.contrib.auth.models import Group
@@ -41,7 +41,7 @@ class RegisterPage(FormView):
     form_class = UserCreationForm
     redirect_authenticated_user = True
     success_url = reverse_lazy('profiles')  # where user will be redirect after success registration
-    email_sent = False
+    # email_sent = False
 
     def form_valid(self, form):
         user = form.save(commit=False)
@@ -58,7 +58,7 @@ class RegisterPage(FormView):
             'token': token,
         })
         send_mail(mail_subject, message, 'yifandsb666@gmail.com', [user.email])
-        self.email_sent = True
+        self.request.session['email_sent'] = True
         # pdb.set_trace()
         email_sent_message = "Activation email has been sent to your email address."  # flash message
         messages.success(self.request, email_sent_message)
@@ -70,9 +70,11 @@ class RegisterPage(FormView):
     def get(self, *args, **kwargs):
         if self.request.user.is_authenticated:
             return redirect('profiles')  # Redirect to the home page
-        resend_verification = self.request.GET.get('resend_verification')
-        if resend_verification == 'true':
-            return self.resend_activation_email()
+        if 'email_sent' in self.request.session:
+            del self.request.session['email_sent']
+        # resend_verification = self.request.GET.get('resend_verification')
+        # if resend_verification == 'true':
+        #     return self.resend_activation_email()
         return super().get(*args, **kwargs)
     
     # def post(self, *args, **kwargs):
@@ -83,52 +85,59 @@ class RegisterPage(FormView):
     #     else:
     #         return super().post(*args, **kwargs)
         
-    def resend_activation_email(self):
-        if self.email_sent:
-            user = self.request.user 
-            if not user.is_active:
-                token = default_token_generator.make_token(user)
-                current_site = get_current_site(self.request)
-                mail_subject = 'Resend Activation Email'
-                message = render_to_string('User_Management/account_activation_email.html', {
-                    'user': user,
-                    'domain': current_site.domain,
-                    'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-                    'token': token,
-                })
-                send_mail(mail_subject, message, 'yifandsb666@gmail.com', [user.email])
-                email_sent_message = "Activation email has been resent to your email address."
-                messages.success(self.request, email_sent_message)
-            else:
-                messages.warning(self.request, "Account is already active or user is not authenticated.")
-        else:
-            messages.warning(self.request, "Please submit the form first to initiate the verification email.")
+    # def resend_activation_email(self):
+    #     if self.email_sent:
+    #         user = self.request.user 
+    #         if not user.is_active:
+    #             token = default_token_generator.make_token(user)
+    #             current_site = get_current_site(self.request)
+    #             mail_subject = 'Resend Activation Email'
+    #             message = render_to_string('User_Management/account_activation_email.html', {
+    #                 'user': user,
+    #                 'domain': current_site.domain,
+    #                 'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+    #                 'token': token,
+    #             })
+    #             send_mail(mail_subject, message, 'yifandsb666@gmail.com', [user.email])
+    #             email_sent_message = "Activation email has been resent to your email address."
+    #             messages.success(self.request, email_sent_message)
+    #         else:
+    #             messages.warning(self.request, "Account is already active or user is not authenticated.")
+    #     else:
+    #         messages.warning(self.request, "Please submit the form first to initiate the verification email.")
         
-        return self.render_to_response(self.get_context_data(form=self.form))
+    #     return self.render_to_response(self.get_context_data(form=self.form))
 
-# class ResendActivationEmailView(View):
-#     template_name = 'User_Management/resend_activation_email.html'
-    
-#     def post(self, request, *args, **kwargs):
-#         email = request.POST.get('email')
-#         user = CustomUser.objects.filter(email=email).first()
+class ResendActivationView(FormView):
+    template_name = 'User_Management/resend_activation.html'
+    form_class = ResendActivationEmailForm
+    success_url = reverse_lazy('login')  
 
-        # if user and not user.is_active:
-        #     token = default_token_generator.make_token(user)
-        #     current_site = get_current_site(request)
-        #     mail_subject = 'Activate your account'
-        #     message = render_to_string('User_Management/account_activation_email.html', {
-        #         'user': user,
-        #         'domain': current_site.domain,
-        #         'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-        #         'token': token,
-        #     })
-        #     send_mail(mail_subject, message, 'yifandsb666@gmail.com', [user.email])
-        #     message = "Activation email has been resent to your email address."
-        # else:
-        #     message = "No account found with the provided email or the account is already active."
+    def form_valid(self, form):
+        user = self.request.user
+        try:
+            user = CustomUser.objects.get(email=form.cleaned_data['email'])
+        except CustomUser.DoesNotExist:
+            messages.error(self.request, "No account with this email exists.")
+            return super().form_valid(form)
+        
+        if not user.is_active:
+            token = default_token_generator.make_token(user)
+            current_site = get_current_site(self.request)
+            mail_subject = 'Resend Activation Email'
+            message = render_to_string('User_Management/account_activation_email.html', {
+                'user': user,
+                'domain': current_site.domain,
+                'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+                'token': token,
+            })
+            send_mail(mail_subject, message, 'yifandsb666@gmail.com', [user.email])
+            email_sent_message = "Activation email has been resent to your email address."
+            messages.success(self.request, email_sent_message)
+        else:
+            messages.warning(self.request, "Account is already active.")
 
-#         return render(request, self.template_name, {'message': message})
+        return super().form_valid(form)
 
 class ActivateAccount(View):
     def get(self, request, uidb64, token, *args, **kwargs):
@@ -334,34 +343,6 @@ class VerifyCodeView(FormView):
                 return redirect('verify_code')
 
         return self.form_invalid(verify_form)
-
-
-# def resend_activation_email(request):
-#     if request.user.is_authenticated:
-#         return redirect('profiles')
-
-#     form = ResendActivationEmailForm(request.POST)
-#     if form.is_valid():
-#         email = form.cleaned_data["email"]
-#         user = User.objects.filter(email=email, is_active=0)
-
-#         if not user.count():
-#             form._errors["email"] = ["Account for email address is not registered or already activated."]
-
-#         token = default_token_generator.make_token(user)
-#         current_site = get_current_site(request)
-#         mail_subject = 'Activate your account'
-#         message = render_to_string('User_Management/account_activation_email.html', {
-#             'user': user,
-#             'domain': current_site.domain,
-#             'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-#             'token': token,
-#         })
-#         send_mail(mail_subject, message, 'yifandsb666@gmail.com', [user.email])
-#         return redirect('resend_activation_email') 
-
-#     return HttpResponse("An error occurred or the form is not valid.")
-
 
 def delete_account(request, account_id):
     account = get_object_or_404(Account, id=account_id)

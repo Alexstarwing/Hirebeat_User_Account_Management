@@ -1,0 +1,30 @@
+{% extends 'User_Management/main_1.html' %}
+{% block content %}
+    <title>Resend Activation</title>
+</head>
+
+<body class="layout-login-centered-boxed">
+    <div class="layout-login-centered-boxed__form">
+        <div class="card card-body">
+            <h2 class="text-center">Resend Activation Email</h2>
+            <form method="post">
+                {% csrf_token %}
+                {% if messages %}
+                    <ul class="messages">
+                        {% for message in messages %}
+                            <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+                {{ form.errors }}
+                <div class="form-group text-center">
+                    <label for="{{ form.email.id_for_label }}" class="text-label">Email:</label>
+                    <div class="input-group input-group-merge">
+                        {{ form.email }}
+                    </div>
+                    <button class="btn btn-primary" type="submit">Resend Activation Email</button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock content %}
