@@ -83,12 +83,10 @@
                 {{form.errors}} <!--Display the error message-->
                 <div class="form-group text-center">
                     <button class="btn btn-primary mb-2" type="submit">Create Account</button><br>
-                    {% if email_sent %}
-                        <a href="{% url 'register' %}?resend_verification=true" class="btn btn-primary">Resend Verification Email</a>
-                    <!-- <button type="submit" name="resend_verification" value="true">Resend Verification Email</button> -->
+                    <span>Have an account?</span> <a class="text-body text-underline" href="{% url 'login' %}"> Login</a><br>
+                    {% if request.session.email_sent %}
+                        <span>Email not received?</span> <a class="text-body text-underline" href="{% url 'resend_activation' %}">Resend</a>
                     {% endif %}
-                    <span>Have an account?</span> <a class="text-body text-underline" href="{% url 'login' %}"> Login</a>
-                    <!-- <span>Didn't receive the activation email?</span> <a class="text-body text-underline" href="{% url 'resend_activation_email' %}"> Resend activation email</a> -->
                 </div>
             </form>
         </div>

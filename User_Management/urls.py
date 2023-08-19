@@ -1,6 +1,6 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views
-from .views import ProfileList, CustomLoginView, RegisterPage, ActivateAccount, UserSettingView, VerifyCodeView
+from .views import ProfileList, CustomLoginView, RegisterPage, ActivateAccount, UserSettingView, ResendActivationView#VerifyCodeView
 from django.contrib.auth.views import LogoutView
 from . import views
 
@@ -10,7 +10,6 @@ urlpatterns = [
     path('logout/', LogoutView.as_view(next_page='login'), name='logout'),
     path('register/', RegisterPage.as_view(), name='register'),
     path('', ProfileList.as_view(), name='profiles'),
-    #     path('resend_activation_email/', resend_activation_email, name='resend_activation_email'),
     path('activate/<uidb64>/<token>/', ActivateAccount.as_view(), name='activate'),
     path('reset_password/',
          auth_views.PasswordResetView.as_view(template_name='User_Management/password_reset.html'),
@@ -27,5 +26,5 @@ urlpatterns = [
     path('delete_account/<int:account_id>/', views.delete_account, name='delete_account'),
     path('user_setting/', UserSettingView.as_view(), name='user_setting'),
     #path('verify_code/', VerifyCodeView.as_view(), name='verify_code'),
-#     path('resend_activation_email/', ResendActivationEmailView.as_view(), name='resend_activation_email')
+    path('resend_activation/', ResendActivationView.as_view(), name='resend_activation'),
 ]
