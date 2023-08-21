@@ -5,26 +5,45 @@
 
 <body class="layout-login-centered-boxed">
     <div class="layout-login-centered-boxed__form">
-        <div class="card card-body">
-            <h2 class="text-center">Resend Activation Email</h2>
-            <form method="post">
-                {% csrf_token %}
-                {% if messages %}
-                    <ul class="messages">
-                        {% for message in messages %}
-                            <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-                        {% endfor %}
-                    </ul>
-                {% endif %}
-                {{ form.errors }}
-                <div class="form-group text-center">
-                    <label for="{{ form.email.id_for_label }}" class="text-label">Email:</label>
-                    <div class="input-group input-group-merge">
-                        {{ form.email }}
-                    </div>
-                    <button class="btn btn-primary" type="submit">Resend Activation Email</button>
-                </div>
-            </form>
+        <div class="d-flex flex-column justify-content-center align-items-center mt-2 mb-4 navbar-light">
+            <a href="index.html" class="navbar-brand text-center mb-2 mr-0 flex-column" style="min-width: 0">
+                <!-- LOGO -->
+                <img id="icon" src="https://hirebeat-assets.s3.amazonaws.com/HireBeatLogo2.png" alt="HireBeat Logo"/> </img>
+
+                <span class="mt-2">Resend Activation Email</span>
+            </a>
         </div>
-    </div>
+        <div class="card card-body">
+            <div style="margin: auto; width: 79.5%; font-family: Arial, Helvetica, sans-serif;">
+                    <p class="margin medium-small">
+                        Haven't receive the email? Enter your email address below, and we’ll email you a new one.
+                    </p>
+            </div>
+            <!-- <h2 class="text-center">Resend Activation Email</h2> -->
+                <form method="post">
+                    {% csrf_token %}
+                    {% if messages %}
+                        <ul class="messages">
+                            {% for message in messages %}
+                                <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                    {{ form.errors }}
+                    <div class="form-group text-center">
+                        <div class="input-field col s12" style="vertical-align: middle;">
+                            <i class="material-icons prefix">mail_outline</i>
+                            <label for="{{ form.email.id_for_label }}" style="display: inline-block; vertical-align: middle;" id="email_label"> </label>
+                            {{form.email}}
+                        </div>
+                        <br>
+                        <!-- <label for="{{ form.email.id_for_label }}" class="text-label">Email:</label>
+                        <div class="input-group input-group-merge" style="display: inline;">
+                            {{ form.email }}
+                        </div> -->
+                        <button class="btn btn-primary" type="submit">Resend</button>
+                    </div>
+                </form>
+            </div>
+        </div>
 {% endblock content %}
