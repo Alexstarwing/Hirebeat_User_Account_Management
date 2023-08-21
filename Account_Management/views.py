@@ -240,10 +240,10 @@ class AddUserView(LoginRequiredMixin, View):
         try:
             current_account = self.get_account_for_user(request.user)
             if not current_account.organization:
-                messages.warning(request, "Please assign an organization first.")
+                messages.warning(request, "Please assign an organization first.", extra_tags='manage')
                 return redirect(self.assign_org_url)
         except AccountUserRelation.DoesNotExist:
-            messages.warning(request, "Please assign an organization first.")
+            messages.warning(request, "Please assign an organization first.", extra_tags='manage')
             return redirect(self.assign_org_url)
 
         return super().dispatch(request, *args, **kwargs)
@@ -421,10 +421,10 @@ class ManageUserView(View):
 
             # Check if organization name is assigned, if not, redirect with a message
             if not current_account.organization:
-                messages.warning(request, "Please assign an organization first.")
+                messages.warning(request, "Please assign an organization first.", extra_tags='manage')
                 return redirect(self.assign_org_url)
         except AccountUserRelation.DoesNotExist:  # except Account.DoesNotExist:
-            messages.warning(request, "Please assign an organization first.")
+            messages.warning(request, "Please assign an organization first.", extra_tags='manage')
             return redirect(self.assign_org_url)
 
         return super().dispatch(request, *args, **kwargs)
