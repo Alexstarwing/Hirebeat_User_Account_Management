@@ -137,7 +137,13 @@
                                         {{ company_name }}
                                         <br><br> -->
 
-                                        
+                                        <div style="margin-top: 20px">
+                                            {%for message in messages %}
+                                               {%if "manage" in message.tags %}
+                                                    <p> {{message}} </p>
+                                               {%endif%}
+                                            {%endfor%}
+                                        </div>
                                         
                                         <form method="post" class="form-inline">
                                             {% csrf_token %}
@@ -207,9 +213,11 @@
                                             </div>
 
                                             <div style="margin-top: 20px">
-                                                {%if extra_tags is 'basic_info' %}
-                                                    <p> {{message}} </p>
-                                                {%endif%}
+                                                {%for message in messages %}
+                                                   {%if "basic_info" in message.tags %}
+                                                        <p> {{message}} </p>
+                                                   {%endif%}
+                                                {%endfor%}
                                             </div>
                                         </form>
                                     </div>
@@ -243,7 +251,7 @@
                                             </div>
                                             <div style="margin-top: 20px">
                                                 {%for message in messages %}
-                                                   {%if "info" == message.tags %}
+                                                   {%if "info" in message.tags %}
                                                         <p> {{message}} </p>
                                                    {%endif%}
                                                 {%endfor%}
@@ -279,9 +287,11 @@
                                             </div>
                                             
                                             <div style="margin-top: 20px">
-                                                {%if extra_tags is 'summary' %}
+                                                {%for message in messages %}
+                                                   {%if "summary" in message.tags %}
                                                         <p> {{message}} </p>
                                                    {%endif%}
+                                                {%endfor%}
                                             </div>
                                         </form>
                                     </div>
