@@ -20,7 +20,8 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
 from django.core.mail import send_mail
 from django.contrib import messages
-from .forms import UserCreationForm, CustomLoginForm, UpdateEmailForm, UserInfoForm, UpdatePasswordForm , VerificationForm, ResendActivationEmailForm
+from .forms import UserCreationForm, CustomLoginForm, UpdateEmailForm, UserInfoForm, UpdatePasswordForm, \
+    VerificationForm, ResendActivationEmailForm
 from .models import Profile, CustomUser
 from Account_Management.models import Account, AccountUserRelation
 from django.contrib.auth.models import Group
@@ -41,6 +42,7 @@ class RegisterPage(FormView):
     form_class = UserCreationForm
     redirect_authenticated_user = True
     success_url = reverse_lazy('profiles')  # where user will be redirect after success registration
+
     # email_sent = False
 
     def form_valid(self, form):
@@ -76,7 +78,7 @@ class RegisterPage(FormView):
         # if resend_verification == 'true':
         #     return self.resend_activation_email()
         return super().get(*args, **kwargs)
-    
+
     # def post(self, *args, **kwargs):
     #     if "create_account" in self.request.POST:
     #         return self.form_valid(self.get_form())  # Manually call form_valid for account creation
@@ -84,7 +86,7 @@ class RegisterPage(FormView):
     #         return self.resend_activation_email()
     #     else:
     #         return super().post(*args, **kwargs)
-        
+
     # def resend_activation_email(self):
     #     if self.email_sent:
     #         user = self.request.user 
@@ -105,13 +107,14 @@ class RegisterPage(FormView):
     #             messages.warning(self.request, "Account is already active or user is not authenticated.")
     #     else:
     #         messages.warning(self.request, "Please submit the form first to initiate the verification email.")
-        
+
     #     return self.render_to_response(self.get_context_data(form=self.form))
+
 
 class ResendActivationView(FormView):
     template_name = 'User_Management/resend_activation.html'
     form_class = ResendActivationEmailForm
-    success_url = reverse_lazy('login')  
+    success_url = reverse_lazy('login')
 
     def form_valid(self, form):
         user = self.request.user
@@ -120,7 +123,7 @@ class ResendActivationView(FormView):
         except CustomUser.DoesNotExist:
             messages.error(self.request, "No account with this email exists.")
             return super().form_valid(form)
-        
+
         if not user.is_active:
             token = default_token_generator.make_token(user)
             current_site = get_current_site(self.request)
@@ -139,6 +142,7 @@ class ResendActivationView(FormView):
 
         return super().form_valid(form)
 
+
 class ActivateAccount(View):
     def get(self, request, uidb64, token, *args, **kwargs):
         try:
@@ -149,6 +153,7 @@ class ActivateAccount(View):
         # pdb.set_trace()  # 断点
         if user is not None and default_token_generator.check_token(user, token):
             user.is_active = True
+            user.is_staff = False
             user.profile.email_confirmed = True
             user.save()
 
@@ -343,6 +348,7 @@ class VerifyCodeView(FormView):
                 return redirect('verify_code')
 
         return self.form_invalid(verify_form)
+
 
 def delete_account(request, account_id):
     account = get_object_or_404(Account, id=account_id)
