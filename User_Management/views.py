@@ -179,6 +179,7 @@ class ProfileList(LoginRequiredMixin, ListView):
         user_roles = [group.name for group in user_groups]
         # pdb.set_trace()  # 断点
         return force_str(user_roles)
+    
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -369,6 +370,16 @@ def delete_account(request, account_id):
         account.delete()
 
         email_sent_message = "Your Account Has Been Deleted!"
+        messages.success(request, email_sent_message)
+
+        return redirect('login')
+    
+def create_company_name(request, account):
+
+    if request.method == 'POST':
+        account.account_name = request.POST.get("name")
+
+        email_sent_message = "Your Account Name Has Been Updated!"
         messages.success(request, email_sent_message)
 
         return redirect('login')
