@@ -57,12 +57,14 @@
             height: 100%;
             background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
             position: fixed; /* Set position to fixed */
+            
+
         }
         
         #popup-modal .modal-content {
             background-color: white;
             padding: 20px;
-            border-radius: 5px;
+            border-radius: 15px;
             
             width: 40%; /* Adjust the width as desired */
             height: 60%;
@@ -83,14 +85,17 @@
         <div id="popup-modal" class="modal">
             <div class="modal-content"><br><br><br>
                 <h3>Please fill in the Company Name</h3><br><br><br>
-                <form>
+                <form method="post" action="{% url 'update_company_name' account.id %}">
+                    {% csrf_token %}
                     <!-- Form fields will go here -->
                     <div>
                         <label for="company_name">Company Name:</label>
                         <input type="text" id="company_name" name="company_name" required><br><br><br><br>
                     </div>
+                    <button id="submit-button" type="submit" class="btn btn-primary" style="margin-left: 110px;">Submit</button>
                 </form>
-                <button id="close-modal-btn" type="submit">Submit</button>
+                
+
             </div>
         </div>
     {% endif %} 

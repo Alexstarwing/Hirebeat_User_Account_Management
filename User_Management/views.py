@@ -374,12 +374,13 @@ def delete_account(request, account_id):
 
         return redirect('login')
     
-def create_company_name(request, account):
-
+    
+def update_company_name(request, account_id):
+    account = Account.objects.get(id=account_id)
     if request.method == 'POST':
-        account.account_name = request.POST.get("name")
+        company_name = request.POST.get('company_name')
+        account.company_name = company_name
+        account.save()
+    return redirect('login')  # Redirect to the desired page after submission
 
-        email_sent_message = "Your Account Name Has Been Updated!"
-        messages.success(request, email_sent_message)
 
-        return redirect('login')
