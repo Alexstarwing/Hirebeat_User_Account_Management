@@ -28,5 +28,4 @@ urlpatterns = [
     path('user_setting/', UserSettingView.as_view(), name='user_setting'),
     path('verify_code/', VerifyCodeView.as_view(), name='verify_code'),
     path('resend_activation/', ResendActivationView.as_view(), name='resend_activation'),
-    path('pop-up/', ProfileList.as_view(), name='pop-up'),
 ]
