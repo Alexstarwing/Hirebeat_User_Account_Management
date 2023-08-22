@@ -84,6 +84,15 @@
                     color: #1167C9;
                 }
 
+                .shadow-border {
+                    border: none;
+                    border-bottom: 1px solid transparent;
+                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                    background-color: #F9F9F9;
+                    width: 100%;
+                    padding: 5px;
+                }
+
             </style>
         </head>
         <body>
@@ -113,7 +122,7 @@
                             <div class="input-field col s12">
                                 <i class="material-icons prefix">group</i>
                                 <label for="{{ form.role_type.id_for_label }}" style="vertical-align: middle;" id="role_type_label">Role: </label>
-                                <select name="{{ form.role_type.name }}" id="{{ form.role_type.id_for_label }}">
+                                <select name="{{ form.role_type.name }}" id="{{ form.role_type.id_for_label }}" class="shadow-border">
                                     {% for role_choice in form.role_type.field.choices %}
                                         <option value="{{ role_choice.0 }}">{{ role_choice.1 }}</option>
                                     {% endfor %}
