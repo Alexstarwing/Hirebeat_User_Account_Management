@@ -277,7 +277,7 @@ class UserSettingView(LoginRequiredMixin, View):
         if update_password_form.is_valid():
             old_password = update_password_form.cleaned_data['old_password']
             if not current_user.check_password(old_password):
-                update_password_form.add_error('old_password', 'Old password is incorrect.')
+                messages.error(request, "Old message type in incorrect. Please try again", extra_tags='password')
             else:
                 new_password1 = update_password_form.cleaned_data['new_password1']
                 new_password2 = update_password_form.cleaned_data['new_password2']
