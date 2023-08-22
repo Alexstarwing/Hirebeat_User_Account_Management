@@ -23,7 +23,7 @@ from django.contrib import messages
 from .forms import UserCreationForm, CustomLoginForm, UpdateEmailForm, UserInfoForm, UpdatePasswordForm, \
     VerificationForm, ResendActivationEmailForm
 from .models import Profile, CustomUser
-from Account_Management.models import Account, AccountUserRelation
+from Account_Management.models import Account, AccountUserRelation, TeamInvitation
 from django.contrib.auth.models import Group
 
 
@@ -179,7 +179,6 @@ class ProfileList(LoginRequiredMixin, ListView):
         user_roles = [group.name for group in user_groups]
         # pdb.set_trace()  # 断点
         return force_str(user_roles)
-    
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -339,8 +338,24 @@ class VerifyCodeView(FormView):
 
             # verify whether is code is correct
             if stored_code == user_entered_code:
+                # update email in TeamInvitation
+                current_user = self.request.user
+                user_groups = current_user.groups.all()
+                user_roles = [group.name for group in user_groups]
+                if force_str(user_roles) != "['Admin Group']":
+                    TeamInvitation.objects.filter(invited_email=current_user.email).update(invited_email=new_email)
+
                 current_user.email = new_email
                 current_user.save()
+
+                TeamInvitation.objects.filter(user=current_user).update(invited_email=new_email)
+                teamInvitation = TeamInvitation.objects.filter(user=current_user)
+                for element in teamInvitation:
+                    if element == 'invited_email':
+                        print('have invited email')
+                    else:
+                        print(element)
+                # pdb.set_trace()
                 messages.success(self.request, 'Congratulations! Your email address has been successfully updated.',
                                  extra_tags='email')
                 return redirect('user_setting')
@@ -373,8 +388,8 @@ def delete_account(request, account_id):
         messages.success(request, email_sent_message)
 
         return redirect('login')
-    
-    
+
+
 def update_company_name(request, account_id):
     account = Account.objects.get(id=account_id)
     if request.method == 'POST':
@@ -382,5 +397,3 @@ def update_company_name(request, account_id):
         account.company_name = company_name
         account.save()
     return redirect('login')  # Redirect to the desired page after submission
-
-
