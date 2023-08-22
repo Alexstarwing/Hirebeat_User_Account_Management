@@ -48,9 +48,58 @@
             font-family: 'Rubik', sans-serif;
 
         }
+
+        #popup-modal.modal {
+            display: none;
+            top: 0;
+            left: 0;
+            width: 100%; /* Adjust the width as desired */
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+            position: fixed; /* Set position to fixed */
+            
+
+        }
+        
+        #popup-modal .modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 15px;
+            
+            width: 40%; /* Adjust the width as desired */
+            height: 60%;
+            position: absolute;
+            transform: translate(90%, 40%); /* Center the content vertically and horizontally */
+            display: flex;
+            flex-direction: column;
+            
+            align-items: center; /* Center horizontally */
+        }
+        
+        
+        
     </style>
 </head>
 <body class="layout-default">
+    {% if not account.company_name %}
+        <div id="popup-modal" class="modal">
+            <div class="modal-content"><br><br><br>
+                <h3>Please fill in the Company Name</h3><br><br><br>
+                <form method="post" action="{% url 'update_company_name' account.id %}">
+                    {% csrf_token %}
+                    <!-- Form fields will go here -->
+                    <div>
+                        <label for="company_name">Company Name:</label>
+                        <input type="text" id="company_name" name="company_name" required><br><br><br><br>
+                    </div>
+                    <button id="submit-button" type="submit" class="btn btn-primary" style="margin-left: 110px;">Submit</button>
+                </form>
+                
+
+            </div>
+        </div>
+    {% endif %} 
+    
 
     <div class="mdk-drawer-layout js-mdk-drawer-layout" data-push data-responsive-width="992px" data-fullbleed>
         <div class="mdk-drawer-layout__content">
@@ -469,6 +518,8 @@
 
     <!-- Chart Samples -->
     <script src="{% static 'js/page.analytics.js' %}"></script>
+    <script src="{% static 'pop-up.js' %}"></script>
+
 
 
 </div>

@@ -28,4 +28,5 @@ urlpatterns = [
     path('user_setting/', UserSettingView.as_view(), name='user_setting'),
     path('verify_code/', VerifyCodeView.as_view(), name='verify_code'),
     path('resend_activation/', ResendActivationView.as_view(), name='resend_activation'),
+    path('update_company_name/<int:account_id>/', views.update_company_name, name='update_company_name'),
 ]
