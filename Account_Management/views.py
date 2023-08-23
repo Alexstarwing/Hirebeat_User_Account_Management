@@ -236,9 +236,11 @@ class AddUserView(LoginRequiredMixin, View):
         # get role
         current_user = request.user
         account = getAccount(current_user)
+        user_roles = self.get_user_role(self.request)
         user_groups = current_user.groups.all()
         user_roles = [group.name for group in user_groups]
-        return render(request, self.template_name, {'form': form, 'user_roles': user_roles[0], 'account': account})
+        return render(request, self.template_name, {'form': form, 'user_roles': user_roles[0], 
+                                                    'account': account, 'user_roles': user_roles})
 
     def post(self, request):
         form = InviteForm(request.POST)
@@ -345,8 +347,9 @@ class InvitationView(LoginRequiredMixin, View):
         current_user = request.user
         user_groups = current_user.groups.all()
         user_roles = [group.name for group in user_groups]
+        account = getAccount(current_user)
         # pdb.set_trace()  # 断点
-        return render(request, self.template_name, {'user_roles': user_roles[0]})
+        return render(request, self.template_name, {'user_roles': user_roles[0], 'account': account})
 
 
 class OrganizationView(LoginRequiredMixin, ListView):

@@ -19,18 +19,22 @@
                 </div>
                 <div class="ml-auto">
                     <a href="{% url 'account_management:organization'%}" class="btn btn-light">Details</a>
-                    <a href="{% url 'account_management:edit_account'%}" class="btn btn-light">Edit</a>
+                    {% if user_roles == "['Hiring_manager Group']" or user_roles == "['Admin Group']" %}
+                        <a href="{% url 'account_management:edit_account'%}" class="btn btn-light">Edit</a>
+                    {% endif %}
                 </div>
             </div>
-            <div class="card-header card-header-large bg-light d-flex align-items-center">
-                <div class="flex">
-                    <h4 class="card-header__title">Users</h4>
-                </div>
-                <div class="ml-auto">
-                    <a href="{% url 'account_management:manage_users' %}" class="btn btn-light">Manage</a>
-                    <a href="{% url 'account_management:add_user' %}" class="btn btn-light">Invite</a>
-                </div>
+            {% if user_roles == "['Hiring_manager Group']" or user_roles == "['Admin Group']" %}
+                <div class="card-header card-header-large bg-light d-flex align-items-center">
+                    <div class="flex">
+                        <h4 class="card-header__title">Users</h4>
+                    </div>
+                    <div class="ml-auto">
+                        <a href="{% url 'account_management:manage_users' %}" class="btn btn-light">Manage</a>
+                        <a href="{% url 'account_management:add_user' %}" class="btn btn-light">Invite</a>
+                    </div>
             </div>
+            {% endif %}
             <div class="card-header card-header-large bg-light d-flex align-items-center">
                 <div class="flex">
                     <h4 class="card-header__title">Permission Policies</h4>
