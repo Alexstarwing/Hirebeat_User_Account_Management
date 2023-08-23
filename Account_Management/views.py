@@ -487,6 +487,9 @@ def check_company_name_existence(target_name):
     else:
         return "Company name is brand new!"
 
+
+def image_upload_view(request):
+    return render(request, 'Account_Management/upload_image.html')
 # create_or_update_employer_basic_info: Creates or updates basic information for an employer's profile
 # def create_or_update_employer_basic_info(request):
 #     if request.method == 'POST':
