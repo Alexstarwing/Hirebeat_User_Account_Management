@@ -430,3 +430,12 @@ def update_company_name(request, account_id):
         account.company_name = company_name
         account.save()
     return redirect('login')  # Redirect to the desired page after submission
+# def update_company_name(request, user):
+#     relation = AccountUserRelation.objects.filter(user=user).first()
+#     if relation:
+#         if request.method == 'POST':
+#             account = relation.account
+#             company_name = request.POST.get('company_name')
+#             account.company_name = company_name
+#             account.save()
+#     return redirect('login')  # Redirect to the desired page after submission

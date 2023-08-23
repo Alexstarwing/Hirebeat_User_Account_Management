@@ -83,30 +83,32 @@
     </style>
 </head>
 <body class="layout-default">
-    {% if not account.company_name %}
-        <div id="popup-modal" class="modal">
-            <div class="modal-content"><br><br><br>
-                <form method="post" action="{% url 'logout' %}">
-                    {% csrf_token %}
-                    <button id="logout-button" type="submit" class="btn btn-secondary" >Logout</button>
-                </form>
-                <h3>Please fill in the Company Name</h3><br><br><br>
-                <form method="post" action="{% url 'update_company_name' account.id %}">
-                    {% csrf_token %}
-                    <!-- Form fields will go here -->
-                    <div>
-                        <label for="company_name">Company Name:</label>
-                        <input type="text" id="company_name" name="company_name" required><br><br><br><br>
-                    </div>
-                    <p>If you are not the owner of the company, please log out and </p>
-                    <p>wait for an invitation from your company's owner to register.</p>
-                    <button id="submit-button" type="submit" class="btn btn-primary" style="margin-left: 160px; margin-top: 20px">Submit</button>
+    {% if account %}
+        {% if not account.company_name %}
+            <div id="popup-modal" class="modal">
+                <div class="modal-content"><br><br><br>
+                    <form method="post" action="{% url 'logout' %}">
+                        {% csrf_token %}
+                        <button id="logout-button" type="submit" class="btn btn-secondary" >Logout</button>
+                    </form>
+                    <h3>Please fill in the Company Name</h3><br><br><br>
+                    <form method="post" action="{% url 'update_company_name' account.id %}">
+                        {% csrf_token %}
+                        <!-- Form fields will go here -->
+                        <div>
+                            <label for="company_name">Company Name:</label>
+                            <input type="text" id="company_name" name="company_name" required><br><br><br><br>
+                        </div>
+                        <p>If you are not the owner of the company, please log out and </p>
+                        <p>wait for an invitation from your company's owner to register.</p>
+                        <button id="submit-button" type="submit" class="btn btn-primary" style="margin-left: 160px; margin-top: 20px">Submit</button>
 
-                </form>
+                    </form>
 
 
+                </div>
             </div>
-        </div>
+        {% endif %}
     {% endif %}
     
 
