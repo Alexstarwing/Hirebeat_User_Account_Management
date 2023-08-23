@@ -14,7 +14,10 @@
                 }
 
                 .basic_info {
-                    margin-bottom: 10px;
+                    width: 46.5%;
+                    padding: 5px;
+                    border-radius: 3px;
+                    margin-bottom: 15px;
                     border: none;
                     border-bottom: 1px solid transparent;
                     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -24,62 +27,44 @@
 
                 .basic_info[type="text"][name="user_id"] {
                     margin-left: 13.5px;
-                    margin-bottom: 10px;
+                    margin-bottom: 15px;
                 }
 
                 .basic_info[type="text"][name="company_type"] {
 
-                    margin-bottom: 10px;
+                    margin-bottom: 15px;
 
                 }
 
                 .basic_info[type="email"][name="contactEmail"] {
                     margin-left: 27.5px;
-                    margin-bottom: 10px;
+                    margin-bottom: 15px;
                 }
 
                 .basic_info[type="text"][name="location"] {
                     margin-left: 69px;
-                    margin-bottom: 10px;
+                    margin-bottom: 15px;
                 }
 
                 .basic_info[type="text"][name="company_size"] {
                     margin-left: 36px;
-                    margin-bottom: 10px;
+                    margin-bottom: 15px;
+                }
+
+                .basic_info[type="text"][name="website"] {
+                    margin-left: 5.5px;
+                    margin-bottom: 15px;
+                    border: none;
+                    border-bottom: 1px solid transparent;
+                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                    background-color: #FFFFFF;
+                    
                 }
 
                 .basic_info select {
-                    font-size: 14px;
+                    font-size: 15px;
                     margin-left: 36px;
                     margin-bottom: 10px;
-                }
-
-                .info[type="text"][name="user_id"] {
-                    margin-left: 7px;
-                    margin-bottom: 10px;
-                    border: none;
-                    border-bottom: 1px solid transparent;
-                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-                    background-color: #FFFFFF;
-                }
-
-                .info[type="text"][name="name"] {
-                    margin-left: 22px;
-                    margin-bottom: 10px;
-                    border: none;
-                    border-bottom: 1px solid transparent;
-                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-                    background-color: #FFFFFF;
-                    
-                }
-
-                .info[type="text"][name="website"] {
-                    margin-bottom: 10px;
-                    border: none;
-                    border-bottom: 1px solid transparent;
-                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-                    background-color: #FFFFFF;
-                    
                 }
 
                 .summary {
@@ -103,12 +88,8 @@
                 }
 
 
-                
 
-                
-
-                
-            </style>
+               </style>
 
         </head>
         <!-- Header Layout Content -->
@@ -174,8 +155,8 @@
                 <div class="card card-form">
                     <div class="row no-gutters">
                         <div class="col-lg-4 card-body">
-                            <p><strong class="headings-color">Basic Info</strong></p>
-                            <p class="text-muted mb-0">Create or Update Employer Basic Info.</p>
+                            <p><strong class="headings-color">Account Information</strong></p>
+                            <p class="text-muted mb-0">Create or Update Employer Information.</p>
                         </div>
                         <div class="col-lg-8 card-form__body card-body">
                             <div class="row">
@@ -186,18 +167,21 @@
                                             
                                             
                                             <label for="user_id">Company Domain:</label>
-                                            <input type="text" name="user_id" required class="basic_info"><br>
+                                            <input type="text" name="user_id" required class="basic_info" value="{{ account.company_domain }}"><br>
                                         
                                             
                                             <label for="company_type">Company Industry:</label>
-                                            <input type="text" name="company_type" required class="basic_info"><br>
+                                            <input type="text" name="company_type" required class="basic_info" value="{{ account.company_industry }}"><br>
                                             
                                             <label for="contactEmail">Contact Email:</label>
-                                            <input type="email" name="contactEmail" required class="basic_info"><br>
+                                            <input type="email" name="contactEmail" required class="basic_info" value="{{ account.company_email }}"><br>
                                             
                                             <label for="location">Location:</label>
-                                            <input type="text" name="location" required class="basic_info"><br>
+                                            <input type="text" name="location" required class="basic_info" value="{{ account.company_location}}"><br>
                                             
+                                            <label for="website">Company Website:</label>
+                                            <input type="text" name="website" required class="basic_info" value="{{ account.company_website }}"><br>
+
                                             <label for="company_size">Company Size:</label>
                                             <select name="company_size" id="companySizeSelect" class = "basic_info" style="font-size: 16px;
                                             margin-left: 36px;
@@ -206,49 +190,49 @@
                                                     <option value="{{ size_choice.0 }}">{{ size_choice.1 }}</option>
                                                 {% endfor %}
                                             </select><br><br>
-                                            <input type="text" name="company_size" id="companySizeInput" required style="display: none;" readonly>
+                                            <label for="social1">Social links:</label>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <form method="post" action="{% url 'account_management:edit_account' %}">
+                                                    {% csrf_token %}
+                                                    <div class="input-group input-group-merge mb-2" style="margin-left:143px; ">
+                                                        <input id="social3" type="text" name="linkedin" class="form-control form-control-prepended" placeholder="linkedin" value="{{ account.company_linkedin }}">
+                                                        <div class="input-group-prepend">
+                                                            <div class="input-group-text">
+                                                                <span class="fab fa-linkedin text-linkedin"></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="input-group input-group-merge mb-2" style="margin-left:143px;">
+                                                        <input id="social1" type="text" name="facebook" class="form-control form-control-prepended" placeholder="Facebook" value="{{ account.company_facebook }}">
+                                                        <div class="input-group-prepend">
+                                                            <div class="input-group-text">
+                                                                <span class="fab fa-facebook text-facebook"></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="input-group input-group-merge mb-2" style="margin-left:143px;">
+                                                        <input id="social2" type="text" name="twitter" class="form-control form-control-prepended" placeholder="Twitter" value="{{ account.company_twitter }}">
+                                                        <div class="input-group-prepend">
+                                                            <div class="input-group-text">
+                                                                <span class="fab fa-twitter text-twitter"></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    
+                    
+                                                </div>
+                                            </div>
+                                            
+
+                                            <br><label for="summary">Company Summary:</label><br>
+                                            <textarea name="summary" id="summary" rows="10" cols="45" class="basic_info" placeholder=" Description ..." style="margin-left: 143px; border-radius: 5px; width: 55%;">{{ account.company_summary }}</textarea><br><br>
+                                            <input type="text" name="company_size" id="companySizeInput" required style="display: none;" readonly value="{{ account.company_summary }}">
                                             
                                             <div class="text-right mb-5">
                                                 <input class="btn btn-primary" type="submit" value="Submit">
                                             </div>
 
-                                            <div style="margin-top: 20px">
-                                                {%for message in messages %}
-                                                   {%if "basic_info" in message.tags %}
-                                                        <p> {{message}} </p>
-                                                   {%endif%}
-                                                {%endfor%}
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card card-form">
-                    <div class="row no-gutters">
-                        <div class="col-lg-4 card-body">
-                            <p><strong class="headings-color">Info</strong></p>
-                            <p class="text-muted mb-0">Create or Update Employer Info.</p>
-                        </div>
-                        <div class="col-lg-8 card-form__body card-body">
-                            <div class="row">
-                                <div class="col">
-                                    <div class="form-group">
-                                        <form method="post" action="{% url 'account_management:edit_account' %}">
-                                            {% csrf_token %}
-                                            <label for="user_id">Company Domain:</label>
-                                            <input type="text" name="user_id" required class="info"><br>
-                                            
-                                            <label for="name">Company Name:</label>
-                                            <input type="text" name="name" required class="info"><br>
-                                            
-                                            <label for="website">Company Website:</label>
-                                            <input type="text" name="website" required class="info"><br><br>
-                                            <div class="text-right mb-5">
-                                                <input class="btn btn-primary" type="submit" value="Submit">
-                                            </div>
                                             <div style="margin-top: 20px">
                                                 {%for message in messages %}
                                                    {%if "info" in message.tags %}
@@ -256,7 +240,6 @@
                                                    {%endif%}
                                                 {%endfor%}
                                             </div>
-    
                                         </form>
                                     </div>
                                 </div>
@@ -264,94 +247,7 @@
                         </div>
                     </div>
                 </div>
-
-                <div class="card card-form">
-                    <div class="row no-gutters">
-                        <div class="col-lg-4 card-body">
-                            <p><strong class="headings-color">Summary</strong></p>
-                            <p class="text-muted mb-0">Create or updates company summary or description.</p>
-                        </div>
-                        <div class="col-lg-8 card-form__body card-body">
-                            <div class="row">
-                                <div class="col">
-                                    <div class="form-group">
-                                        <form method="post" action="{% url 'account_management:edit_account' %}">
-                                            {% csrf_token %}
-                                            <label for="user_id">Company Domain:</label>
-                                            <input type="text" name="user_id" required class="summary"><br>
-                                            
-                                            <label for="summary">Company Summary:</label>
-                                            <textarea name="summary" id="summary" rows="10" cols="45" class="summary" placeholder=" Description ...">{{ form.company_summary.value }}</textarea><br><br>
-                                            <div class="text-right mb-5">
-                                                <input class="btn btn-primary" type="submit" value="Submit">
-                                            </div>
-                                            
-                                            <div style="margin-top: 20px">
-                                                {%for message in messages %}
-                                                   {%if "summary" in message.tags %}
-                                                        <p> {{message}} </p>
-                                                   {%endif%}
-                                                {%endfor%}
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card card-form">
-                    <div class="row no-gutters">
-                        <div class="col-lg-4 card-body">
-                            <p><strong class="headings-color">Social links</strong></p>
-                            <p class="text-muted mb-0">Create or update your social links.</p>
-                        </div>
-                        <div class="col-lg-8 card-form__body card-body">
-                            
-                            <div class="form-group">
-                                <label for="social1">Social links</label>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <form method="post" action="{% url 'account_management:edit_account' %}">
-                                        {% csrf_token %}
-                                        <div class="input-group input-group-merge mb-2">
-                                            <input id="social3" type="text" name="linkedin" class="form-control form-control-prepended" placeholder="linkedin">
-                                            <div class="input-group-prepend">
-                                                <div class="input-group-text">
-                                                    <span class="fab fa-linkedin text-linkedin"></span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="input-group input-group-merge mb-2">
-                                            <input id="social1" type="text" name="facebook" class="form-control form-control-prepended" placeholder="Facebook">
-                                            <div class="input-group-prepend">
-                                                <div class="input-group-text">
-                                                    <span class="fab fa-facebook text-facebook"></span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="input-group input-group-merge mb-2">
-                                            <input id="social2" type="text" name="twitter" class="form-control form-control-prepended" placeholder="Twitter">
-                                            <div class="input-group-prepend">
-                                                <div class="input-group-text">
-                                                    <span class="fab fa-twitter text-twitter"></span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        
-        
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="text-right mb-5">
-                                <a href="" class="btn btn-primary">Save</a>
-                            </div>
-                        </div>
-                        
-                    </div>
-                    
-                </div>
+                
                 
             </div>
         </div>

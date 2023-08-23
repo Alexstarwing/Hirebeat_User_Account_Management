@@ -23,10 +23,22 @@
                         <label for="office-list">Company Name: </label>
                         {{ company_name }}
                         <br>
-                        <label for="office-list">Testing: check if a company name existence: </label>
-                        {{ company_name_exists }}
-                        <br><br>
-                        <div class="dz-clickable media align-items-center" data-toggle="dropzone" data-dropzone-url="http://" data-dropzone-clickable=".dz-clickable" data-dropzone-files='["assets/images/account-add-photo.svg"]'>
+                        <label for="office-list">Company Industry: </label>
+                        {{ account.company_industry }}
+                        <br>
+                        <label for="office-list">Company Email: </label>
+                        {{ account.company_email }}
+                        <br>
+                        <label for="office-list">Company Location: </label>
+                        {{ account.company_location }}
+                        <br>
+                        <label for="office-list">Company Website: </label>
+                        {{ account.company_website }}
+                        <br>
+                        <label for="office-list">Company size: </label>
+                        {{ account.company_size_range }}
+                        <br>
+                        {% comment %} <div class="dz-clickable media align-items-center" data-toggle="dropzone" data-dropzone-url="http://" data-dropzone-clickable=".dz-clickable" data-dropzone-files='["assets/images/account-add-photo.svg"]'>
                             <div class="dz-preview dz-file-preview dz-clickable mr-3">
                                 <div class="avatar avatar-lg">
 
@@ -40,18 +52,26 @@
                             </div>
                             <img id="previewImage" src="" style="display: none;" alt="Uploaded Image">
                             
-                        </div>
+                        </div> {% endcomment %}
                     </div>
                     <div class="form-group">
                         <label for="desc2">Description</label>
-                        <textarea id="desc2" rows="4" class="form-control" placeholder="Description ..."></textarea>
+                        <textarea id="desc2" rows="4" class="form-control" placeholder="Description ..." style="width: 70%;">{{account.company_summary}}</textarea>
                     </div>
                     <div class="form-group">
                         <label for="social1">Social links</label>
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="input-group input-group-merge mb-2">
-                                    <input id="social1" type="text" class="form-control form-control-prepended" placeholder="Facebook">
+                                    <input id="social1" type="text" class="form-control form-control-prepended" placeholder="linkedin" value="{{ account.company_linkedin }}">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">
+                                            <span class="fab fa-linkedin text-linkedin"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="input-group input-group-merge mb-2">
+                                    <input id="social2" type="text" class="form-control form-control-prepended" placeholder="Facebook" value="{{account.company_facebook}}">
                                     <div class="input-group-prepend">
                                         <div class="input-group-text">
                                             <span class="fab fa-facebook text-facebook"></span>
@@ -59,37 +79,23 @@
                                     </div>
                                 </div>
                                 <div class="input-group input-group-merge mb-2">
-                                    <input id="social2" type="text" class="form-control form-control-prepended" placeholder="Twitter">
+                                    <input id="social3" type="text" class="form-control form-control-prepended" placeholder="Twitter" value="{{account.company_twitter}}">
                                     <div class="input-group-prepend">
                                         <div class="input-group-text">
                                             <span class="fab fa-twitter text-twitter"></span>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="input-group input-group-merge mb-2">
-                                    <input id="social3" type="text" class="form-control form-control-prepended" placeholder="Instagram">
-                                    <div class="input-group-prepend">
-                                        <div class="input-group-text">
-                                            <span class="fab fa-instagram text-instagram"></span>
-                                        </div>
-                                    </div>
-                                </div>
+        
 
                             </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="customCheck1">Available for freelance?</label>
-                        <div class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input" id="customCheck1" checked="">
-                            <label class="custom-control-label" for="customCheck1">Yes, show me as available for freelance!</label>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
         <div class="text-right mb-5">
-            <a href="" class="btn btn-success">Save</a>
+            <a href="{% url 'account_management:edit_account'%}" class="btn btn-success">Edit</a>
         </div>
 
         <div class="container-fluid page__container">
@@ -104,34 +110,10 @@
             </div>
             <div class="card-header card-header-large bg-light d-flex align-items-center">
                 <div class="flex">
-                    <h4 class="card-header__title">Company Name</h4>
-                </div>
-                <div class="ml-auto">
-                    <a href="#" class="btn btn-light">Edit</a>
-                </div>
-            </div>
-            <div class="card-header card-header-large bg-light d-flex align-items-center">
-                <div class="flex">
-                    <h4 class="card-header__title">Basic Information</h4>
-                </div>
-                <div class="ml-auto">
-                    <a href="#" class="btn btn-light">Edit</a>
-                </div>
-            </div>
-            <div class="card-header card-header-large bg-light d-flex align-items-center">
-                <div class="flex">
                     <h4 class="card-header__title">Profile Video</h4>
                 </div>
                 <div class="ml-auto">
                     <a href="#" class="btn btn-light">Update</a>
-                </div>
-            </div>
-            <div class="card-header card-header-large bg-light d-flex align-items-center">
-                <div class="flex">
-                    <h4 class="card-header__title">Email Settings</h4>
-                </div>
-                <div class="ml-auto">
-                    <a href="#" class="btn btn-light">Manage</a>
                 </div>
             </div>
 

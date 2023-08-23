@@ -304,7 +304,7 @@
                                             </span>
                                             <span class="flex d-flex flex-column">
                                                 <strong class="h5 m-0">{{ request.user|title }}</strong>
-                                                <small class="text-muted text-uppercase">Employer</small>
+                                                <small class="text-muted text-uppercase">{{ user_roles|slice:"0:-5"|replace:"_"}}</small>
                                             </span>
 
                                         </div>
@@ -387,9 +387,9 @@
                     {% if account %}
                         <form method="post" action="{% url 'delete_account' account.id %}" class="delete-form">
                             {% csrf_token %}
-                            <a class="sidebar-menu-button" href="javascript:void(0);" onclick="document.querySelector('.delete-form').submit();">
-                                <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">queue_play_next</i>
-                                <span class="sidebar-menu-text">Delete Account</span>
+                            <a style="margin-left: 3px;" class="sidebar-menu-button" href="javascript:void(0);" onclick="document.querySelector('.delete-form').submit();">
+                                <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons" >queue_play_next</i>
+                                <span class="sidebar-menu-text" style="transform: translateX(2.5px);">Delete Account</span>
                             </a>
                         </form>
                     {% endif %}

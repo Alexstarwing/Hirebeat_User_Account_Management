@@ -1,3 +1,4 @@
+
 import pdb
 from django.http import HttpResponseRedirect
 from rest_framework import status
@@ -88,23 +89,28 @@ class AccountSettingView(LoginRequiredMixin, View):
             account.save()
             return redirect('account_management:edit_account')
 
-        self.create_or_update_employer_basic_info(request)
+        #self.create_or_update_employer_basic_info(request)
         self.create_or_update_employer_info(request)
-        self.create_or_update_employer_summary(request)
-        self.create_or_update_employer_social_media(request)
+        #self.create_or_update_employer_summary(request)
+        #self.create_or_update_employer_social_media(request)
 
         # return render(request, self.template_name, {'org_form': org_form})
         # Thinking of rediect user to organiztion, which view the changes.
         # return render(request, 'Account_Management/organization.html', {'org_form': org_form})
         return redirect('account_management:edit_account')
 
-    def create_or_update_employer_basic_info(self, request):
+    def create_or_update_employer_info(self, request):
         if request.method == 'POST':
             # company_domain = request.POST.get("user_id")
             company_industry = request.POST.get("company_type")
             company_email = request.POST.get("contactEmail")
             company_location = request.POST.get("location")
             company_size_range = request.POST.get("company_size")
+            company_website = request.POST.get("website")
+            company_summary = request.POST.get("summary")
+            company_linkedin = request.POST.get("linkedin")
+            company_facebook = request.POST.get("facebook")
+            company_twitter = request.POST.get("twitter")
             current_user = request.user
             account = self.get_account_for_user(current_user)
 
@@ -113,27 +119,11 @@ class AccountSettingView(LoginRequiredMixin, View):
                 account.company_email = company_email
                 account.company_location = company_location
                 account.company_size_range = company_size_range
-                account.save()
-                messages.success(request, 'Your basic information has been successfully updated. ',
-                                 extra_tags='basic_info')
-            except Account.DoesNotExist:
-                messages.error(request, 'Account not found. Unable to update information.',
-                               extra_tags='error')
-
-        return redirect('account_management:organization')
-
-    def create_or_update_employer_info(self, request):
-        if request.method == 'POST':
-            current_user = request.user
-            account = self.get_account_for_user(current_user)
-            company_domain = request.POST.get("user_id")
-            company_name = request.POST.get("name")
-            company_website = request.POST.get("website")
-
-            try:
-                account.company_domain = company_domain
-                account.company_name = company_name
                 account.company_website = company_website
+                account.company_summary = company_summary
+                account.company_linkedin = company_linkedin 
+                account.company_facebook = company_facebook
+                account.company_twitter = company_twitter
                 account.save()
                 messages.success(request, 'Your information has been successfully updated. ',
                                  extra_tags='info')
@@ -141,48 +131,92 @@ class AccountSettingView(LoginRequiredMixin, View):
                 messages.error(request, 'Account not found. Unable to update information.',
                                extra_tags='error')
 
-            # return render(request, 'Account_Management/edit_account.html', {'extra_tags': 'info'})
         return redirect('account_management:organization')
+        
+    # def create_or_update_employer_basic_info(self, request):
+    #     if request.method == 'POST':
+    #         # company_domain = request.POST.get("user_id")
+    #         company_industry = request.POST.get("company_type")
+    #         company_email = request.POST.get("contactEmail")
+    #         company_location = request.POST.get("location")
+    #         company_size_range = request.POST.get("company_size")
+    #         current_user = request.user
+    #         account = self.get_account_for_user(current_user)
 
-        # create_or_update_employer_summary: Creates or updates an employer's summary or description
+    #         try:
+    #             account.company_industry = company_industry
+    #             account.company_email = company_email
+    #             account.company_location = company_location
+    #             account.company_size_range = company_size_range
+    #             account.save()
+    #             messages.success(request, 'Your basic information has been successfully updated. ',
+    #                              extra_tags='basic_info')
+    #         except Account.DoesNotExist:
+    #             messages.error(request, 'Account not found. Unable to update information.',
+    #                            extra_tags='error')
 
-    def create_or_update_employer_summary(self, request):
-        # company_domain = request.POST.get("user_id")
-        company_summary = request.POST.get("summary")
-        current_user = request.user
-        account = self.get_account_for_user(current_user)
+    #     return redirect('account_management:organization')
 
-        try:
-            account.company_summary = company_summary
-            account.save()
-            messages.success(request, 'Your summary has been successfully updated. ',
-                             extra_tags='summary')
-        except Account.DoesNotExist:
-            messages.error(request, 'Account not found. Unable to update information.',
-                           extra_tags='error')
+    # def create_or_update_employer_info(self, request):
+    #     if request.method == 'POST':
+    #         current_user = request.user
+    #         account = self.get_account_for_user(current_user)
+    #         company_domain = request.POST.get("user_id")
+    #         company_name = request.POST.get("name")
+    #         company_website = request.POST.get("website")
 
-        return redirect('account_management:organization')
+    #         try:
+    #             account.company_domain = company_domain
+    #             account.company_name = company_name
+    #             account.company_website = company_website
+    #             account.save()
+    #             messages.success(request, 'Your information has been successfully updated. ',
+    #                              extra_tags='info')
+    #         except Account.DoesNotExist:
+    #             messages.error(request, 'Account not found. Unable to update information.',
+    #                            extra_tags='error')
 
-    # create_or_update_employer_social_media: Creates or updates an employer's social media profiles
-    def create_or_update_employer_social_media(self, request):
-        # company_domain = request.POST.get("user_id")
-        company_linkedin = request.POST.get("linkedin")
-        company_facebook = request.POST.get("facebook")
-        company_twitter = request.POST.get("twitter")
-        current_user = request.user
-        account = self.get_account_for_user(current_user)
+    #         # return render(request, 'Account_Management/edit_account.html', {'extra_tags': 'info'})
+    #     return redirect('account_management:organization')
 
-        try:
-            account.company_linkedin = company_linkedin
-            account.company_facebook = company_facebook
-            account.company_twitter = company_twitter
-            account.save()
-        except Account.DoesNotExist:
-            messages.error(request, 'Account not found. Unable to update information.',
-                           extra_tags='error')
+    #     # create_or_update_employer_summary: Creates or updates an employer's summary or description
 
-        return redirect('account_management:organization')
-        # return Response("Create or Update employer social media successfully", status=status.HTTP_201_CREATED)
+    # def create_or_update_employer_summary(self, request):
+    #     # company_domain = request.POST.get("user_id")
+    #     company_summary = request.POST.get("summary")
+    #     current_user = request.user
+    #     account = self.get_account_for_user(current_user)
+
+    #     try:
+    #         account.company_summary = company_summary
+    #         account.save()
+    #         messages.success(request, 'Your summary has been successfully updated. ',
+    #                          extra_tags='summary')
+    #     except Account.DoesNotExist:
+    #         messages.error(request, 'Account not found. Unable to update information.',
+    #                        extra_tags='error')
+
+    #     return redirect('account_management:organization')
+
+    # # create_or_update_employer_social_media: Creates or updates an employer's social media profiles
+    # def create_or_update_employer_social_media(self, request):
+    #     # company_domain = request.POST.get("user_id")
+    #     company_linkedin = request.POST.get("linkedin")
+    #     company_facebook = request.POST.get("facebook")
+    #     company_twitter = request.POST.get("twitter")
+    #     current_user = request.user
+    #     account = self.get_account_for_user(current_user)
+
+    #     try:
+    #         account.company_linkedin = company_linkedin
+    #         account.company_facebook = company_facebook
+    #         account.company_twitter = company_twitter
+    #         account.save()
+    #     except Account.DoesNotExist:
+    #         messages.error(request, 'Account not found. Unable to update information.',
+    #                        extra_tags='error')
+
+    #     return redirect('account_management:organization')
 
 
 class ConfigureView(LoginRequiredMixin, ListView):
@@ -235,9 +269,11 @@ class AddUserView(LoginRequiredMixin, View):
         # get role
         current_user = request.user
         account = getAccount(current_user)
+        user_roles = self.get_user_role(self.request)
         user_groups = current_user.groups.all()
         user_roles = [group.name for group in user_groups]
-        return render(request, self.template_name, {'form': form, 'user_roles': user_roles[0], 'account': account})
+        return render(request, self.template_name, {'form': form, 'user_roles': user_roles[0], 
+                                                    'account': account, 'user_roles': user_roles})
 
     def post(self, request):
         form = InviteForm(request.POST)
@@ -344,8 +380,9 @@ class InvitationView(LoginRequiredMixin, View):
         current_user = request.user
         user_groups = current_user.groups.all()
         user_roles = [group.name for group in user_groups]
+        account = getAccount(current_user)
         # pdb.set_trace()  # 断点
-        return render(request, self.template_name, {'user_roles': user_roles[0]})
+        return render(request, self.template_name, {'user_roles': user_roles[0], 'account': account})
 
 
 class OrganizationView(LoginRequiredMixin, ListView):
@@ -475,8 +512,8 @@ def getAccount(user):
 
 def get_company_name(user):
     account = getAccount(user)
-    company_name = account.organization
-    # company_name = account.company_name
+    #company_name = account.organization
+    company_name = account.company_name
     return company_name
 
 
