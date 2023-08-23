@@ -46,13 +46,23 @@ class CustomLoginView(LoginView):
                 account_user_relation = AccountUserRelation.objects.filter(user=user).first()
 
                 if account_user_relation:
-                    # Delete the old account (if desired)
-                    if account_user_relation.account:
-                        account_user_relation.account.delete()
+                    account = account_user_relation.account
+                    other_users_count = AccountUserRelation.objects.filter(account=account).exclude(user=user).count()
+                    
+                    if other_users_count == 0:
+                        role_type = invitation_account.role.role_type.capitalize()
+                        role_type += " Group"
+                        group_instance = Group.objects.get(name=role_type)
+                        user.groups.set([group_instance])
+                        # Delete the old account (if desired)
+                        if account_user_relation.account:
+                            account_user_relation.account.delete()
 
-                    # Assign the new account from the invitation
-                    account_user_relation.account = invitation_account.account
-                    account_user_relation.save()
+                        # Assign the new account from the invitation
+                        account_user_relation.account = invitation_account.account
+                        account_user_relation.save()
+                        
+                        
 
         return super().form_valid(form)
 
