@@ -42,6 +42,7 @@ class UserCreationForm(UserCreationForm):
 class ResendActivationEmailForm(forms.Form):
     email = forms.EmailField(required=True)
 
+
 class CustonmerForm(forms.ModelForm):
     class Meta:
         model = Profile

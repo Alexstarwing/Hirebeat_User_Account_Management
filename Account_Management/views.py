@@ -87,20 +87,20 @@ class AccountSettingView(LoginRequiredMixin, View):
             account.organization = org_form.cleaned_data['organization']
             account.save()
             return redirect('account_management:edit_account')
-        
+
         self.create_or_update_employer_basic_info(request)
         self.create_or_update_employer_info(request)
         self.create_or_update_employer_summary(request)
         self.create_or_update_employer_social_media(request)
 
-        #return render(request, self.template_name, {'org_form': org_form})
+        # return render(request, self.template_name, {'org_form': org_form})
         # Thinking of rediect user to organiztion, which view the changes.
         # return render(request, 'Account_Management/organization.html', {'org_form': org_form})
         return redirect('account_management:edit_account')
 
     def create_or_update_employer_basic_info(self, request):
         if request.method == 'POST':
-            #company_domain = request.POST.get("user_id")
+            # company_domain = request.POST.get("user_id")
             company_industry = request.POST.get("company_type")
             company_email = request.POST.get("contactEmail")
             company_location = request.POST.get("location")
@@ -118,8 +118,8 @@ class AccountSettingView(LoginRequiredMixin, View):
                                  extra_tags='basic_info')
             except Account.DoesNotExist:
                 messages.error(request, 'Account not found. Unable to update information.',
-                            extra_tags='error')
-                
+                               extra_tags='error')
+
         return redirect('account_management:organization')
 
     def create_or_update_employer_info(self, request):
@@ -139,14 +139,15 @@ class AccountSettingView(LoginRequiredMixin, View):
                                  extra_tags='info')
             except Account.DoesNotExist:
                 messages.error(request, 'Account not found. Unable to update information.',
-                            extra_tags='error')
-                
-            #return render(request, 'Account_Management/edit_account.html', {'extra_tags': 'info'})
+                               extra_tags='error')
+
+            # return render(request, 'Account_Management/edit_account.html', {'extra_tags': 'info'})
         return redirect('account_management:organization')
-        
+
         # create_or_update_employer_summary: Creates or updates an employer's summary or description
+
     def create_or_update_employer_summary(self, request):
-        #company_domain = request.POST.get("user_id")
+        # company_domain = request.POST.get("user_id")
         company_summary = request.POST.get("summary")
         current_user = request.user
         account = self.get_account_for_user(current_user)
@@ -155,16 +156,16 @@ class AccountSettingView(LoginRequiredMixin, View):
             account.company_summary = company_summary
             account.save()
             messages.success(request, 'Your summary has been successfully updated. ',
-                                 extra_tags='summary')
+                             extra_tags='summary')
         except Account.DoesNotExist:
-                messages.error(request, 'Account not found. Unable to update information.',
-                            extra_tags='error')
-            
+            messages.error(request, 'Account not found. Unable to update information.',
+                           extra_tags='error')
+
         return redirect('account_management:organization')
-    
+
     # create_or_update_employer_social_media: Creates or updates an employer's social media profiles
     def create_or_update_employer_social_media(self, request):
-        #company_domain = request.POST.get("user_id")
+        # company_domain = request.POST.get("user_id")
         company_linkedin = request.POST.get("linkedin")
         company_facebook = request.POST.get("facebook")
         company_twitter = request.POST.get("twitter")
@@ -177,13 +178,11 @@ class AccountSettingView(LoginRequiredMixin, View):
             account.company_twitter = company_twitter
             account.save()
         except Account.DoesNotExist:
-                messages.error(request, 'Account not found. Unable to update information.',
-                            extra_tags='error')
+            messages.error(request, 'Account not found. Unable to update information.',
+                           extra_tags='error')
 
         return redirect('account_management:organization')
-        #return Response("Create or Update employer social media successfully", status=status.HTTP_201_CREATED)
-
-
+        # return Response("Create or Update employer social media successfully", status=status.HTTP_201_CREATED)
 
 
 class ConfigureView(LoginRequiredMixin, ListView):
@@ -219,17 +218,17 @@ class AddUserView(LoginRequiredMixin, View):
         except AccountUserRelation.DoesNotExist:
             return None
 
-    def dispatch(self, request, *args, **kwargs):
-        try:
-            current_account = self.get_account_for_user(request.user)
-            if not current_account.organization:
-                messages.warning(request, "Please assign an company first.", extra_tags='manage')
-                return redirect(self.assign_org_url)
-        except AccountUserRelation.DoesNotExist:
-            messages.warning(request, "Please assign an company first.", extra_tags='manage')
-            return redirect(self.assign_org_url)
-
-        return super().dispatch(request, *args, **kwargs)
+    # def dispatch(self, request, *args, **kwargs):
+    #     try:
+    #         current_account = self.get_account_for_user(request.user)
+    #         if not current_account.company_name:
+    #             messages.warning(request, "Please assign an company first.", extra_tags='manage')
+    #             return redirect(self.assign_org_url)
+    #     except AccountUserRelation.DoesNotExist:
+    #         messages.warning(request, "Please assign an company first.", extra_tags='manage')
+    #         return redirect(self.assign_org_url)
+    #
+    #     return super().dispatch(request, *args, **kwargs)
 
     def get(self, request):
         form = InviteForm()
@@ -397,20 +396,20 @@ class ManageUserView(View):
         except AccountUserRelation.DoesNotExist:
             return None
 
-    def dispatch(self, request, *args, **kwargs):
-        try:
-            current_account = self.get_account_for_user(request.user)
-            # current_account = Account.objects.get(profile__user=request.user)
-
-            # Check if organization name is assigned, if not, redirect with a message
-            if not current_account.organization:
-                messages.warning(request, "Please assign an company first.", extra_tags='manage')
-                return redirect(self.assign_org_url)
-        except AccountUserRelation.DoesNotExist:  # except Account.DoesNotExist:
-            messages.warning(request, "Please assign an company first.", extra_tags='manage')
-            return redirect(self.assign_org_url)
-
-        return super().dispatch(request, *args, **kwargs)
+    # def dispatch(self, request, *args, **kwargs):
+    #     try:
+    #         current_account = self.get_account_for_user(request.user)
+    #         # current_account = Account.objects.get(profile__user=request.user)
+    #
+    #         # Check if organization name is assigned, if not, redirect with a message
+    #         if not current_account.organization:
+    #             messages.warning(request, "Please assign an company first.", extra_tags='manage')
+    #             return redirect(self.assign_org_url)
+    #     except AccountUserRelation.DoesNotExist:  # except Account.DoesNotExist:
+    #         messages.warning(request, "Please assign an company first.", extra_tags='manage')
+    #         return redirect(self.assign_org_url)
+    #
+    #     return super().dispatch(request, *args, **kwargs)
 
     def get(self, request):
         current_account = self.get_account_for_user(request.user)
@@ -439,8 +438,6 @@ class ManageUserView(View):
 def acccountSettings(request):
     context = {}
     return render(request, 'accounts/origanization.html', context)
-
-
 
 
 def delete_account(request, account):
@@ -485,7 +482,7 @@ def get_company_name(user):
 
 def check_company_name_existence(target_name):
     if Account.objects.filter(organization=target_name).exists():
-    # if Account.objects.filter(company_name=target_name).exists():
+        # if Account.objects.filter(company_name=target_name).exists():
         return "Company name is existed"
     else:
         return "Company name is brand new!"
