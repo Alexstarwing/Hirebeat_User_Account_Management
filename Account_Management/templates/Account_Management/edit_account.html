@@ -167,20 +167,20 @@
                                             
                                             
                                             <label for="user_id">Company Domain:</label>
-                                            <input type="text" name="user_id" required class="basic_info"><br>
+                                            <input type="text" name="user_id" required class="basic_info" value="{{ account.company_domain }}"><br>
                                         
                                             
                                             <label for="company_type">Company Industry:</label>
-                                            <input type="text" name="company_type" required class="basic_info"><br>
+                                            <input type="text" name="company_type" required class="basic_info" value="{{ account.company_industry }}"><br>
                                             
                                             <label for="contactEmail">Contact Email:</label>
-                                            <input type="email" name="contactEmail" required class="basic_info"><br>
+                                            <input type="email" name="contactEmail" required class="basic_info" value="{{ account.company_email }}"><br>
                                             
                                             <label for="location">Location:</label>
-                                            <input type="text" name="location" required class="basic_info"><br>
+                                            <input type="text" name="location" required class="basic_info" value="{{ account.company_location}}"><br>
                                             
                                             <label for="website">Company Website:</label>
-                                            <input type="text" name="website" required class="basic_info"><br>
+                                            <input type="text" name="website" required class="basic_info" value="{{ account.company_website }}"><br>
 
                                             <label for="company_size">Company Size:</label>
                                             <select name="company_size" id="companySizeSelect" class = "basic_info" style="font-size: 16px;
@@ -196,7 +196,7 @@
                                                     <form method="post" action="{% url 'account_management:edit_account' %}">
                                                     {% csrf_token %}
                                                     <div class="input-group input-group-merge mb-2" style="margin-left:143px; ">
-                                                        <input id="social3" type="text" name="linkedin" class="form-control form-control-prepended" placeholder="linkedin" >
+                                                        <input id="social3" type="text" name="linkedin" class="form-control form-control-prepended" placeholder="linkedin" value="{{ account.company_linkedin }}">
                                                         <div class="input-group-prepend">
                                                             <div class="input-group-text">
                                                                 <span class="fab fa-linkedin text-linkedin"></span>
@@ -204,7 +204,7 @@
                                                         </div>
                                                     </div>
                                                     <div class="input-group input-group-merge mb-2" style="margin-left:143px;">
-                                                        <input id="social1" type="text" name="facebook" class="form-control form-control-prepended" placeholder="Facebook" >
+                                                        <input id="social1" type="text" name="facebook" class="form-control form-control-prepended" placeholder="Facebook" value="{{ account.company_facebook }}">
                                                         <div class="input-group-prepend">
                                                             <div class="input-group-text">
                                                                 <span class="fab fa-facebook text-facebook"></span>
@@ -212,7 +212,7 @@
                                                         </div>
                                                     </div>
                                                     <div class="input-group input-group-merge mb-2" style="margin-left:143px;">
-                                                        <input id="social2" type="text" name="twitter" class="form-control form-control-prepended" placeholder="Twitter">
+                                                        <input id="social2" type="text" name="twitter" class="form-control form-control-prepended" placeholder="Twitter" value="{{ account.company_twitter }}">
                                                         <div class="input-group-prepend">
                                                             <div class="input-group-text">
                                                                 <span class="fab fa-twitter text-twitter"></span>
@@ -226,8 +226,8 @@
                                             
 
                                             <br><label for="summary">Company Summary:</label><br>
-                                            <textarea name="summary" id="summary" rows="10" cols="45" class="basic_info" placeholder=" Description ..." style="margin-left: 143px; border-radius: 5px; width: 55%;">{{ form.company_summary.value }}</textarea><br><br>
-                                            <input type="text" name="company_size" id="companySizeInput" required style="display: none;" readonly>
+                                            <textarea name="summary" id="summary" rows="10" cols="45" class="basic_info" placeholder=" Description ..." style="margin-left: 143px; border-radius: 5px; width: 55%;">{{ account.company_summary }}</textarea><br><br>
+                                            <input type="text" name="company_size" id="companySizeInput" required style="display: none;" readonly value="{{ account.company_summary }}">
                                             
                                             <div class="text-right mb-5">
                                                 <input class="btn btn-primary" type="submit" value="Submit">
