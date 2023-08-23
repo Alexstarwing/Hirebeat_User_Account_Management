@@ -23,9 +23,6 @@ class Account(models.Model):
     ]
 
     # profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    office = models.CharField(max_length=200)
-    department = models.CharField(max_length=200)
-    organization = models.CharField(max_length=200)
     profile_logo = models.ImageField(null=True, blank=True)
     company_name = models.CharField(max_length=255, null=True, blank=True)
     company_email = models.EmailField(max_length=255, null=True, blank=True)
