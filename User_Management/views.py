@@ -1,6 +1,7 @@
 import pdb
 import random
 import re
+from django.contrib.auth import authenticate, login
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.contrib.auth import update_session_auth_hash
@@ -10,7 +11,7 @@ from django.shortcuts import redirect
 from django.views.generic import View
 from django.views.generic.list import ListView
 from django.views.generic.edit import FormView
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
 from django.contrib.auth.tokens import default_token_generator
@@ -32,9 +33,31 @@ class CustomLoginView(LoginView):
     template_name = 'User_Management/login.html'
     fields = '__all__'
     redirect_authenticated_user = True
+    
+    def form_valid(self, form):
+        user = form.get_user()
+
+        if user.is_authenticated:
+            user_email = user.email
+            invitation_exists = TeamInvitation.objects.filter(invited_email=user_email).exists()
+
+            if invitation_exists:
+                invitation_account = TeamInvitation.objects.filter(invited_email=user_email).first()
+                account_user_relation = AccountUserRelation.objects.filter(user=user).first()
+
+                if account_user_relation:
+                    # Delete the old account (if desired)
+                    if account_user_relation.account:
+                        account_user_relation.account.delete()
+
+                    # Assign the new account from the invitation
+                    account_user_relation.account = invitation_account.account
+                    account_user_relation.save()
+
+        return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse_lazy('profiles')
+        return reverse('profiles')
 
 
 class RegisterPage(FormView):

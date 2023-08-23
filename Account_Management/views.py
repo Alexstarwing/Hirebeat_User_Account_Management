@@ -1,3 +1,4 @@
+
 import pdb
 from django.http import HttpResponseRedirect
 from rest_framework import status
@@ -475,8 +476,8 @@ def getAccount(user):
 
 def get_company_name(user):
     account = getAccount(user)
-    company_name = account.organization
-    # company_name = account.company_name
+    #company_name = account.organization
+    company_name = account.company_name
     return company_name
 
 
