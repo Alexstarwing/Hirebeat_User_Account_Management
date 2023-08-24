@@ -377,10 +377,18 @@
         <div class="sidebar-heading">Employer</div>
         <div class="sidebar-block p-0">
             <ul class="sidebar-menu mt-0">
-                <li class="sidebar-menu-item active">
-                    <a class="sidebar-menu-button" href="{% url 'account_management:edit_account' %}">
-                        <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">settings</i>
-                        <span class="sidebar-menu-text">Account Settings</span>
+                {% if user_roles.0 == 'H' or user_roles.0 == 'A' %}
+                    <li class="sidebar-menu-item active">
+                        <a class="sidebar-menu-button" href="{% url 'account_management:edit_account' %}">
+                            <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">settings</i>
+                            <span class="sidebar-menu-text">Account Settings</span>
+                        </a>
+                    </li>
+                {% endif %}
+                <li class="sidebar-menu-item">
+                    <a class="sidebar-menu-button" href="{% url 'user_setting' %}">
+                        <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">person</i>
+                        <span class="sidebar-menu-text">User Settings</span>
                     </a>
                 </li>
                 {% if user_roles.0 == 'H' or user_roles.0 == 'A' %}

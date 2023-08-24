@@ -355,9 +355,11 @@
 
                                         </div>
                                         <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item d-flex align-items-center py-2" href="{% url 'account_management:edit_account' %}">
-                                            <span class="material-icons mr-2">settings</span> Account Settings
-                                        </a>
+                                        {% if user_roles.2 == 'H' or user_roles.2 == 'A' %}
+                                            <a class="dropdown-item d-flex align-items-center py-2" href="{% url 'account_management:edit_account' %}">
+                                                <span class="material-icons mr-2">settings</span> Account Settings
+                                            </a>
+                                        {% endif %}
                                         <a class="dropdown-item d-flex align-items-center py-2" href="{% url 'user_setting' %}">
                                             <span class="material-icons mr-2">account_circle</span> User Settings
                                         </a>
@@ -422,10 +424,18 @@
         <div class="sidebar-heading">Employer</div>
         <div class="sidebar-block p-0">
             <ul class="sidebar-menu mt-0">
-                <li class="sidebar-menu-item active">
-                    <a class="sidebar-menu-button" href="{% url 'account_management:edit_account' %}">
-                        <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">settings</i>
-                        <span class="sidebar-menu-text">Account Settings</span>
+                {% if user_roles.2 == 'H' or user_roles.2 == 'A' %}
+                    <li class="sidebar-menu-item active">
+                        <a class="sidebar-menu-button" href="{% url 'account_management:edit_account' %}">
+                            <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">settings</i>
+                            <span class="sidebar-menu-text">Account Settings</span>
+                        </a>
+                    </li>
+                {% endif %}
+                <li class="sidebar-menu-item">
+                    <a class="sidebar-menu-button" href="{% url 'user_setting' %}">
+                        <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">person</i>
+                        <span class="sidebar-menu-text">User Settings</span>
                     </a>
                 </li>
                 {% if user_roles.2 == 'H' or user_roles.2 == 'A' %}
