@@ -18,7 +18,7 @@ from django.utils.encoding import force_bytes, force_str
 from django.views import View
 from django.utils.crypto import get_random_string
 from User_Management.models import CustomUser
-from .forms import InviteForm
+from .forms import InviteForm, OrganizationForm, UserInfoForm
 from User_Management.forms import UserCreationForm
 from Account_Management.models import Profile, Account, AccountUserRelation
 from django.template.loader import render_to_string
@@ -50,6 +50,9 @@ class AccountSettingView(LoginRequiredMixin, View):
         if not account:
             raise Http404("No account linked with the current user.")
 
+        org_form = OrganizationForm(initial={'organization': account.company_name})
+        user_info_form = UserInfoForm(
+            initial={'first_name': current_user.first_name, 'last_name': current_user.last_name})
         user_groups = current_user.groups.all()
         user_roles = [group.name for group in user_groups]
         # account_user_relation = AccountUserRelation.objects.filter(user=current_user).first()
@@ -58,9 +61,43 @@ class AccountSettingView(LoginRequiredMixin, View):
 
         return render(request, self.template_name, {
             'account': account,
+            'org_form': org_form,
+            'user_info_form': user_info_form,
             'user_roles': user_roles[0],
             'company_name': company_name,
         })
+        
+    def post(self, request):
+        org_form = OrganizationForm(request.POST)
+        user_info_form = UserInfoForm(request.POST)
+        if user_info_form.is_valid():
+            current_user = request.user
+
+            current_user.first_name = user_info_form.cleaned_data['first_name']
+            current_user.last_name = user_info_form.cleaned_data['last_name']
+            current_user.save()
+            return redirect('account_management:edit_account')
+        if org_form.is_valid():
+            current_user = request.user
+            account = self.get_account_for_user(current_user)
+
+            if not account:
+                raise Http404("No account linked with the current user.")
+            # profile = Profile.objects.get(user=request.user)
+            # account, created = Account.objects.get_or_create(profile=profile)
+            account.company_name = org_form.cleaned_data['organization']
+            account.save()
+            return redirect('account_management:edit_account')
+        
+        #self.create_or_update_employer_basic_info(request)
+        self.create_or_update_employer_info(request)
+        #self.create_or_update_employer_summary(request)
+        #self.create_or_update_employer_social_media(request)
+
+        # return render(request, self.template_name, {'org_form': org_form})
+        # Thinking of rediect user to organiztion, which view the changes.
+        # return render(request, 'Account_Management/organization.html', {'org_form': org_form})
+        return redirect('account_management:edit_account')
 
     def create_or_update_employer_info(self, request):
         if request.method == 'POST':
