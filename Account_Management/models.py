@@ -23,7 +23,7 @@ class Account(models.Model):
     ]
 
     # profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    profile_logo = models.ImageField(null=True, blank=True)
+    profile_logo = models.URLField(max_length=255, null=True, blank=True)
     company_name = models.CharField(max_length=255, null=True, blank=True)
     company_email = models.EmailField(max_length=255, null=True, blank=True)
     # account_status = models.CharField(max_length=255, choices=ACCOUNT_STATUS_CHOICES)
