@@ -232,11 +232,11 @@ class AddUserView(LoginRequiredMixin, View):
         # get role
         current_user = request.user
         account = getAccount(current_user)
-        user_roles = self.get_user_role(self.request)
+        #user_role = self.get_user_role(self.request)
         user_groups = current_user.groups.all()
         user_roles = [group.name for group in user_groups]
         return render(request, self.template_name, {'form': form, 'user_roles': user_roles[0], 
-                                                    'account': account, 'user_roles': user_roles})
+                                                    'account': account}) #'user_role': user_role})
 
     def post(self, request):
         form = InviteForm(request.POST)
@@ -481,7 +481,6 @@ def get_company_name(user):
 
 
 def check_company_name_existence(target_name):
-    #if Account.objects.filter(get_company_name=target_name).exists():
     if Account.objects.filter(company_name=target_name).exists():
         return "Company name is existed"
     else:
