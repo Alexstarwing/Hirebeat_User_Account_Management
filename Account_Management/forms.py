@@ -10,15 +10,6 @@ class InviteForm(forms.Form):
                                   choices=Role.ROLE_TYPE_CHOICES)
 
 
-class OrganizationForm(forms.Form): 
-    organization = forms.CharField(max_length=200, label='Company Name')
-
-
-class UserInfoForm(forms.Form):
-    first_name = forms.CharField(max_length=200, label='First name')
-    last_name = forms.CharField(max_length=200, label='Last name')
-
-
 class RegisterWithInvitationForm(forms.Form):
     name = forms.CharField(max_length=255)
     email = forms.EmailField(required=True, label='Email')
