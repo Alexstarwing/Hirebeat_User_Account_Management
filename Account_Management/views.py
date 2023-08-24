@@ -18,7 +18,7 @@ from django.utils.encoding import force_bytes, force_str
 from django.views import View
 from django.utils.crypto import get_random_string
 from User_Management.models import CustomUser
-from .forms import InviteForm
+from .forms import InviteForm, OrganizationForm, UserInfoForm
 from User_Management.forms import UserCreationForm
 from Account_Management.models import Profile, Account, AccountUserRelation
 from django.template.loader import render_to_string
@@ -50,6 +50,9 @@ class AccountSettingView(LoginRequiredMixin, View):
         if not account:
             raise Http404("No account linked with the current user.")
 
+        org_form = OrganizationForm(initial={'organization': account.company_name})
+        user_info_form = UserInfoForm(
+            initial={'first_name': current_user.first_name, 'last_name': current_user.last_name})
         user_groups = current_user.groups.all()
         user_roles = [group.name for group in user_groups]
         # account_user_relation = AccountUserRelation.objects.filter(user=current_user).first()
@@ -58,13 +61,48 @@ class AccountSettingView(LoginRequiredMixin, View):
 
         return render(request, self.template_name, {
             'account': account,
+            'org_form': org_form,
+            'user_info_form': user_info_form,
             'user_roles': user_roles[0],
             'company_name': company_name,
         })
+        
+    def post(self, request):
+        org_form = OrganizationForm(request.POST)
+        user_info_form = UserInfoForm(request.POST)
+        if user_info_form.is_valid():
+            current_user = request.user
+
+            current_user.first_name = user_info_form.cleaned_data['first_name']
+            current_user.last_name = user_info_form.cleaned_data['last_name']
+            current_user.save()
+            return redirect('account_management:edit_account')
+        if org_form.is_valid():
+            current_user = request.user
+            account = self.get_account_for_user(current_user)
+
+            if not account:
+                raise Http404("No account linked with the current user.")
+            # profile = Profile.objects.get(user=request.user)
+            # account, created = Account.objects.get_or_create(profile=profile)
+            account.company_name = org_form.cleaned_data['organization']
+            account.save()
+            return redirect('account_management:edit_account')
+        
+        #self.create_or_update_employer_basic_info(request)
+        self.create_or_update_employer_info(request)
+        #self.create_or_update_employer_summary(request)
+        #self.create_or_update_employer_social_media(request)
+
+        # return render(request, self.template_name, {'org_form': org_form})
+        # Thinking of rediect user to organiztion, which view the changes.
+        # return render(request, 'Account_Management/organization.html', {'org_form': org_form})
+        return redirect('account_management:edit_account')
 
     def create_or_update_employer_info(self, request):
         if request.method == 'POST':
             # company_domain = request.POST.get("user_id")
+            profile_logo = request.POST.get("profile_logo")
             company_industry = request.POST.get("company_type")
             company_email = request.POST.get("contactEmail")
             company_location = request.POST.get("location")
@@ -78,6 +116,7 @@ class AccountSettingView(LoginRequiredMixin, View):
             account = self.get_account_for_user(current_user)
 
             try:
+                account.profile_logo = profile_logo
                 account.company_industry = company_industry
                 account.company_email = company_email
                 account.company_location = company_location
@@ -232,11 +271,11 @@ class AddUserView(LoginRequiredMixin, View):
         # get role
         current_user = request.user
         account = getAccount(current_user)
-        user_roles = self.get_user_role(self.request)
+        #user_role = self.get_user_role(self.request)
         user_groups = current_user.groups.all()
         user_roles = [group.name for group in user_groups]
         return render(request, self.template_name, {'form': form, 'user_roles': user_roles[0], 
-                                                    'account': account, 'user_roles': user_roles})
+                                                    'account': account}) #'user_role': user_role})
 
     def post(self, request):
         form = InviteForm(request.POST)
@@ -481,8 +520,7 @@ def get_company_name(user):
 
 
 def check_company_name_existence(target_name):
-    if Account.objects.filter(organization=target_name).exists():
-        # if Account.objects.filter(company_name=target_name).exists():
+    if Account.objects.filter(company_name=target_name).exists():
         return "Company name is existed"
     else:
         return "Company name is brand new!"
