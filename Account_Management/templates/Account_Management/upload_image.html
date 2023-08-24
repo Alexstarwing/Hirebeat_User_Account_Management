@@ -14,8 +14,9 @@
    </style>
 </head>
 <body>
-   <input type="file" id="photo" /></br>
-   <button id="upload" onclick="uploadImage()">Upload Image</button>
+    <input type="file" id="photo" /></br>
+    <button id="upload" onclick="uploadImage()">Upload Image</button>
+    <img id="image" src="" >
 </body>
 <script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-storage.js"></script>
@@ -35,6 +36,7 @@
    // Initialize Firebase
    firebase.initializeApp(firebaseConfig);
    console.log(firebase);
+
    function uploadImage() {
       const ref = firebase.storage().ref();
       const file = document.querySelector("#photo").files[0];
@@ -45,12 +47,28 @@
       const task = ref.child(name).put(file, metadata);task
       .then(snapshot => snapshot.ref.getDownloadURL())
       .then(url => {
-      console.log(url);
-      alert('image uploaded successfully');
-      document.querySelector("#image").src = url;
-   })
-   .catch(console.error);
+          console.log(url);
+          alert('image uploaded successfully');
+          document.querySelector("#image").src = url;
+
+          getDownloadURLForImage(name);
+        })
+       .catch(console.error);
+       }
+
+   function getDownloadURLForImage(imagePath) {
+      const storageRef = firebase.storage().ref();
+      const imageRef = storageRef.child(imagePath); // imagePath 是存储在 Firebase 中的图片路径
+
+      imageRef.getDownloadURL()
+          .then((url) => {
+             console.log("Image URL:", url);
+             // 将获取到的链接设置给 img 标签的 src 属性
+             document.querySelector("#image").src = url;
+          })
+          .catch((error) => {
+             console.error("Error getting download URL:", error);
+          });
    }
-   const errorMsgElement = document.querySelector('span#errorMsg');
 </script>
 </html>
