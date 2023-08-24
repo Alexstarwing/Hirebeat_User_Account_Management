@@ -167,9 +167,9 @@
                                             {% csrf_token %}
                                             <div class="col" style="margin-right: 20px; margin-bottom: 20px">
                                                 <label for="user_id">Company Logo:</label>
-                                                <input type="file" id="photo" /></br>
-                                                <button id="upload" onclick="uploadImage()">Upload</button>
-                                                <img id="image" src="" width="43" height="43">
+                                                <input type="file" id="photo" />
+                                                <button id="upload" onclick="uploadImage()" class="btn btn-primary">Upload</button>
+{#                                                <img id="image" src="" width="43" height="43">#}
                                             </div>
 
 
@@ -281,12 +281,11 @@
             function uploadImage() {
                 const ref = firebase.storage().ref();
                 const file = document.querySelector("#photo").files[0];
-                const accountName = document.getElementById("accountName").value; // Replace this with the account's name or any dynamic value you have
-                const name = accountName + "-" + new Date().getTime(); // Use a unique name
+                const accountName = document.getElementById("accountName").value;
                 const metadata = {
                  contentType: file.type
                 };
-                const task = ref.child("logo/account" + accountName + "/" + name).put(file, metadata);
+                const task = ref.child("logo/account/" + accountName).put(file, metadata);
                 task.then(snapshot => snapshot.ref.getDownloadURL())
                       .then(url => {
                          console.log(url);
@@ -294,7 +293,7 @@
                          document.querySelector("#image").src = url;
 
 
-                         getDownloadURLForImage("logo/" + accountName + "/" + name);
+                         getDownloadURLForImage("logo/account/" + accountName);
                       })
                       .catch(console.error);
            }

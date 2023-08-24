@@ -1,6 +1,6 @@
 from django.urls import path
 from .views import AccountList, AccountSettingView, ConfigureView, \
-    AddUserView, OrganizationView, InvitationView, ManageUserView, RegisterWithInvitationView
+    AddUserView, OrganizationView, InvitationView, ManageUserView, RegisterWithInvitationView, RetrieveImageView
 from . import views
 
 app_name = 'account_management'
@@ -16,4 +16,5 @@ urlpatterns = [
     path('register/<invitation_token>/', RegisterWithInvitationView.as_view(), name='register_with_invitation'),
     path('delete_user/<int:user_id>/', views.delete_user, name='delete_user'),
     path('upload_image/', views.image_upload_view, name='image_upload'),
+    path('retrieve/', RetrieveImageView.as_view(), name='retrieve_image'),
 ]
