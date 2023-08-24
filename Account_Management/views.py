@@ -481,8 +481,8 @@ def get_company_name(user):
 
 
 def check_company_name_existence(target_name):
-    if Account.objects.filter(organization=target_name).exists():
-        # if Account.objects.filter(company_name=target_name).exists():
+    #if Account.objects.filter(get_company_name=target_name).exists():
+    if Account.objects.filter(company_name=target_name).exists():
         return "Company name is existed"
     else:
         return "Company name is brand new!"
