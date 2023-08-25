@@ -501,6 +501,8 @@
         </div>
     </div>
 </div>
+<input id="accountName" type="hidden" value="{{ account.company_name }}">
+<input id="userName" type="hidden" value="{{ user.first_name }}_{{ user.last_name }}">
 </div>
     <!-- // END drawer-layout -->
 <div id="app-settings">
@@ -600,7 +602,10 @@
        }
 
        // Set the image path here
-       const imagePath = 'logo/user/testCo_Ming_Weng';
+       const accountName = document.getElementById("accountName").value;
+       const userName = document.getElementById("userName").value;
+       const name = accountName + '_' + userName
+       const imagePath = 'logo/user/' + name;
        getDownloadURLForImage(imagePath);
     </script>
 
