@@ -187,11 +187,8 @@
               const ref = firebase.storage().ref();
               const file = document.querySelector("#photo").files[0];
               const accountName = document.getElementById("accountName").value;
-              console.log(accountName)
               const userName = document.getElementById("userName").value;
-              console.log(userName)
               const name = accountName + '_' + userName
-              console.log(name)
                const metadata = {
                  contentType: file.type
               };

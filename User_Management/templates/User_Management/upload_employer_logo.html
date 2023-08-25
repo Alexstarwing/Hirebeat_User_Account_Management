@@ -14,11 +14,11 @@
    </style>
 </head>
 <body>
-    <input type="file" id="photo" /></br>
-    {{ user.first_name }} {{ user.last_name }}
-    {{ account.company_name }}
-    <button id="upload" onclick="uploadImage()">Upload</button>
-    <img id="image" src="" >
+{#    <input type="file" id="photo" /></br>#}
+{#    {{ user.first_name }} {{ user.last_name }}#}
+{#    {{ account.company_name }}#}
+{#    <button id="upload" onclick="uploadImage()">Upload</button>#}
+    <img id="image" src="" alt="Downloaded Image">
 </body>
 <script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-storage.js"></script>
@@ -38,39 +38,42 @@
    // Initialize Firebase
    firebase.initializeApp(firebaseConfig);
    console.log(firebase);
-
-   function uploadImage() {
-      const ref = firebase.storage().ref();
-      const file = document.querySelector("#photo").files[0];
-      const name = +new Date() + "-" + file.name;
-      const metadata = {
-         contentType: file.type
-      };
-      const task = ref.child(name).put(file, metadata);task
-      .then(snapshot => snapshot.ref.getDownloadURL())
-      .then(url => {
-          console.log(url);
-          alert('image uploaded successfully');
-          document.querySelector("#image").src = url;
-
-          getDownloadURLForImage(name);
-        })
-       .catch(console.error);
-       }
+   {#function uploadImage() {#}
+   {#   const ref = firebase.storage().ref();#}
+   {#   const file = document.querySelector("#photo").files[0];#}
+   {#   const name = +new Date() + "-" + file.name;#}
+   {#   const metadata = {#}
+   {#      contentType: file.type#}
+   {#   };#}
+   {#   const task = ref.child(name).put(file, metadata);task#}
+   {#   .then(snapshot => snapshot.ref.getDownloadURL())#}
+   {#   .then(url => {#}
+   {#       console.log(url);#}
+   {#       alert('image uploaded successfully');#}
+   {#       document.querySelector("#image").src = url;#}
+   {##}
+   {#       getDownloadURLForImage(name);#}
+   {#     })#}
+   {#    .catch(console.error);#}
+   {#    }#}
 
    function getDownloadURLForImage(imagePath) {
+       console.log(imagePath)
       const storageRef = firebase.storage().ref();
-      const imageRef = storageRef.child(imagePath); // imagePath 是存储在 Firebase 中的图片路径
+      const imageRef = storageRef.child(imagePath);
 
       imageRef.getDownloadURL()
           .then((url) => {
              console.log("Image URL:", url);
-             // 将获取到的链接设置给 img 标签的 src 属性
              document.querySelector("#image").src = url;
           })
           .catch((error) => {
              console.error("Error getting download URL:", error);
           });
    }
+
+   // Set the image path here
+   const imagePath = 'logo/user/testCo_Ming_Weng';
+   getDownloadURLForImage(imagePath);
 </script>
 </html>
