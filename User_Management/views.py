@@ -430,6 +430,23 @@ def update_company_name(request, account_id):
         account.company_name = company_name
         account.save()
     return redirect('login')  # Redirect to the desired page after submission
+
+
+class UpdateEmployerLogoView(LoginRequiredMixin, View):
+    template_name = 'User_Management/upload_employer_logo.html'
+
+    def get(self, request):
+        current_user = self.request.user
+        account_user_relation = AccountUserRelation.objects.filter(user=current_user).first()
+        account = account_user_relation.account
+        return render(request, 'User_Management/upload_employer_logo.html', {'user': current_user, 'account': account})
+
+
+
+
+
+
+
 # def update_company_name(request, user):
 #     relation = AccountUserRelation.objects.filter(user=user).first()
 #     if relation:

@@ -1,7 +1,7 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views
 from .views import ProfileList, CustomLoginView, RegisterPage, ActivateAccount, UserSettingView, ResendActivationView,\
-    VerifyCodeView
+    VerifyCodeView, UpdateEmployerLogoView
 from django.contrib.auth.views import LogoutView
 from . import views
 
@@ -29,4 +29,5 @@ urlpatterns = [
     path('verify_code/', VerifyCodeView.as_view(), name='verify_code'),
     path('resend_activation/', ResendActivationView.as_view(), name='resend_activation'),
     path('update_company_name/<int:account_id>/', views.update_company_name, name='update_company_name'),
+    path('upload_employer_logo/', UpdateEmployerLogoView.as_view(), name='user_avatar'),
 ]
