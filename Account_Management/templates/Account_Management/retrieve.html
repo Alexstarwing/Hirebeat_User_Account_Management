@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <title>retrieve Logo</title>
+</head>
+<body>
+    <h1>Company Logo</h1>
+    <img id="profileImage" src="" alt="User Profile Image">
+    {{ account.company_name }}
+    <input id="accountName" type="hidden" value="{{ account.company_name }}">
+</body>
+<script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-storage.js"></script>
+<script>
+   const firebaseConfig = {
+        apiKey: "AIzaSyBxYu2sNjLgQsJJ7PwyK228DDdgg4rgSTw",
+        authDomain: "hirebeat-561be.firebaseapp.com",
+        projectId: "hirebeat-561be",
+        storageBucket: "hirebeat-561be.appspot.com",
+        messagingSenderId: "100708272950",
+        appId: "1:100708272950:web:7fbab5c81409113efd8197",
+        measurementId: "G-56Z0DL0SH3"
+    };
+
+   firebase.initializeApp(firebaseConfig);
+
+   // 获取 Firebase Storage 中的图像 URL
+   function getProfileImageURL() {
+       const accountName = document.getElementById('accountName').value
+       const imagePath = "logo/account/" + accountName;
+       const storageRef = firebase.storage().ref();
+       const imageRef = storageRef.child(imagePath);
+
+      imageRef.getDownloadURL()
+         .then((url) => {
+            const profileImage = document.getElementById("profileImage");
+            console.log(profileImage)
+            profileImage.src = url;
+         })
+         .catch((error) => {
+            console.error("Error getting download URL:", error);
+         });
+   }
+
+   window.onload = function() {
+      getProfileImageURL();
+   };
+</script>
+</html>

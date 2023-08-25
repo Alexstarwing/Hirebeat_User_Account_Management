@@ -528,6 +528,19 @@ def check_company_name_existence(target_name):
 
 def image_upload_view(request):
     return render(request, 'Account_Management/upload_image.html')
+
+
+class RetrieveImageView(View):
+    def get(self, request):
+        current_account = self.get_account_for_user(request.user)  # 这里需要实现 get_account_for_user 方法
+        return render(request, 'Account_Management/retrieve.html', {'account': current_account})
+
+    def get_account_for_user(self, user):
+        try:
+            account_user_relation = AccountUserRelation.objects.get(user=user)
+            return account_user_relation.account
+        except AccountUserRelation.DoesNotExist:
+            return None
 # create_or_update_employer_basic_info: Creates or updates basic information for an employer's profile
 # def create_or_update_employer_basic_info(request):
 #     if request.method == 'POST':
