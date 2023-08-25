@@ -1,4 +1,5 @@
 {% extends 'Account_Management/account_main.html' %}
+{% load static %}
 {% load replace %}
 {% block content %}
     <head>
@@ -53,6 +54,28 @@
                                     <button type="submit" class="btn btn-primary">Save</button>
                                 </div>
                             </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card card-form">
+                    <div class="row no-gutters">
+                        <div class="col-lg-4 card-body">
+                            <p><strong class="headings-color">Profile Settings</strong></p>
+                            <p class="text-muted mb-0">Update your logo and video here.</p>
+                        </div>
+                        <div class="col-lg-8 card-form__body card-body">
+                            <div class="form-group">
+                                <label>Avatar</label></br>
+                                <input type="file" id="photo" /></br>
+                                <div class="col">
+                                    <button id="upload" onclick="uploadImage()" class="btn btn-primary" style="margin-top: 20px">Upload</button>
+                                    <img id="image" src="" >
+                                    <input id="accountName" type="hidden" value="{{ account.company_name }}">
+                                    <input id="userName" type="hidden" value="{{ user.first_name }}_{{ user.last_name }}">
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -136,9 +159,69 @@
                     <a href="{% url 'account_management:account'%}" class="btn btn-success">Go Back</a>
                 </div>
             </div>
-
+{#        <input type="file" id="photo" /></br>#}
+{#        <button id="upload" onclick="uploadImage()">Upload</button>#}
+{#        <img id="image" src="" >#}
 
         </div>
+        <script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-storage.js"></script>
+        <script>
+
+           //paste here your copied configuration code
+           const firebaseConfig = {
+              apiKey: "AIzaSyBxYu2sNjLgQsJJ7PwyK228DDdgg4rgSTw",
+              authDomain: "hirebeat-561be.firebaseapp.com",
+              projectId: "hirebeat-561be",
+              storageBucket: "hirebeat-561be.appspot.com",
+              messagingSenderId: "100708272950",
+              appId: "1:100708272950:web:7fbab5c81409113efd8197",
+              measurementId: "G-56Z0DL0SH3"
+           };
+
+           // Initialize Firebase
+           firebase.initializeApp(firebaseConfig);
+           console.log(firebase);
+
+           function uploadImage() {
+              const ref = firebase.storage().ref();
+              const file = document.querySelector("#photo").files[0];
+              const accountName = document.getElementById("accountName").value;
+              console.log(accountName)
+              const userName = document.getElementById("userName").value;
+              console.log(userName)
+              const name = accountName + '_' + userName
+              console.log(name)
+               const metadata = {
+                 contentType: file.type
+              };
+              const task = ref.child("logo/user/" + name).put(file, metadata);task
+              .then(snapshot => snapshot.ref.getDownloadURL())
+              .then(url => {
+                  console.log(url);
+                  alert('image uploaded successfully');
+                  document.querySelector("#image").src = url;
+
+                  getDownloadURLForImage("logo/user/" + name);
+                })
+               .catch(console.error);
+               }
+
+           function getDownloadURLForImage(imagePath) {
+              const storageRef = firebase.storage().ref();
+              const imageRef = storageRef.child(imagePath);
+
+              imageRef.getDownloadURL()
+                  .then((url) => {
+                     console.log("Image URL:", url);
+                     // 将获取到的链接设置给 img 标签的 src 属性
+                     document.querySelector("#image").src = url;
+                  })
+                  .catch((error) => {
+                     console.error("Error getting download URL:", error);
+                  });
+           }
+        </script>
         <script>
             const newPassword1 = document.getElementById('new_password1');
             const newPassword2 = document.getElementById('new_password2');
