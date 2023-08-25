@@ -167,8 +167,10 @@
                                             {% csrf_token %}
                                             <div class="col" style="margin-right: 20px; margin-bottom: 20px">
                                                 <label for="user_id">Company Logo:</label>
-                                                <input type="file" id="photo" />
-                                                <button id="upload" onclick="uploadImage()" class="btn btn-primary">Upload</button>
+                                                <img id="image" src="{{ account.profile_logo }}" width="43" height="43">
+                                                <input type="file" id="photo" onchange="uploadImage()"/>
+                                                {% comment %} <button id="upload" onclick="uploadImage()" class="btn btn-primary">Upload</button> {% endcomment %}
+                                                <input type="url" name="profile_logo" required class="basic_info" value="{{ account.profile_logo }}"><br>
 {#                                                <img id="image" src="" width="43" height="43">#}
                                             </div>
 
@@ -301,11 +303,13 @@
             function getDownloadURLForImage(imagePath) {
               const storageRef = firebase.storage().ref();
               const imageRef = storageRef.child(imagePath);
+              var profileLogoInput = document.querySelector('input[name="profile_logo"]');
 
               imageRef.getDownloadURL()
                   .then((url) => {
                      console.log("Image URL:", url);
                      document.querySelector("#image").src = url;
+                     profileLogoInput.value = url;
                   })
                   .catch((error) => {
                      console.error("Error getting download URL:", error);
