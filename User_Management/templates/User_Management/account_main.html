@@ -97,7 +97,14 @@
 
         .form-group input {
             width: 80%; 
-        }       
+        }
+
+        #image {
+            width: 40px;
+            height: 40px;
+            object-fit: cover;
+            border-radius: 50%;
+        }
     </style>
 </head>
 <body class="layout-default">
@@ -362,7 +369,8 @@
                                         <div class="dropdown-item d-flex align-items-center py-2 navbar-company-info py-3">
 
                                             <span class="mr-3">
-                                                <img src="{{ account.profile_logo }}" width="43" height="43" alt="avatar">
+{#                                                <img src="{{ account.profile_logo }}" width="43" height="43" alt="avatar">#}
+                                                <img id="image" src="">
                                             </span>
                                             <span class="flex d-flex flex-column">
                                                 <strong class="h5 m-0">{{ request.user|title }}</strong>
@@ -557,7 +565,44 @@
     <!-- Chart Samples -->
     <script src="{% static 'js/page.analytics.js' %}"></script>
     <script src="{% static 'pop-up.js' %}"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-storage.js"></script>
+    <script>
 
+       //paste here your copied configuration code
+       const firebaseConfig = {
+          apiKey: "AIzaSyBxYu2sNjLgQsJJ7PwyK228DDdgg4rgSTw",
+          authDomain: "hirebeat-561be.firebaseapp.com",
+          projectId: "hirebeat-561be",
+          storageBucket: "hirebeat-561be.appspot.com",
+          messagingSenderId: "100708272950",
+          appId: "1:100708272950:web:7fbab5c81409113efd8197",
+          measurementId: "G-56Z0DL0SH3"
+       };
+
+       // Initialize Firebase
+       firebase.initializeApp(firebaseConfig);
+       console.log(firebase);
+
+       function getDownloadURLForImage(imagePath) {
+           console.log(imagePath)
+          const storageRef = firebase.storage().ref();
+          const imageRef = storageRef.child(imagePath);
+
+          imageRef.getDownloadURL()
+              .then((url) => {
+                 console.log("Image URL:", url);
+                 document.querySelector("#image").src = url;
+              })
+              .catch((error) => {
+                 console.error("Error getting download URL:", error);
+              });
+       }
+
+       // Set the image path here
+       const imagePath = 'logo/user/testCo_Ming_Weng';
+       getDownloadURLForImage(imagePath);
+    </script>
 
 
 </div>
