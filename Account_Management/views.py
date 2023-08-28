@@ -503,8 +503,15 @@ def delete_account(request, account):
 
 def delete_user(request, user_id):
     user = get_object_or_404(CustomUser, id=user_id)
-    user.delete()
-    return HttpResponseRedirect(reverse('login'))
+    user.is_active = False
+    user.save()
+    return redirect('account_management:manage_users')
+
+def active_user(request, user_id):
+    user = get_object_or_404(CustomUser, id=user_id)
+    user.is_active = True
+    user.save()
+    return redirect('account_management:manage_users')
 
 
 def getAccount(user):
