@@ -73,17 +73,17 @@
                         </div>
                         <div class="col-lg-8 card-form__body card-body">
                             <div class="form-group">
-                                <label>Avatar</label></br>
+                                <label style="margin-left: 16px">Avatar</label></br>
 
                                 <form method="post" action="{% url 'user_setting' %}">
                                     {% csrf_token %}
                                     <div class="col">
 {#                                        <button id="upload" onclick="uploadImage()" class="btn btn-primary" style="margin-top: 20px">Upload</button>#}
                                         <input type="file" id="photo" onchange="uploadImage()"/></br>
-                                        <img id="image" src="{{ user.user_logo }}"  alt="Not set yet">
-                                        <input type="url" name="user_logo" required class="shadow-border"  value="{{ user.user_logo }}">
+                                        <img id="image" src="{{ user.user_logo }}"  alt="Not set yet" style="margin-top: 20px">
+                                        <input type="url" name="user_logo" required class="shadow-border"  value="{{ user.user_logo }}" style="margin-top: 20px">
                                         <div class="text-right mb-5">
-                                            <input class="btn btn-primary" type="submit" value="Submit">
+                                            <input class="btn btn-primary" type="submit" value="Submit" style="margin-top: 20px; margin-right: 650px">
                                         </div>
                                     </div>
                                 </form>
@@ -228,7 +228,7 @@
                   .then((url) => {
                      console.log("Image URL:", url);
                      document.querySelector("#image").src = url;
-                     userLogoInput.src = url;
+                     userLogoInput.value = url;
                   })
                   .catch((error) => {
                      console.error("Error getting download URL:", error);

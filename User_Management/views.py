@@ -249,6 +249,14 @@ class UserSettingView(LoginRequiredMixin, View):
     context_object_name = 'user_settings'
     template_name = 'User_Management/user_setting.html'
 
+    def update_user_logo(self, request):
+        current_user = request.user
+
+        if request.method == 'POST':
+            user_logo = request.POST.get['user_logo']
+            current_user.user_logo = user_logo
+            current_user.save
+
     def get(self, request):
         current_user = request.user
 
