@@ -170,6 +170,9 @@
                                                 <label for="user_id" style="margin-left: -15px">Company Logo:</label>
                                                 <img id="image" src="{{ account.profile_logo }}" width="43" height="43">
                                                 <input type="file" id="photo" onchange="uploadImage()"/>
+                                                <div id="loading" style="display: none;">
+                                                    <img src="{% static 'loading.gif' %}" height="40px" width="40px">
+                                                </div>
                                                 {% comment %} <button id="upload" onclick="uploadImage()" class="btn btn-primary">Upload</button> {% endcomment %}
                                                 <input type="url" name="profile_logo" required class="basic_info" value="{{ account.profile_logo }}" hidden><br>
 {#                                                <img id="image" src="" width="43" height="43">#}
@@ -185,7 +188,7 @@
                                                 <video controls hidden>
                                                     <source id="video" src="">
                                                 </video>
-                                                <input type="url" name="profile_video" required class="basic_info" value="{{ account.profile_video }}"><br>
+                                                <input type="url" name="profile_video" required class="basic_info" value="{{ account.profile_video }}" hidden><br>
 {#                                                <img id="image" src="" width="43" height="43">#}
                                             </div>
 
@@ -298,6 +301,41 @@
 
            // Initialize Firebase
            firebase.initializeApp(firebaseConfig);
+
+           function uploadImage() {
+                const ref = firebase.storage().ref();
+                const file = document.querySelector("#photo").files[0];
+                const accountName = document.getElementById("accountName").value;
+                const metadata = {
+                 contentType: file.type
+                };
+                const task = ref.child("logo/account/" + accountName).put(file, metadata);
+                task.then(snapshot => snapshot.ref.getDownloadURL())
+                      .then(url => {
+                         console.log(url);
+                         alert('image uploaded successfully');
+                         document.querySelector("#image").src = url;
+                         getDownloadURLForImage("logo/account/" + accountName);
+                      })
+                      .catch(console.error);
+           }
+
+           function getDownloadURLForImage(imagePath) {
+              const storageRef = firebase.storage().ref();
+              const imageRef = storageRef.child(imagePath);
+              var profileLogoInput = document.querySelector('input[name="profile_logo"]');
+
+              imageRef.getDownloadURL()
+                  .then((url) => {
+                     console.log("Image URL:", url);
+                     document.querySelector("#image").src = url;
+                     profileLogoInput.value = url;
+                  })
+                  .catch((error) => {
+                     console.error("Error getting download URL:", error);
+                  });
+           }
+
 
            function uploadVideo() {
               showLoading();
