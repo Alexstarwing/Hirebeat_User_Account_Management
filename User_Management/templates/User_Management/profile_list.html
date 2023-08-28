@@ -10,7 +10,7 @@
         <div class="page__heading">
             <div class="container-fluid page__container">
                 <h1 class="mb-0">Dashboard</h1>
-                <p>Welcome, {{ first_name }} {{ last_name }}!</p>
+{#                <p>Welcome, {{ first_name }} {{ last_name }}!</p>#}
 {#                {% if user_roles %}#}
 {#                    <p>{{ user_roles|slice:"2:-8"|replace:"_"}}</p>#}
 {#                {% else %}#}
@@ -30,23 +30,30 @@
                         <div class="col-md-8">
                             <div class="card">
                                 <div class="card-header card-header-large bg-light d-flex align-items-center">
-                                    <div class="flex">
-                                        <h4 class="card-header__title">Summary</h4>
-                                        <div class="card-subtitle text-muted">Your recent summary</div>
+                                    <div class="col">
+                                        <h4 class="card-header__title" style="margin-left: 150px">Company Video</h4>
+                                        <div class="card-subtitle text-muted" style="margin-left: 150px">Your Company's Video</div>
                                     </div>
                                     <div class="ml-auto">
-                                        <a href="author-earnings.html" class="btn btn-light">Browse All</a>
+{#                                        <a href="author-earnings.html" class="btn btn-light">Browse All</a>#}
                                     </div>
                                 </div>
 
-                                <div class="card-body">
-
-                                    <div class="chart" style="height: 295px;">
-                                        <canvas id="viewsChart">
-                                            <span style="font-size: 1rem;"><strong>Views</strong> area chart goes here.</span>
-                                        </canvas>
-                                    </div>
+                                <div class="card-header card-header-large bg-light d-flex align-items-center">
+                                    <video controls width="750px" height="422x" style="margin-left: 150px">
+                                        <source src="{{ account.profile_video }}">
+                                        Your browser does not support the video tag.
+                                    </video>
                                 </div>
+
+{#                                <div class="card-body">#}
+{##}
+{#                                    <div class="chart" style="height: 295px;">#}
+{#                                        <canvas id="viewsChart">#}
+{#                                            <span style="font-size: 1rem;"><strong>Views</strong> area chart goes here.</span>#}
+{#                                        </canvas>#}
+{#                                    </div>#}
+{#                                </div>#}
                             </div>
                         </div>
                         <div class="col-md-4">
@@ -71,6 +78,8 @@
                                     </div>
 
                                 </div>
+
+
 
 
                                 <ul class="list-group list-rankings">
