@@ -170,7 +170,7 @@
                                                 <img id="image" src="{{ account.profile_logo }}" width="43" height="43">
                                                 <input type="file" id="photo" onchange="uploadImage()"/>
                                                 {% comment %} <button id="upload" onclick="uploadImage()" class="btn btn-primary">Upload</button> {% endcomment %}
-                                                <input type="url" name="profile_logo" required class="basic_info" value="{{ account.profile_logo }}"><br>
+                                                <input type="url" name="profile_logo" required class="basic_info" value="{{ account.profile_logo }}" hidden><br>
 {#                                                <img id="image" src="" width="43" height="43">#}
                                             </div>
 
