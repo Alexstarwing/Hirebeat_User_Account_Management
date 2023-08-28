@@ -13,6 +13,13 @@
             width: 100%;
             padding: 5px;
         }
+
+        #image {
+            width: 40px;
+            height: 40px;
+            object-fit: cover;
+            border-radius: 50%;
+        }
     </style>
     </head>
     <body>
@@ -67,13 +74,21 @@
                         <div class="col-lg-8 card-form__body card-body">
                             <div class="form-group">
                                 <label>Avatar</label></br>
-                                <input type="file" id="photo" /></br>
-                                <div class="col">
-                                    <button id="upload" onclick="uploadImage()" class="btn btn-primary" style="margin-top: 20px">Upload</button>
-                                    <img id="image" src=""  alt="Not set yet">
-                                    <input id="accountName" type="hidden" value="{{ account.company_name }}">
-                                    <input id="userName" type="hidden" value="{{ user.first_name }}_{{ user.last_name }}">
-                                </div>
+
+                                <form method="post" action="{% url 'user_setting' %}">
+                                    {% csrf_token %}
+                                    <div class="col">
+{#                                        <button id="upload" onclick="uploadImage()" class="btn btn-primary" style="margin-top: 20px">Upload</button>#}
+                                        <input type="file" id="photo" onchange="uploadImage()"/></br>
+                                        <img id="image" src="{{ user.user_logo }}"  alt="Not set yet">
+                                        <input type="url" name="user_logo" required class="shadow-border"  value="{{ user.user_logo }}">
+                                        <div class="text-right mb-5">
+                                            <input class="btn btn-primary" type="submit" value="Submit">
+                                        </div>
+                                    </div>
+                                </form>
+                                <input id="accountName" type="hidden" value="{{ account.company_name }}">
+                                <input id="userName" type="hidden" value="{{ user.first_name }}_{{ user.last_name }}">
                             </div>
 
                         </div>
@@ -192,8 +207,8 @@
                const metadata = {
                  contentType: file.type
               };
-              const task = ref.child("logo/user/" + name).put(file, metadata);task
-              .then(snapshot => snapshot.ref.getDownloadURL())
+              const task = ref.child("logo/user/" + name).put(file, metadata);
+              task.then(snapshot => snapshot.ref.getDownloadURL())
               .then(url => {
                   console.log(url);
                   alert('image uploaded successfully');
@@ -207,12 +222,13 @@
            function getDownloadURLForImage(imagePath) {
               const storageRef = firebase.storage().ref();
               const imageRef = storageRef.child(imagePath);
+              var userLogoInput = document.querySelector('input[name="user_logo"]');
 
               imageRef.getDownloadURL()
                   .then((url) => {
                      console.log("Image URL:", url);
-                     // 将获取到的链接设置给 img 标签的 src 属性
                      document.querySelector("#image").src = url;
+                     userLogoInput.src = url;
                   })
                   .catch((error) => {
                      console.error("Error getting download URL:", error);

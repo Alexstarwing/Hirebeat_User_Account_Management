@@ -86,3 +86,7 @@ class UpdatePasswordForm(forms.Form):
                                     label="New Password")
     new_password2 = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'shadow-border'}),
                                     label="Confirm New Password")
+
+
+class UserLogoUrlForm(forms.Form):
+    user_logo_url = forms.URLField(max_length=300, label='user_logo_url')

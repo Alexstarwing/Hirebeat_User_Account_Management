@@ -22,7 +22,7 @@ from django.utils.encoding import force_bytes, force_str
 from django.core.mail import send_mail
 from django.contrib import messages
 from .forms import UserCreationForm, CustomLoginForm, UpdateEmailForm, UserInfoForm, UpdatePasswordForm, \
-    VerificationForm, ResendActivationEmailForm
+    VerificationForm, ResendActivationEmailForm, UserLogoUrlForm
 from .models import Profile, CustomUser
 from Account_Management.models import Account, AccountUserRelation, TeamInvitation
 from django.contrib.auth.models import Group
@@ -33,7 +33,7 @@ class CustomLoginView(LoginView):
     template_name = 'User_Management/login.html'
     fields = '__all__'
     redirect_authenticated_user = True
-    
+
     def form_valid(self, form):
         user = form.get_user()
 
@@ -48,7 +48,7 @@ class CustomLoginView(LoginView):
                 if account_user_relation:
                     account = account_user_relation.account
                     other_users_count = AccountUserRelation.objects.filter(account=account).exclude(user=user).count()
-                    
+
                     if other_users_count == 0:
                         role_type = invitation_account.role.role_type.capitalize()
                         role_type += " Group"
@@ -61,8 +61,6 @@ class CustomLoginView(LoginView):
                         # Assign the new account from the invitation
                         account_user_relation.account = invitation_account.account
                         account_user_relation.save()
-                        
-                        
 
         return super().form_valid(form)
 
@@ -267,8 +265,11 @@ class UserSettingView(LoginRequiredMixin, View):
         # delete account function
         account_user_relation = AccountUserRelation.objects.filter(user=current_user).first()
         account = account_user_relation.account
+        user_logo_url_form = UserLogoUrlForm(initial={'user_logo': current_user.user_logo})
 
         return render(request, self.template_name, {
+            'user': current_user,
+            'user_logo_url_form': user_logo_url_form,
             'user_info_form': user_info_form,
             'update_email_form': update_email_form,
             'update_password_form': update_password_form,
@@ -440,12 +441,6 @@ class UpdateEmployerLogoView(LoginRequiredMixin, View):
         account_user_relation = AccountUserRelation.objects.filter(user=current_user).first()
         account = account_user_relation.account
         return render(request, 'User_Management/upload_employer_logo.html', {'user': current_user, 'account': account})
-
-
-
-
-
-
 
 # def update_company_name(request, user):
 #     relation = AccountUserRelation.objects.filter(user=user).first()

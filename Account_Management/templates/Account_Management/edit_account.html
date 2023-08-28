@@ -104,55 +104,6 @@
             </div>
 
             <div class="container-fluid page__container">
-                {% comment %} <div class="card card-form">
-                    <div class="row no-gutters">
-                        <div class="col-lg-4 card-body">
-                            <p><strong class="headings-color">Organization</strong></p>
-                            <p class="text-muted mb-0">Update the information on your company.</p>
-                        </div>
-                        <div class="col-lg-8 card-form__body card-body">
-                            <div class="row">
-                                <div class="col">
-                                    <div class="form-group">
-                                        <!-- <label for="office-list">Company Name: </label>
-                                        {{ company_name }}
-                                        <br><br> -->
-
-                                        <div style="margin-top: 20px">
-                                            {%for message in messages %}
-                                               {%if "manage" in message.tags %}
-                                                    <p> {{message}} </p>
-                                               {%endif%}
-                                            {%endfor%}
-                                        </div>
-                                        
-                                        <form method="post" class="form-inline">
-                                            {% csrf_token %}
-                                            {{ org_form.as_p }}
-                                            <button type="submit" class="btn btn-primary">Save</button>
-                                        </form>                                        
-                                        <!-- <label for="username">Orgnaization Name</label>
-                                        <input id="username" type="text" class="form-control" placeholder="Username" value="Hirebeat"> -->
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                
-                                <label for="office-list">Offices</label>
-                                <button id="add-office-btn" class="btn btn-primary">+ Add Office</button>
-                                <ul id="office-list" class="list-group"></ul>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="department-list">Departments</label>
-                                <button id="add-department-btn" class="btn btn-primary">+ New Department</button>
-                                <ul id="department-list" class="list-group"></ul>
-                            </div>
-                        </div>
-                    </div>
-                </div> {% endcomment %}
-
                 <div class="card card-form">
                     <div class="row no-gutters">
                         <div class="col-lg-4 card-body">
@@ -167,7 +118,7 @@
                                             {% csrf_token %}
                                             <div class="col" style="margin-right: 20px; margin-bottom: 20px">
                                                 <label for="user_id">Company Logo:</label>
-                                                <img id="image" src="{{ account.profile_logo }}" width="43" height="43">
+                                                <img id="image" src="{{ account.profile_logo }}" width="43" height="43" alt="Not Set Yet">
                                                 <input type="file" id="photo" onchange="uploadImage()"/>
                                                 {% comment %} <button id="upload" onclick="uploadImage()" class="btn btn-primary">Upload</button> {% endcomment %}
                                                 <input type="url" name="profile_logo" required class="basic_info" value="{{ account.profile_logo }}"><br>
@@ -315,8 +266,6 @@
                      console.error("Error getting download URL:", error);
                   });
            }
-
-
         </script>
 
             
