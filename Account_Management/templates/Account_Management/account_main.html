@@ -48,30 +48,135 @@
             font-family: 'Rubik', sans-serif;
         }
 
-        .popup-container {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
-            /* Add more styles as needed */
-        }
         
-        .popup-content {
-            /* Styles for the pop-up content */
-        }
-
         #image {
             width: 40px;
             height: 40px;
             object-fit: cover;
             border-radius: 50%;
         }
+
+        #popup-modal.modal,
+        #delete-popup-modal {
+            display: none;
+            top: 0;
+            left: 0;
+            width: 100%; /* Adjust the width as desired */
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+            position: fixed; /* Set position to fixed */
+        }
+        
+        #popup-modal .modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 15px;
+            
+            width: 500px; /* Adjust the width as desired */
+            height: 425px;
+            position: absolute;
+            transform: translate(90%, 40%); /* Center the content vertically and horizontally */
+            display: flex;
+            flex-direction: column;
+            
+            /* align-items: center;  */
+        }
+
+        #delete-popup-modal .modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 15px;
+            
+            width: 500px; /* Adjust the width as desired */
+            height: 300px;
+            position: absolute;
+            transform: translate(90%, 40%); /* Center the content vertically and horizontally */
+            display: flex;
+            flex-direction: column;
+            
+            /* align-items: center;  */
+        }
+
+        #logout-button {
+            /* margin: -100px 0 0 600px; */
+            /* margin-left: auto;
+            margin-top: -10px; */
+            position: absolute;
+            top: 12px; 
+            right: 12px;
+        }
+
+        #delete-button{
+            /* margin: -100px 0 0 600px; */
+            /* margin-left: auto;
+            margin-top: -10px; */
+            position: absolute;
+            bottom: 20px; 
+            right: 150px;
+        }
+
+        #cancel-button {
+            /* margin: -100px 0 0 600px; */
+            /* margin-left: auto;
+            margin-top: -10px; */
+            position: absolute;
+            bottom: 20px; 
+            left: 150px;
+        }
+
+
+        .form-group label{
+            text-align: center; 
+        }
+
     </style>
 </head>
 <body class="layout-default">
+
+    {% if account %}
+        {% comment %} pop-up window for fill in the company name {% endcomment %}
+        {% if not account.company_name %}
+            <div id="popup-modal" class="modal">
+                <div class="modal-content"><br>
+                    <form method="post" action="{% url 'logout' %}">
+                        {% csrf_token %}
+                        <button id="logout-button" type="submit" class="btn btn-secondary" >Logout</button>
+                    </form><br><br>
+                    <center>
+                        <h3>Please fill in the Company Name</h3><br><br>
+                    </center>
+                    <form method="post" action="{% url 'update_company_name' account.id %}">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="company_name">Company Name:</label>
+                            <input type="text" id="company_name" name="company_name" required><br>
+                        </div>
+                        <center>
+                            <p>If you are not the owner of the company, please log out and </p>
+                            <p>wait for an invitation from your company's owner to register.</p>
+                        </center>
+                        <button id="submit-button" type="submit" class="btn btn-primary" style="margin-left: 190px; margin-top: 20px">Submit</button>
+                    </form>
+                </div>
+            </div>
+        {% endif %}
+    {% endif %}
+    <div id="delete-popup-modal" class="modal">
+        <div class="modal-content"><br>
+            <center>
+                <h3>You are deleting the account...</h3><br><br>
+            </center>
+            <form method="post" action="{% url 'delete_account' account.id %}" class="delete-form">
+                {% csrf_token %}
+                <center>
+                    <p>Are you sure you want to delete the account?</p>
+                    <p>Click Cancel to go back. </p><br>
+                </center>
+                <button id="cancel-button" type="button" class="btn btn-secondary" >Cancel</button>
+                <button id="delete-button" type="submit" class="btn btn-primary" style="margin-left: 190px; margin-top: 20px">Delete</button>
+            </form>
+        </div>
+    </div>
 
     <div class="mdk-drawer-layout js-mdk-drawer-layout" data-push data-responsive-width="992px" data-fullbleed>
         <div class="mdk-drawer-layout__content">
@@ -260,13 +365,16 @@
                 </li>
                 {% if user_roles.0 == 'H' or user_roles.0 == 'A' %}
                     {% if account %}
-                        <form method="post" action="{% url 'delete_account' account.id %}" class="delete-form">
-                            {% csrf_token %}
-                            <a style="margin-left: 3px;" class="sidebar-menu-button" href="javascript:void(0);" onclick="document.querySelector('.delete-form').submit();">
-                                <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons" >queue_play_next</i>
-                                <span class="sidebar-menu-text" style="transform: translateX(2.5px);">Delete Account</span>
+                    <li class="sidebar-menu-item">
+                            {% comment %} <a class="sidebar-menu-button" href="javascript:void(0);" onclick="document.querySelector('.delete-form').submit();">
+                                <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">queue_play_next</i>
+                                <span class="sidebar-menu-text">Delete Account</span>
+                            </a> {% endcomment %}
+                            <a class="sidebar-menu-button" id="delete-account-link">
+                                <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">queue_play_next</i>
+                                <span class="sidebar-menu-text">Delete Account</span>
                             </a>
-                        </form>
+                    </li>
                     {% endif %}
                 {% endif %}
                 {% if user_roles.0 == 'H' or user_roles.0 == 'A' %}
@@ -351,6 +459,24 @@
     <!-- Chart Samples -->
     <script src="{% static 'js/page.analytics.js' %}"></script>
     <script src="{% static 'upload_image.js' %}"></script>
+    <script src="{% static 'pop-up.js' %}"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const deleteAccountLink = document.getElementById("delete-account-link");
+            const popupModal = document.getElementById("delete-popup-modal");
+        
+            deleteAccountLink.addEventListener("click", function(event) {
+                event.preventDefault();
+                popupModal.style.display = "block";
+            });
+        
+            const cancelButton = document.getElementById("cancel-button");
+            cancelButton.addEventListener("click", function() {
+                popupModal.style.display = "none";
+            });
+        });
+    </script>
 
 
 </div>
