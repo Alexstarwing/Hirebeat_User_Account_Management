@@ -15,6 +15,7 @@ urlpatterns = [
     path('manage_users/', ManageUserView.as_view(), name='manage_users'),
     path('register/<invitation_token>/', RegisterWithInvitationView.as_view(), name='register_with_invitation'),
     path('delete_user/<int:user_id>/', views.delete_user, name='delete_user'),
+    path('active_user/<int:user_id>/', views.active_user, name='active_user'),
     path('upload_image/', views.image_upload_view, name='image_upload'),
     path('retrieve/', RetrieveImageView.as_view(), name='retrieve_image'),
 ]

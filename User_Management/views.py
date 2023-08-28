@@ -1,6 +1,7 @@
 import pdb
 import random
 import re
+from django.contrib.auth import logout
 from django.contrib.auth import authenticate, login
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -408,14 +409,16 @@ def delete_account(request, account_id):
 
     if request.method == 'POST':
         # Delete all related AccountUserRelation entries
-        account_user_relations.delete()
 
         # Delete all related users
         for user in users_to_delete:
-            user.delete()
+            user.is_active = False
+            user.save()
 
         # Delete the account itself
-        account.delete()
+        account.is_active = False
+        account.save()
+        logout(request)
 
         email_sent_message = "Your Account Has Been Deleted!"
         messages.success(request, email_sent_message)

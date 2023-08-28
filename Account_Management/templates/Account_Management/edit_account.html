@@ -170,7 +170,7 @@
                                                 <img id="image" src="{{ account.profile_logo }}" width="43" height="43">
                                                 <input type="file" id="photo" onchange="uploadImage()"/>
                                                 {% comment %} <button id="upload" onclick="uploadImage()" class="btn btn-primary">Upload</button> {% endcomment %}
-                                                <input type="url" name="profile_logo" required class="basic_info" value="{{ account.profile_logo }}"><br>
+                                                <input type="url" name="profile_logo" required class="basic_info" value="{{ account.profile_logo }}" hidden><br>
 {#                                                <img id="image" src="" width="43" height="43">#}
                                             </div>
 
@@ -263,169 +263,9 @@
         
         <script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-app.js"></script>
         <script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-storage.js"></script>
-        <script>
-
-            //paste here your copied configuration code
-            const firebaseConfig = {
-                apiKey: "AIzaSyBxYu2sNjLgQsJJ7PwyK228DDdgg4rgSTw",
-                authDomain: "hirebeat-561be.firebaseapp.com",
-                projectId: "hirebeat-561be",
-                storageBucket: "hirebeat-561be.appspot.com",
-                messagingSenderId: "100708272950",
-                appId: "1:100708272950:web:7fbab5c81409113efd8197",
-                measurementId: "G-56Z0DL0SH3"
-            };
-
-            // Initialize Firebase
-            firebase.initializeApp(firebaseConfig);
-            console.log(firebase);
-
-            function uploadImage() {
-                const ref = firebase.storage().ref();
-                const file = document.querySelector("#photo").files[0];
-                const accountName = document.getElementById("accountName").value;
-                const metadata = {
-                 contentType: file.type
-                };
-                const task = ref.child("logo/account/" + accountName).put(file, metadata);
-                task.then(snapshot => snapshot.ref.getDownloadURL())
-                      .then(url => {
-                         console.log(url);
-                         alert('image uploaded successfully');
-                         document.querySelector("#image").src = url;
-
-
-                         getDownloadURLForImage("logo/account/" + accountName);
-                      })
-                      .catch(console.error);
-           }
-
-            function getDownloadURLForImage(imagePath) {
-              const storageRef = firebase.storage().ref();
-              const imageRef = storageRef.child(imagePath);
-              var profileLogoInput = document.querySelector('input[name="profile_logo"]');
-
-              imageRef.getDownloadURL()
-                  .then((url) => {
-                     console.log("Image URL:", url);
-                     document.querySelector("#image").src = url;
-                     profileLogoInput.value = url;
-                  })
-                  .catch((error) => {
-                     console.error("Error getting download URL:", error);
-                  });
-           }
-
-
-        </script>
+        
 
             
-{% comment %} 
-            document.addEventListener('DOMContentLoaded', function() {
-                const addOfficeBtn = document.getElementById('add-office-btn');
-                const addDepartmentBtn = document.getElementById('add-department-btn');
-                const selectElement = document.getElementById("companySizeSelect");
-                const inputElement = document.getElementById("companySizeInput");
-                const textareaElement = document.getElementById("summary");
-
-                selectElement.addEventListener("change", function() {
-                    const selectedValue = selectElement.value;
-                    inputElement.value = selectedValue;
-                });
-
-                function createItem(list, itemName, editFunction, deleteFunction) {
-                    const listItem = document.createElement('li');
-                    listItem.className = 'list-group-item d-flex justify-content-between align-items-center';
-
-                    const itemNameSpan = document.createElement('span');
-                    itemNameSpan.textContent = itemName;
-                    listItem.appendChild(itemNameSpan);
-
-                    const buttonsContainer = document.createElement('div');
-                    buttonsContainer.className = 'd-flex';
-
-                    const editBtn = document.createElement('button');
-                    editBtn.className = 'btn btn-secondary me-2';
-                    editBtn.textContent = 'Edit';
-                    editBtn.addEventListener('click', () => {
-                        editFunction(itemNameSpan);
-                    });
-                    buttonsContainer.appendChild(editBtn);
-
-                    const deleteBtn = document.createElement('button');
-                    deleteBtn.className = 'btn btn-danger';
-                    deleteBtn.textContent = 'Delete';
-                    deleteBtn.addEventListener('click', () => {
-                        deleteFunction(list, listItem);
-                    });
-                    buttonsContainer.appendChild(deleteBtn);
-
-                    listItem.appendChild(buttonsContainer);
-
-                    list.appendChild(listItem);
-                }
-
-                function editItemName(itemNameSpan) {
-                    const newItemName = prompt('Enter the new name:', itemNameSpan.textContent);
-                    if (newItemName !== null) {
-                        itemNameSpan.textContent = newItemName;
-                    }
-                }
-
-                function deleteItem(list, listItem) {
-                    const isConfirmed = confirm('Are you sure you want to delete this item?');
-                    if (isConfirmed) {
-                        list.removeChild(listItem);
-                    }
-                }
-
-                function showInputForm(list) {
-                    const itemName = prompt('Enter the name:');
-                    if (itemName) {
-                        createItem(list, itemName, editItemName, deleteItem);
-                    }
-                }
-
-                addOfficeBtn.addEventListener('click', function() {
-                    showInputForm(document.getElementById('office-list'));
-                });
-
-                addDepartmentBtn.addEventListener('click', function() {
-                    showInputForm(document.getElementById('department-list'));
-                });
-            });
-        </script> {% endcomment %}
-
-{#                <div class="card card-form">#}
-{#                    <div class="row no-gutters">#}
-{#                        <div class="col-lg-4 card-body">#}
-{#                            <p><strong class="headings-color">Users</strong></p>#}
-{#                            <p class="text-muted mb-0">Update your personal information.</p>#}
-{#                        </div>#}
-{#                        <div class="col-lg-8 card-form__body card-body">#}
-{#                            <form method="post" class="form-inline">#}
-{#                                {% csrf_token %}#}
-{#                                <div class="form-group">#}
-{#                                    <label for="fname">First name</label>#}
-{#                                </div>#}
-{#                                <div class="form-group">#}
-{#                                    {{ user_info_form.first_name }}#}
-{#                                </div>#}
-{##}
-{#                                <div class="form-group" style="margin-left: 15px">#}
-{#                                    <label for="lname">Last name</label>#}
-{#                                </div>#}
-{#                                <div class="form-group">#}
-{#                                    {{ user_info_form.last_name }}#}
-{#                                </div>#}
-{#                                <div class="col">#}
-{#                                    <button type="submit" class="btn btn-primary">Save</button>#}
-{#                                </div>#}
-{#                            </form>#}
-{#                        </div>#}
-{#                    </div>#}
-{#                </div>#}
-
     <div class="text-right mb-5">
         <a href="{% url 'account_management:account'%}" class="btn btn-success">Go Back</a>
     </div>
