@@ -49,7 +49,8 @@
 
         }
 
-        #popup-modal.modal {
+        #popup-modal.modal,
+        #delete-popup-modal {
             display: none;
             top: 0;
             left: 0;
@@ -73,14 +74,47 @@
             
             /* align-items: center;  */
         }
+
+        #delete-popup-modal .modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 15px;
+            
+            width: 500px; /* Adjust the width as desired */
+            height: 300px;
+            position: absolute;
+            transform: translate(90%, 40%); /* Center the content vertically and horizontally */
+            display: flex;
+            flex-direction: column;
+            
+            /* align-items: center;  */
+        }
         
-        #logout-button {
+        #logout-button, {
             /* margin: -100px 0 0 600px; */
             /* margin-left: auto;
             margin-top: -10px; */
             position: absolute;
             top: 12px; 
             right: 12px;
+        }
+
+        #delete-button{
+            /* margin: -100px 0 0 600px; */
+            /* margin-left: auto;
+            margin-top: -10px; */
+            position: absolute;
+            bottom: 20px; 
+            right: 150px;
+        }
+
+        #cancel-button {
+            /* margin: -100px 0 0 600px; */
+            /* margin-left: auto;
+            margin-top: -10px; */
+            position: absolute;
+            bottom: 20px; 
+            left: 150px;
         }
 
         .form-group {
@@ -91,7 +125,8 @@
             margin-bottom: 10px; 
         }
 
-        .form-group label {
+        .form-group label,
+        p, h3 {
             text-align: center; 
         }
 
@@ -101,7 +136,23 @@
     </style>
 </head>
 <body class="layout-default">
+    
+    {% comment %} pop-up window for delete account {% endcomment %}
+    <div id="delete-popup-modal" class="modal">
+        <div class="modal-content"><br>
+            <h3>You are deleting the account...</h3><br><br>
+            <form method="post" action="{% url 'delete_account' account.id %}" class="delete-form">
+                {% csrf_token %}
+                <p>Are you sure you want to delete the account?</p>
+                <p>Click Cancel to go back. </p><br>
+                <button id="cancel-button" type="button" class="btn btn-secondary" >Cancel</button>
+                <button id="delete-button" type="submit" class="btn btn-primary" style="margin-left: 190px; margin-top: 20px">Delete</button>
+            </form>
+        </div>
+    </div>
+
     {% if account %}
+        {% comment %} pop-up window for fill in the company name {% endcomment %}
         {% if not account.company_name %}
             <div id="popup-modal" class="modal">
                 <div class="modal-content"><br>
@@ -201,157 +252,12 @@
 
                                 <ul class="nav navbar-nav d-none d-md-flex">
                                     <li class="nav-item dropdown">
-{#                                        <a href="#notifications_menu" class="nav-link dropdown-toggle" data-toggle="dropdown" data-caret="false">#}
-{#                                            <i class="material-icons nav-icon navbar-notifications-indicator">notifications</i>#}
-{#                                        </a>#}
-{#                                        <div id="notifications_menu" class="dropdown-menu dropdown-menu-right navbar-notifications-menu">#}
-{#                                            <div class="dropdown-item d-flex align-items-center py-2">#}
-{#                                                <span class="flex navbar-notifications-menu__title m-0">Notifications</span>#}
-{#                                                <a href="javascript:void(0)" class="text-muted"><small>Clear all</small></a>#}
-{#                                            </div>#}
-{#                                            <div class="navbar-notifications-menu__content" data-perfect-scrollbar>#}
-{#                                                <div class="py-2">#}
-{##}
-{#                                                    <div class="dropdown-item d-flex">#}
-{#                                                        <div class="mr-3">#}
-{#                                                            <div class="avatar avatar-xs">#}
-{#                                                                <img src="{% static'images/256_daniel-gaffey-1060698-unsplash.jpg" alt="Avatar" class="avatar-img rounded-circle">#}
-{#                                                            </div>#}
-{#                                                        </div>#}
-{#                                                        <div class="flex">#}
-{#                                                            <a href="">A.Demian</a> left a comment on <a href="">Stack</a><br>#}
-{#                                                            <small class="text-muted">1 minute ago</small>#}
-{#                                                        </div>#}
-{#                                                    </div>#}
-{#                                                    <div class="dropdown-item d-flex">#}
-{#                                                        <div class="mr-3">#}
-{#                                                            <a href="#">#}
-{#                                                                <div class="avatar avatar-xs">#}
-{#                                                                    <span class="avatar-title bg-primary rounded-circle"><i class="material-icons icon-16pt">person_add</i></span>#}
-{#                                                                </div>#}
-{#                                                            </a>#}
-{#                                                        </div>#}
-{#                                                        <div class="flex">#}
-{#                                                            New user <a href="#">Peter Parker</a> signed up.<br>#}
-{#                                                            <small class="text-muted">1 hour ago</small>#}
-{#                                                        </div>#}
-{#                                                    </div>#}
-{#                                                    <div class="dropdown-item d-flex">#}
-{#                                                        <div class="mr-3">#}
-{#                                                            <a href="#">#}
-{#                                                                <div class="avatar avatar-xs">#}
-{#                                                                    <span class="avatar-title rounded-circle">JD</span>#}
-{#                                                                </div>#}
-{#                                                            </a>#}
-{#                                                        </div>#}
-{#                                                        <div class="flex">#}
-{#                                                            <a href="#">Big Joe</a> <small class="text-muted">wrote:</small><br>#}
-{#                                                            <div>Hey, how are you? What about our next meeting</div>#}
-{#                                                            <small class="text-muted">2 minutes ago</small>#}
-{#                                                        </div>#}
-{#                                                    </div>#}
-{##}
-{#                                                    <div class="dropdown-item d-flex">#}
-{#                                                        <div class="mr-3">#}
-{#                                                            <div class="avatar avatar-xs">#}
-{#                                                                <img src="{% static 'images/256_daniel-gaffey-1060698-unsplash.jpg' %}" alt="Avatar" class="avatar-img rounded-circle">#}
-{#                                                            </div>#}
-{#                                                        </div>#}
-{#                                                        <div class="flex">#}
-{#                                                            <a href="">A.Demian</a> left a comment on <a href="">Stack</a><br>#}
-{#                                                            <small class="text-muted">1 minute ago</small>#}
-{#                                                        </div>#}
-{#                                                    </div>#}
-{#                                                    <div class="dropdown-item d-flex">#}
-{#                                                        <div class="mr-3">#}
-{#                                                            <a href="#">#}
-{#                                                                <div class="avatar avatar-xs">#}
-{#                                                                    <span class="avatar-title bg-primary rounded-circle"><i class="material-icons icon-16pt">person_add</i></span>#}
-{#                                                                </div>#}
-{#                                                            </a>#}
-{#                                                        </div>#}
-{#                                                        <div class="flex">#}
-{#                                                            New user <a href="#">Peter Parker</a> signed up.<br>#}
-{#                                                            <small class="text-muted">1 hour ago</small>#}
-{#                                                        </div>#}
-{#                                                    </div>#}
-{#                                                    <div class="dropdown-item d-flex">#}
-{#                                                        <div class="mr-3">#}
-{#                                                            <a href="#">#}
-{#                                                                <div class="avatar avatar-xs">#}
-{#                                                                    <span class="avatar-title rounded-circle">JD</span>#}
-{#                                                                </div>#}
-{#                                                            </a>#}
-{#                                                        </div>#}
-{#                                                        <div class="flex">#}
-{#                                                            <a href="#">Big Joe</a> <small class="text-muted">wrote:</small><br>#}
-{#                                                            <div>Hey, how are you? What about our next meeting</div>#}
-{#                                                            <small class="text-muted">2 minutes ago</small>#}
-{#                                                        </div>#}
-{#                                                    </div>#}
-{##}
-{#                                                    <div class="dropdown-item d-flex">#}
-{#                                                        <div class="mr-3">#}
-{#                                                            <div class="avatar avatar-xs">#}
-{#                                                                <img src="{% static 'images/256_daniel-gaffey-1060698-unsplash.jpg' %}" alt="Avatar" class="avatar-img rounded-circle">#}
-{#                                                            </div>#}
-{#                                                        </div>#}
-{#                                                        <div class="flex">#}
-{#                                                            <a href="">A.Demian</a> left a comment on <a href="">Stack</a><br>#}
-{#                                                            <small class="text-muted">1 minute ago</small>#}
-{#                                                        </div>#}
-{#                                                    </div>#}
-{#                                                    <div class="dropdown-item d-flex">#}
-{#                                                        <div class="mr-3">#}
-{#                                                            <a href="#">#}
-{#                                                                <div class="avatar avatar-xs">#}
-{#                                                                    <span class="avatar-title bg-primary rounded-circle"><i class="material-icons icon-16pt">person_add</i></span>#}
-{#                                                                </div>#}
-{#                                                            </a>#}
-{#                                                        </div>#}
-{#                                                        <div class="flex">#}
-{#                                                            New user <a href="#">Peter Parker</a> signed up.<br>#}
-{#                                                            <small class="text-muted">1 hour ago</small>#}
-{#                                                        </div>#}
-{#                                                    </div>#}
-{#                                                    <div class="dropdown-item d-flex">#}
-{#                                                        <div class="mr-3">#}
-{#                                                            <a href="#">#}
-{#                                                                <div class="avatar avatar-xs">#}
-{#                                                                    <span class="avatar-title rounded-circle">JD</span>#}
-{#                                                                </div>#}
-{#                                                            </a>#}
-{#                                                        </div>#}
-{#                                                        <div class="flex">#}
-{#                                                            <a href="#">Big Joe</a> <small class="text-muted">wrote:</small><br>#}
-{#                                                            <div>Hey, how are you? What about our next meeting</div>#}
-{#                                                            <small class="text-muted">2 minutes ago</small>#}
-{#                                                        </div>#}
-{#                                                    </div>#}
-{##}
-{#                                                </div>#}
-{#                                            </div>#}
-{#                                            <a href="javascript:void(0);" class="dropdown-item text-center navbar-notifications-menu__footer">View All</a>#}
-{#                                        </div>#}
-{#                                    </li>#}
 
                                     <li class="nav-item">
                                         <a href="{% url 'account_management:account_list' %}" data-toggle="sidebar" class="nav-link d-flex align-items-center">
                                             <i class="material-icons nav-icon-configure">settings</i>
                                         </a>
                                     </li>
-{#                                    <li class="nav-item">#}
-{#                                        <a href="#events-drawer" data-toggle="sidebar" class="nav-link d-flex align-items-center">#}
-{#                                            <i class="material-icons nav-icon">event_note</i>#}
-{#                                        </a>#}
-{#                                    </li>#}
-{#                                    <li class="nav-item nav-item-circle">#}
-{#                                        <a href="#" class="nav-link d-flex align-items-center navbar-circle-link">#}
-{#                                            <span class="rounded-circle">#}
-{#                                                <span class="material-icons text-primary">flag</span>#}
-{#                                            </span>#}
-{#                                        </a>#}
-{#                                    </li>#}
                                 </ul>
 
                                 <div class="dropdown">
@@ -464,15 +370,15 @@
                 </li> {% endcomment %}
                     {% if account %}
                     <li class="sidebar-menu-item">
-                        <form method="post" action="{% url 'delete_account' account.id %}" class="delete-form">
-                            {% csrf_token %}
-                            <a class="sidebar-menu-button" href="javascript:void(0);" onclick="document.querySelector('.delete-form').submit();">
+                            {% comment %} <a class="sidebar-menu-button" href="javascript:void(0);" onclick="document.querySelector('.delete-form').submit();">
+                                <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">queue_play_next</i>
+                                <span class="sidebar-menu-text">Delete Account</span>
+                            </a> {% endcomment %}
+                            <a class="sidebar-menu-button" id="delete-account-link">
                                 <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">queue_play_next</i>
                                 <span class="sidebar-menu-text">Delete Account</span>
                             </a>
-                        </form>
                     </li>
-                    
                     {% endif %}
                 {% endif %}
                 {% if user_roles.2 == 'H' or user_roles.2 == 'A' %}
@@ -557,6 +463,23 @@
     <!-- Chart Samples -->
     <script src="{% static 'js/page.analytics.js' %}"></script>
     <script src="{% static 'pop-up.js' %}"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const deleteAccountLink = document.getElementById("delete-account-link");
+            const popupModal = document.getElementById("delete-popup-modal");
+        
+            deleteAccountLink.addEventListener("click", function(event) {
+                event.preventDefault();
+                popupModal.style.display = "block";
+            });
+        
+            const cancelButton = document.getElementById("cancel-button");
+            cancelButton.addEventListener("click", function() {
+                popupModal.style.display = "none";
+            });
+        });
+        </script>
 
 
 
