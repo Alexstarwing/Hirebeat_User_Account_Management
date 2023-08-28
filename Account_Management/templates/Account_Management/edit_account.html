@@ -166,7 +166,7 @@
                                         <form method="post" action="{% url 'account_management:edit_account' %}">
                                             {% csrf_token %}
                                             <div class="col" style="margin-right: 20px; margin-bottom: 20px">
-                                                <label for="user_id">Company Logo:</label>
+                                                <label for="user_id" style="margin-left: -15px">Company Logo:</label>
                                                 <img id="image" src="{{ account.profile_logo }}" width="43" height="43">
                                                 <input type="file" id="photo" onchange="uploadImage()"/>
                                                 {% comment %} <button id="upload" onclick="uploadImage()" class="btn btn-primary">Upload</button> {% endcomment %}
@@ -174,6 +174,18 @@
 {#                                                <img id="image" src="" width="43" height="43">#}
                                             </div>
 
+                                            <div class="col" style="margin-right: 20px; margin-bottom: 20px">
+                                                <label for="user_id" style="margin-left: -15px">Company Video:</label>
+                                                <video id="video" width="320" height="240" controls>
+                                                    <source src="https://www.youtube.com/watch?v=L_4BPjLBF4E">
+                                                    Your browser does not support the video tag.
+                                                </video>
+{#                                                <img id="image" src="{{ account.profile_video }}" width="43" height="43">#}
+                                                <input type="file" id="photo" onchange="uploadImage()"/>
+                                                {% comment %} <button id="upload" onclick="uploadImage()" class="btn btn-primary">Upload</button> {% endcomment %}
+                                                <input type="url" name="profile_video" required class="basic_info" value="{{ account.profile_logo }}" hidden><br>
+{#                                                <img id="image" src="" width="43" height="43">#}
+                                            </div>
 
                                             <label for="user_id">Company Domain:</label>
                                             <input type="text" name="user_id" required class="basic_info" value="{{ account.company_domain }}"><br>
