@@ -2,9 +2,6 @@ import pdb
 import random
 import re
 from django.contrib.auth import logout
-from django.contrib.auth import authenticate, login
-from rest_framework.views import APIView
-from rest_framework.response import Response
 from django.contrib.auth import update_session_auth_hash
 from django.shortcuts import get_object_or_404, render
 from django.utils.crypto import get_random_string
@@ -82,7 +79,6 @@ class RegisterPage(FormView):
     def form_valid(self, form):
         user = form.save(commit=False)
         user.is_active = False
-        user.is_staff = True
         user.save()
         token = default_token_generator.make_token(user)
         current_site = get_current_site(self.request)

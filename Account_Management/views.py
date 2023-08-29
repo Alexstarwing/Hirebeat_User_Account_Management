@@ -1,10 +1,6 @@
 
 import pdb
 from django.contrib.auth import logout
-from django.http import HttpResponseRedirect
-from rest_framework import status
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse, Http404
 from django.contrib import messages
