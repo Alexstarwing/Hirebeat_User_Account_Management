@@ -103,6 +103,7 @@ class AccountSettingView(LoginRequiredMixin, View):
     def create_or_update_employer_info(self, request):
         if request.method == 'POST':
             # company_domain = request.POST.get("user_id")
+            profile_video = request.POST.get("profile_video")
             profile_logo = request.POST.get("profile_logo")
             company_industry = request.POST.get("company_type")
             company_email = request.POST.get("contactEmail")
@@ -117,6 +118,7 @@ class AccountSettingView(LoginRequiredMixin, View):
             account = self.get_account_for_user(current_user)
 
             try:
+                account.profile_video = profile_video
                 account.profile_logo = profile_logo
                 account.company_industry = company_industry
                 account.company_email = company_email

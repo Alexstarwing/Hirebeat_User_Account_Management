@@ -98,7 +98,7 @@ class RegisterPage(FormView):
         # pdb.set_trace()
         email_sent_message = "Activation email has been sent to your email address."  # flash message
         messages.success(self.request, email_sent_message)
-        admin_group = Group.objects.get(name='Admin Group')  # Replace 'admin' with your actual group name
+        admin_group, created = Group.objects.get_or_create(name='Admin Group')
         user.groups.add(admin_group)
         # return redirect('resend_activation_email') #Notify about the sent in another page
         return self.render_to_response(self.get_context_data(form=form))

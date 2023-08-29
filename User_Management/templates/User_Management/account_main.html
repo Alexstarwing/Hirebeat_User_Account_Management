@@ -134,6 +134,12 @@
             width: 80%; 
         }      
 
+        #image {
+            width: 40px;
+            height: 40px;
+            object-fit: cover;
+            border-radius: 50%;
+        }
     </style>
 </head>
 <body class="layout-default">
@@ -269,7 +275,7 @@
                                         <div class="dropdown-item d-flex align-items-center py-2 navbar-company-info py-3">
 
                                             <span class="mr-3">
-                                                <img src="{{ account.profile_logo }}" width="43" height="43" alt="avatar">
+                                                <img id="image" src="{{ account.profile_logo }}" width="43" height="43" alt="avatar">
                                             </span>
                                             <span class="flex d-flex flex-column">
                                                 <strong class="h5 m-0">{{ request.user|title }}</strong>

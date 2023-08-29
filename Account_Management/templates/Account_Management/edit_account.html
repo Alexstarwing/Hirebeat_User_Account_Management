@@ -1,4 +1,5 @@
 {% extends 'Account_Management/account_main.html' %}
+{% load static %}
 {% load replace %}
 {% block content %}
         <head>
@@ -166,14 +167,30 @@
                                         <form method="post" action="{% url 'account_management:edit_account' %}">
                                             {% csrf_token %}
                                             <div class="col" style="margin-right: 20px; margin-bottom: 20px">
-                                                <label for="user_id">Company Logo:</label>
+                                                <label for="user_id" style="margin-left: -15px">Company Logo:</label>
                                                 <img id="image" src="{{ account.profile_logo }}" width="43" height="43">
                                                 <input type="file" id="photo" onchange="uploadImage()"/>
+                                                <div id="loading" style="display: none;">
+                                                    <img src="{% static 'loading.gif' %}" height="40px" width="40px">
+                                                </div>
                                                 {% comment %} <button id="upload" onclick="uploadImage()" class="btn btn-primary">Upload</button> {% endcomment %}
                                                 <input type="url" name="profile_logo" required class="basic_info" value="{{ account.profile_logo }}" hidden><br>
 {#                                                <img id="image" src="" width="43" height="43">#}
                                             </div>
 
+                                            <div class="col" style="margin-right: 20px; margin-bottom: 20px">
+{#                                                <img src="{% static 'loading.gif' %}" height="40px" width="40px">#}
+                                                <label for="user_id" style="margin-left: -15px">Company Video:</label>
+                                                <input type="file" id="choose_file" onchange="uploadVideo()"/></br>
+                                                <div id="loading" style="display: none;">
+                                                    <img src="{% static 'loading.gif' %}" height="40px" width="40px">
+                                                </div>
+                                                <video controls hidden>
+                                                    <source id="video" src="">
+                                                </video>
+                                                <input type="url" name="profile_video" required class="basic_info" value="{{ account.profile_video }}" hidden><br>
+{#                                                <img id="image" src="" width="43" height="43">#}
+                                            </div>
 
                                             <label for="user_id">Company Domain:</label>
                                             <input type="text" name="user_id" required class="basic_info" value="{{ account.company_domain }}"><br>
@@ -263,7 +280,100 @@
         
         <script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-app.js"></script>
         <script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-storage.js"></script>
-        
+        <script>
+            function showLoading() {
+                document.getElementById("loading").style.display = "block";
+            }
+
+            function hideLoading() {
+                document.getElementById("loading").style.display = "none";
+            }
+           //paste here your copied configuration code
+           const firebaseConfig = {
+              apiKey: "AIzaSyBxYu2sNjLgQsJJ7PwyK228DDdgg4rgSTw",
+              authDomain: "hirebeat-561be.firebaseapp.com",
+              projectId: "hirebeat-561be",
+              storageBucket: "hirebeat-561be.appspot.com",
+              messagingSenderId: "100708272950",
+              appId: "1:100708272950:web:7fbab5c81409113efd8197",
+              measurementId: "G-56Z0DL0SH3"
+           };
+
+           // Initialize Firebase
+           firebase.initializeApp(firebaseConfig);
+
+           function uploadImage() {
+                const ref = firebase.storage().ref();
+                const file = document.querySelector("#photo").files[0];
+                const accountName = document.getElementById("accountName").value;
+                const metadata = {
+                 contentType: file.type
+                };
+                const task = ref.child("logo/account/" + accountName).put(file, metadata);
+                task.then(snapshot => snapshot.ref.getDownloadURL())
+                      .then(url => {
+                         console.log(url);
+                         alert('image uploaded successfully');
+                         document.querySelector("#image").src = url;
+                         getDownloadURLForImage("logo/account/" + accountName);
+                      })
+                      .catch(console.error);
+           }
+
+           function getDownloadURLForImage(imagePath) {
+              const storageRef = firebase.storage().ref();
+              const imageRef = storageRef.child(imagePath);
+              var profileLogoInput = document.querySelector('input[name="profile_logo"]');
+
+              imageRef.getDownloadURL()
+                  .then((url) => {
+                     console.log("Image URL:", url);
+                     document.querySelector("#image").src = url;
+                     profileLogoInput.value = url;
+                  })
+                  .catch((error) => {
+                     console.error("Error getting download URL:", error);
+                  });
+           }
+
+
+           function uploadVideo() {
+              showLoading();
+
+              const ref = firebase.storage().ref();
+              const file = document.querySelector("#choose_file").files[0];
+              const name = +new Date() + "-" + file.name;
+              const metadata = {
+                 contentType: file.type
+              };
+              const task = ref.child('video/account/' + name).put(file, metadata);
+              task.then(snapshot => snapshot.ref.getDownloadURL())
+              .then(url => {
+                  console.log(url);
+                  alert('Video uploaded successfully');
+                  document.querySelector("#video").src = url;
+
+                  getDownloadURLForVideo('video/account/' + name);
+                  hideLoading();
+                })
+               .catch(console.error);
+               }
+
+           function getDownloadURLForVideo(VideoPath) {
+              const storageRef = firebase.storage().ref();
+              const videoRef = storageRef.child(VideoPath);
+              let video_url = document.querySelector('input[name="profile_video"]');
+              videoRef.getDownloadURL()
+                  .then((url) => {
+                     console.log("Video URL:", url);
+                     document.querySelector("#video").src = url;
+                     video_url.value = url;
+                  })
+                  .catch((error) => {
+                     console.error("Error getting download URL:", error);
+                  });
+           }
+        </script>
 
             
     <div class="text-right mb-5">
