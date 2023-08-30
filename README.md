@@ -3,7 +3,7 @@
 HireBeat is an advanced candidate sourcing and applicant tracking system that seamlessly accelerates recruitment processes. 
 This project encompasses both User Management and Account Management functionalities.
 
-##Install and Run Locally
+## Install and Run Locally
 The following steps assume a foundational understanding of Django's concepts, and make sure you have installed python3, pip in your computer.
 Then git clone the repo.
 
