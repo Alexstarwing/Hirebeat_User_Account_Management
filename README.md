@@ -26,7 +26,7 @@ The following will provide an in-depth exploration of the main functionalities w
 The "User_Management" app serves as a platform to facilitate user registration, login, profile modification, 
 and personal information submission and display functionalities.   
 
-####1. Login: 
+#### 1. Login: 
 The User_Management app's model is built upon Django's official User class, with additional fields including `is_active`, `groups`, 
 and `user_permission` to enhance the security of user logins.  
 The login functionality is implemented through the `CustomLoginView` class, which inherits from Django's built-in LoginView, and renders the login template at `'login.html'`. 
@@ -47,7 +47,7 @@ Then an email will be sent to user and a successful message will be displayed in
 The ActivateAccount class is responsible for activating user accounts after they have clicked on the activation link sent to their email. 
 This User will automatically be assigned as an admin role, indicate this user can have all permission. 
 
-####3. Display and Update user information
+#### 3. Display and Update user information
 These function is included in `UserSettingView` class, which allowing users to update their personal information, change their email address, and modify their account password.
 and it is render in `'user_setting.html'`.
 1. Updating Personal Information:   
