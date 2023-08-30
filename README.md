@@ -61,3 +61,32 @@ users are prompted to keep their new password secure and are automatically logge
 
 ## TechStack
 
+### Account_Management:
+
+The "Account_Management" app serves as a platform to facilitate account, deleting account, manage new users(invite, deactivate, activate), account modification, 
+and account information submission and display functionalities.  
+
+#### 1. Delete Account:
+Delete account will deactivate all users who under an specfic account and the account itself. 
+
+### 2. Delete/activate User:
+Delete/activate user will deactivate/activate specific user. Simply set `user.is_active = True/False`
+
+### 3. Add New User:
+
+
+
+### 4. Account Setting:
+Only Admin and HireManger and access this page.
+It uses `edit_account.html`. In get() function, it render account, org_form, user_info_form, user_roles, company. 
+the create_or_update_employer_info() function will create or update company logo, video, industry, email, location, size, website, summary, linkedin, facebook, twitter. In the Account Setting page, if the information already fill in before, the blank will be automaticlly fill in, and ther user just need to modify specfic information.
+
+image & video are uploaded to the firebase and the urls are used for display.  `<img src=url >`
+
+### 5. ConfigureView:
+
+
+### 6. OrganizationView:
+Instead of editing the account information, it displays account information. `get()` provide important information for furher uses.
+
+
