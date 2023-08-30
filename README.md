@@ -59,34 +59,62 @@ The verification code is stored in the session for later use in the email verifi
 Users can also change their account password using the update_password_form. The form requires users to provide their old password and a new password. If the old password is verified successfully, the new password is checked for complexity requirements and matched for confirmation. Upon a successful password change, 
 users are prompted to keep their new password secure and are automatically logged out for security reasons.
 
-## TechStack
 
 ### Account_Management:
 
-The "Account_Management" app serves as a platform to facilitate account, deleting account, manage new users(invite, deactivate, activate), account modification, 
-and account information submission and display functionalities.  
+The `Account_Management` app serves as a platform to facilitate account, deleting account, manage new users(invite, deactivate, activate), account modification, 
+and account information submission and display functionalities. The `Account_Management` app's model encompasses four essential classes: `Account`, `Role`, `TeamInvitation`, and `AccountUserRelation`.
+The `Account` class serves as the model that gathers and holds all pertinent company information for display by the company owner.
+The `Role` class defines and describes a user's role or position within the company.
+The `TeamInvitation` class facilitates the linkage between the database, accounts, and users, primarily employed for managing and inviting users to the system. 
+Lastly, the `AccountUserRelation` class offers a valuable method for establishing and checking the associations between user accounts and the corresponding company accounts.
 
 #### 1. Delete Account:
-Delete account will deactivate all users who under an specfic account and the account itself. 
+Delete account will deactivate all users who under an specfic account and the account itself. This feature is render in `delete_account`
 
-### 2. Delete/activate User:
+#### 2. Delete/activate User:
 Delete/activate user will deactivate/activate specific user. Simply set `user.is_active = True/False`
 
-### 3. Add New User:
+#### 3. Add New User:
+This feature is render in `AddUserView` and `RegisterWithInvitationView` classes. Only user in Hiring Managers or Admin Group have the right to add new users. This feature comprises two distinct aspects: inviting users by HR or admin and user registration.
 
+1. invite user(`AddUserView`)：  
+After HR or admin fill in the new user's Role name, Role type and email, new user will receive an email include a special link to register. 
+In this class's `post` method, a TeamInvitation is created, including email, role, and token, then saved in the database, which will help new user's registration.
 
+2. register with invitation(`RegisterWithInvitationView`):  
+The `RegisterWithInvitationView` class handles user registration with an invitation token. It uses the `register_with_invitation.html` template. 
+In the get method, the token is decoded and validated against a TeamInvitation entry. If valid, a user creation form is rendered. 
+The post method checks the validity of the registration form. If valid, a new user is created and associated with the provided email, username, and password. 
+The user is assigned to a group based on the role from the invitation, and an AccountUserRelation is established.
 
-### 4. Account Setting:
-Only Admin and HireManger and access this page.
+#### 4. Account Setting:
+Only Admin and HireManger can access this page.
 It uses `edit_account.html`. In get() function, it render account, org_form, user_info_form, user_roles, company. 
 the create_or_update_employer_info() function will create or update company logo, video, industry, email, location, size, website, summary, linkedin, facebook, twitter. In the Account Setting page, if the information already fill in before, the blank will be automaticlly fill in, and ther user just need to modify specfic information.
 
 image & video are uploaded to the firebase and the urls are used for display.  `<img src=url >`
 
-### 5. ConfigureView:
+#### 5. ConfigureView:
+Displaying all user-operable features, the `User` section includes the ability for HR and admin users to `Manage/Invite` other users. 
+This right is exclusively granted to HR and admin roles.
 
-
-### 6. OrganizationView:
+#### 6. OrganizationView:
 Instead of editing the account information, it displays account information. `get()` provide important information for furher uses.
 
+#### 7. ManageUserView:
 
+
+
+## TechStack
+Our HireBeat website is built on the following tech stack:
+1. **Backend Development**: Utilizing the Django framework to establish a robust backend logic and manage the database.
+2. **Frontend Design**: Employing HTML, CSS, and JavaScript for frontend design and development, ensuring a user-friendly interface and interactive experience. 
+The website template is based on `https://elements.envato.com/learning-dashboard-template-DLH2S6X`.
+3. **Database**: Using SQLite for development and testing.
+4. **User Authentication**: Leveraging Django's built-in user authentication system to ensure secure user login and registration.
+5. **Cloud Storage**: Integrating Firebase cloud storage to enable users to upload and manage multimedia resources such as images and videos.
+6. **Third-party Libraries**: Utilizing Django's built-in libraries along with other third-party libraries to provide rich functionality, including `form validation`, `email sending`, and `permission management`.
+7. **Version Control**: Employing Git for version control, facilitating team collaboration and code management.  
+
+Our chosen tech stack is designed to offer users an efficient, secure, and seamless recruiting experience.
