@@ -58,3 +58,6 @@ The verification code is stored in the session for later use in the email verifi
 3. Modifying Password:   
 Users can also change their account password using the update_password_form. The form requires users to provide their old password and a new password. If the old password is verified successfully, the new password is checked for complexity requirements and matched for confirmation. Upon a successful password change, 
 users are prompted to keep their new password secure and are automatically logged out for security reasons.
+
+##TechStack
+
