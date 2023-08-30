@@ -21,7 +21,7 @@ The whole project have User_Management and Account_Management two parts.
 The following will provide an in-depth exploration of the main functionalities within these two apps.
 
 
-###User_Management: 
+### User_Management: 
 
 The "User_Management" app serves as a platform to facilitate user registration, login, profile modification, 
 and personal information submission and display functionalities.   
@@ -34,7 +34,7 @@ The `CustomLoginView` class is responsible for handling user authentication and 
 It also checks if the user's email has an associated invitation and, if so, handles account and group assignments.
 If user forget password, login page also have `Forget Password` link help user reset password
 
-####2. Register:
+#### 2. Register:
 1. Register function:  
 The `RegisterPage` class in the User_Management app provides user registration functionality. 
 It is implemented using Django's `FormView` class and uses the `UserCreationForm` as the form class to collect user registration data. 
@@ -59,5 +59,5 @@ The verification code is stored in the session for later use in the email verifi
 Users can also change their account password using the update_password_form. The form requires users to provide their old password and a new password. If the old password is verified successfully, the new password is checked for complexity requirements and matched for confirmation. Upon a successful password change, 
 users are prompted to keep their new password secure and are automatically logged out for security reasons.
 
-##TechStack
+## TechStack
 
