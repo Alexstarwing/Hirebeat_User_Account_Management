@@ -5,7 +5,7 @@ This project encompasses both User Management and Account Management functionali
 
 ## Install and Run Locally
 The following steps assume a foundational understanding of Django's concepts, and make sure you have installed python3, pip in your computer.
-Then git clone the repo.
+Then git clone the repo and run following command in terminal.
 
 1. Set up virtual environment:
    1. `python3 -m venv myenv`(create virtual environment)
