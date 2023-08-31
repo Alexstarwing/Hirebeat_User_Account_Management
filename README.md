@@ -8,8 +8,8 @@ The following steps assume a foundational understanding of Django's concepts, an
 Then git clone the repo and run following command in terminal.
 
 1. Set up virtual environment:
-   1. `python3 -m venv myenv`(create virtual environment)
-   2. `source myenv/bin/activate`(open virtual environment)
+   1. `python3 -m venv env`(create virtual environment)
+   2. `source env/bin/activate`(open virtual environment)
    3. `pip install django`(install django)
    4. `pip install django-utils-six`(install necessary package)
 
