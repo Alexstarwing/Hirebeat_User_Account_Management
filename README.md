@@ -33,8 +33,8 @@ The `CustomLoginView` class is responsible for handling user authentication and 
 It also checks if the user's email has an associated invitation and, if so, handles account and group assignments.
 
 extra feature in Login:
-1. **Forget Password**: If user forget password, login page also have `Forget Password` link help user reset password(补充一下)
-2. **Resend Activation Email**:
+1. **Forget Password**: If user forget password, login page also have `Forget Password` link help user reset password. 
+2. **Resend Activation Email**: After the invitation email being send, the page on the user end would pop up a resend activation email icon in case the user hasn't received the email the first time. After clicking the button, the user would be prompted to enter their registered email address, and then the program will search inside the database to find the corresponding user based on the email and then resend the activation email. 
 
 #### 2. Register:
 1. **Register function**:  
@@ -105,7 +105,7 @@ This right is exclusively granted to HR and admin roles.
 Instead of editing the account information, it displays account information. `get()` provide important information for furher uses.
 
 #### 7. ManageUserView:
-
+The database would filter all the registered users inside the database with the same company name as the current login user. The page will display the list of users with their assigned role inside the company at the same page. 
 
 
 ## TechStack
