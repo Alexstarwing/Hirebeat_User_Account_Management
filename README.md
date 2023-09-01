@@ -105,7 +105,7 @@ This right is exclusively granted to HR and admin roles.
 Instead of editing the account information, it displays account information. `get()` provide important information for furher uses.
 
 #### 7. ManageUserView:
-The database would filter all the registered users inside the database with the same company name as the current login user. The page will display the list of users with their assigned role inside the company at the same page. 
+The database would filter all the registered users inside the database with the same company name as the current login user. The page will display the list of users with their assigned role inside the company at the same page in a organized form that is edited by the corresponding html template. 
 
 
 ## TechStack
