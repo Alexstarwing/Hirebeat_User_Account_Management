@@ -325,7 +325,7 @@ class UserSettingView(LoginRequiredMixin, View):
 
                     send_mail(
                         'Your password has been changed',
-                        'We noticed the password for your Greenhouse account was recently changed. '
+                        'We noticed the password for your HireBeat account was recently changed. '
                         'If this was you, you can ignore this email – we’re just checking in.'
                         'If it wasn’t you, please reset your password to keep your account secure.',
                         'yifandsb666@gmail.com',
